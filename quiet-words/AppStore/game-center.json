@@ -207,12 +207,12 @@
         "es": "Pulso firme"
       },
       "preEarnedDescription": {
-        "en": "Finish a Hard puzzle without hints in under 5 minutes.",
-        "es": "Termina una sopa Difícil sin pistas en menos de 5 minutos."
+        "en": "Finish a Hard puzzle without hints in under 10 minutes.",
+        "es": "Termina una sopa Difícil sin pistas en menos de 10 minutos."
       },
       "earnedDescription": {
-        "en": "You finished a Hard puzzle without hints in under 5 minutes.",
-        "es": "Terminaste una sopa Difícil sin pistas en menos de 5 minutos."
+        "en": "You finished a Hard puzzle without hints in under 10 minutes.",
+        "es": "Terminaste una sopa Difícil sin pistas en menos de 10 minutos."
       },
       "image": "AppStore/achievements/qw_hard_fast.png"
     },
@@ -249,8 +249,8 @@
       "type": "recurring",
       "recurrence": "Every 1 day, starting at 05:00 UTC (00:00 in Colombia)",
       "name": {
-        "en": "Daily Challenge · English words",
-        "es": "Reto diario · palabras en inglés"
+        "en": "Daily Challenge · English",
+        "es": "Reto diario · Inglés"
       },
       "scoreFormat": "Integer",
       "formatSuffix": {
@@ -267,8 +267,8 @@
       "type": "recurring",
       "recurrence": "Every 1 day, starting at 05:00 UTC (00:00 in Colombia)",
       "name": {
-        "en": "Daily Challenge · Spanish words",
-        "es": "Reto diario · palabras en español"
+        "en": "Daily Challenge · Spanish",
+        "es": "Reto diario · Español"
       },
       "scoreFormat": "Integer",
       "formatSuffix": {
@@ -285,8 +285,8 @@
       "type": "classic",
       "recurrence": null,
       "name": {
-        "en": "Best Hard · English words",
-        "es": "Mejor Difícil · palabras en inglés"
+        "en": "Best Hard · English",
+        "es": "Mejor Difícil · Inglés"
       },
       "scoreFormat": "Integer",
       "formatSuffix": {
@@ -303,8 +303,8 @@
       "type": "classic",
       "recurrence": null,
       "name": {
-        "en": "Best Hard · Spanish words",
-        "es": "Mejor Difícil · palabras en español"
+        "en": "Best Hard · Spanish",
+        "es": "Mejor Difícil · Español"
       },
       "scoreFormat": "Integer",
       "formatSuffix": {

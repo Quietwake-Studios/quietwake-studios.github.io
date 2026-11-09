@@ -157,7 +157,7 @@ Partidas guardadas en iCloud: `Snapshot` = perfil (progreso + álbum) + retos; l
 | `qw_hidden_early` | A simple vista / In Plain Sight | Adivinar la oculta antes de terminar, sin pistas | Marcador Tinta |
 | `qw_daily_7` | Hábito / Habit | Racha de 7 retos | Tema Índigo y durazno |
 | `qw_daily_30` | Constancia / Consistency | Racha de 30 retos | Tema Salvia y coral |
-| `qw_hard_fast` | Pulso firme / Steady Hand | Difícil sin pistas en menos de 5 min | Marcador Subrayado |
+| `qw_hard_fast` | Pulso firme / Steady Hand | Difícil sin pistas en menos de 10 min (2026-11-08) | Marcador Subrayado |
 | `qw_bilingual` | Bilingüe / Bilingual (oculto) | Reto del día en los dos idiomas | Solo el logro |
 
 Siempre disponibles: marcador Resaltador, letra Redonda, Petróleo y coral, **Alto contraste** y **Letras más grandes**.
@@ -194,7 +194,7 @@ Inglés (development language) y español con String Catalogs (`scripts/strings.
 
 ## Estado (2026-11-08)
 
-Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos de la ficha subidos en en-US y es-MX. Falta para enviar a revisión: capturas, Game Center en ASC (`setup-game-center.py --apply`), subtítulo y la aprobación de las listas.
+Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos de la ficha subidos en en-US y es-MX. Falta para enviar a revisión: capturas, activar Game Center en la versión, subtítulo y la aprobación de las listas.
 
 | Fase | Estado |
 |---|---|
@@ -202,7 +202,7 @@ Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos d
 | 1. Motor | ✅ 21 tests del Core en release: referencias por fecha en/es, 10.000 tableros, un año de retos, candado, sesión, puntaje, progreso y álbum. 1–4 ms por tablero en Mac. |
 | 2. Jugable | ✅ en simulador: partida completa en "QW iPhone 17" y "QW iPad 13" (UI tests de arrastre y toque en los dos), adivinar, resumen, tutorial con el paso del idioma. Falta probar en iPhone real. |
 | 3. Persistencia y reto | ✅ en simulador: guardado por día e idioma, Continuar / Empezar de nuevo, racha única, días pasados, calendario, recordatorios; `DailyRuleTests` (7) y `ReminderTests` (2). |
-| 4. Game Center | 🟡 En el código (logros, 5 clasificaciones, snapshot, amigos). Nada creado en App Store Connect; falta verificar en dispositivo. |
+| 4. Game Center | 🟡 10 logros (con insignias, en/es) y 5 clasificaciones creados en App Store Connect (2026-11-08, `setup-game-center.py --apply`; reto diario desde 2026-11-09 05:00 UTC). Falta activarlos en la versión 1.0 y verificar envío y sincronización en el dispositivo. |
 | 5. Álbum y recompensas | 🟡 Álbum por tema e idioma con insignias y definiciones del diccionario del sistema, recompensas seleccionables y bloqueadas con su condición, ícono dorado. Falta revisar en dispositivo (con diccionarios descargados). |
 | 6. Lanzamiento | ⬜ App Store pendiente hasta tener capturas reales (decisión 2026-11-08). |
 

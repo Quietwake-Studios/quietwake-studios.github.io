@@ -127,7 +127,7 @@ extension Achievement {
         case .inPlainSight: "Guess the hidden word before the end, without hints."
         case .habit: "Complete 7 daily challenges in a row."
         case .consistency: "Complete 30 daily challenges in a row."
-        case .steadyHand: "Finish a Hard puzzle without hints in under 5 minutes."
+        case .steadyHand: "Finish a Hard puzzle without hints in under 10 minutes."
         case .bilingual: "Complete the day's challenge in both languages."
         }
     }

@@ -12,7 +12,7 @@ import Testing
         #expect(p.record(.won(summary(guessed: true), isFree: true)) == [.firstPuzzle, .inPlainSight])
         #expect(p.record(.won(summary(), isFree: true)).isEmpty)
         #expect(p.bestScore(.gentle, .es) == 500)
-        #expect(p.record(.won(summary(level: .hard, seconds: 299), isFree: false)) == [.steadyHand])
+        #expect(p.record(.won(summary(level: .hard, seconds: 599), isFree: false)) == [.steadyHand])
         #expect(p.record(.wordsFound(99)) == [])
         #expect(p.record(.wordsFound(1)) == [.words100])
         #expect(p.record(.dailyCompleted(longestStreak: 7)) == [.habit])

@@ -13,7 +13,7 @@ public enum Achievement: String, CaseIterable, Codable, Sendable {
     case habit
     /// 30-day daily streak.
     case consistency
-    /// Finish a Hard puzzle without hints in under 5 minutes.
+    /// Finish a Hard puzzle without hints in under 10 minutes.
     case steadyHand
     /// Finish the day's challenge in both languages. Hidden.
     case bilingual
@@ -33,7 +33,7 @@ public enum Achievement: String, CaseIterable, Codable, Sendable {
     public var isHidden: Bool { self == .bilingual }
 
     /// "Steady Hand" needs a Hard puzzle in less than this.
-    public static let steadyHandSeconds = 300
+    public static let steadyHandSeconds = 600
 }
 
 /// Something that happened in play, fed to `PlayerProgress`.

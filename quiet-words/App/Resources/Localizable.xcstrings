@@ -974,12 +974,12 @@
         }
       }
     },
-    "Finish a Hard puzzle without hints in under 5 minutes.": {
+    "Finish a Hard puzzle without hints in under 10 minutes.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Termina una sopa Difícil sin pistas en menos de 5 minutos."
+            "value": "Termina una sopa Difícil sin pistas en menos de 10 minutos."
           }
         }
       }

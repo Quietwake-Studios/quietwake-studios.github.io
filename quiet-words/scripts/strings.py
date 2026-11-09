@@ -80,7 +80,7 @@ ES = {
     "Find 10,000 words.": "Encuentra 10.000 palabras.",
     "Find 100 words.": "Encuentra 100 palabras.",
     "Find every word of a theme in the album.": "Encuentra todas las palabras de un tema del álbum.",
-    "Finish a Hard puzzle without hints in under 5 minutes.": "Termina una sopa Difícil sin pistas en menos de 5 minutos.",
+    "Finish a Hard puzzle without hints in under 10 minutes.": "Termina una sopa Difícil sin pistas en menos de 10 minutos.",
     "Finish your first puzzle.": "Termina tu primera sopa.",
     "First Puzzle": "Primera sopa",
     "Found": "Encontradas",

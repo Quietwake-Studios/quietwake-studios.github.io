@@ -19,7 +19,7 @@ BUNDLE_ID = "com.tavoohoh.quietwords"
 # Game Center locales: English (U.S.) and Spanish (Mexico), like the store listing.
 LOCALES = {"en-US": "en", "es-MX": "es"}
 # The daily board resets at 05:00 UTC, midnight in Colombia (DailyKey.rolloverHour = 0 in QuietKit).
-DAILY_START = "2026-10-31T05:00:00Z"
+DAILY_START = "2026-11-09T05:00:00Z"  # must be in the future when created
 SINGULAR = {" points": " point", " puntos": " punto", " days": " day", " días": " día"}
 
 APPLY = "--apply" in sys.argv
