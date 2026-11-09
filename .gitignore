@@ -20,6 +20,7 @@ build/
 quiet-numbers/Config/Local.xcconfig
 quiet-solitaire/Config/Local.xcconfig
 quiet-sudoku/Config/Local.xcconfig
+quiet-words/Config/Local.xcconfig
 
 # Signing and App Store Connect credentials: never commit
 *.p8

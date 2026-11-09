@@ -1,0 +1,45 @@
+# Palabras bloqueadas (español). Una por línea; se comparan normalizadas (mayúsculas, sin tildes; la Ñ se queda).
+# Ninguna palabra de la lista (ni parte de una) puede serlo, y no puede aparecer en el tablero en ninguna
+# dirección salvo dentro de una palabra puesta (CÁLCULO, COMPUTADORA).
+CUL
+PEDO
+PUTA
+PUTO
+CULO
+COÑO
+VERGA
+PENE
+POLLA
+MIERDA
+CABRON
+JODER
+JODIDO
+PINCHE
+CHINGA
+PENDEJO
+MARICA
+MARICON
+ZORRA
+PERRA
+CAGAR
+MAMON
+MAMADA
+TETA
+CONCHUDO
+CONCHETUMADRE
+GILIPOLLAS
+HIJUEPUTA
+MALPARIDO
+GONORREA
+CARAJO
+PAJERO
+CHOCHO
+PICHA
+NAZI
+NEGRATA
+SUDACA
+VIOLAR
+VIOLACION
+PORNO
+SEXO
+NALGA

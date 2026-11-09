@@ -15,7 +15,7 @@ Misma estructura en todos: **modo libre** (partidas sin fin, mejor puntaje) y **
 | Publicado (1.0 en revisión) | Quiet Numbers | Emparejar números iguales o que sumen 10 | Primera app. 1.1 en TestFlight. |
 | En desarrollo | Quiet Solitaire | Klondike, robar 1 | Retos con solución garantizada. |
 | **Siguiente** | Sudoku | Sudoku 9×9 clásico | Reto diario con dificultad por día de la semana (como Solitaire). Generador con solución única y semilla del día; pistas con costo; notas a lápiz. "Sudoku" es nombre genérico. |
-| Propuesta | Sopa de letras (Quiet Words) | Encontrar palabras de un tema en una cuadrícula | Temas para adultos en/es con listas curadas por tema; palabra oculta. Propuesta técnica en `studio/propuestas/sopa-de-letras.md` (2026-11-08). |
+| En desarrollo | Quiet Words (sopa de letras) | Encontrar palabras de un tema en una cuadrícula | Temas para adultos en/es con listas curadas por tema; tablero denso con palabra oculta; reto diario por idioma. Jugable en el simulador (2026-11-08); brief en `quiet-words/CLAUDE.md`. |
 | Idea | Defensa con monedas | Soldados que pelean solos; cada enemigo vencido suelta monedas que el jugador recoge y lleva a puntos de compra para pagar torres o más soldados | Género "idle arcade" de defensa (híbrido entre tower defense y recolección). No identificamos el juego del anuncio de Instagram; tomar solo la mecánica genérica. Mucho más grande que los demás (tiempo real, personajes, oleadas): candidato a **juego de pago**. Reto diario: misma oleada para todos. |
 | Idea | Bloques | Armar figuras con bloques encastrables | Por definir la mecánica. **Nunca** usar "LEGO" ni formas de su marca: decir "bloques". |
 | Idea | Números (otro) | Por definir | Distinto de Quiet Numbers y Sudoku. |

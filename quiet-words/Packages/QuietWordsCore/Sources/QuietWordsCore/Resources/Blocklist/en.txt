@@ -1,0 +1,44 @@
+# Blocked words (English). One per line; compared after normalizing (upper case, no accents).
+# No list word (or part of one) may be it, and it may not appear on a board in any direction
+# unless it lies inside a placed word (PEACOCK, GLASS).
+ASS
+FAG
+CUM
+TIT
+FUCK
+SHIT
+CUNT
+COCK
+DICK
+PISS
+SLUT
+WHORE
+BITCH
+BASTARD
+TWAT
+WANK
+PRICK
+PUSSY
+BOOB
+DAMN
+CRAP
+DILDO
+PORN
+RAPE
+NAZI
+NIGG
+SPIC
+KIKE
+CHINK
+RETARD
+FAGGOT
+DYKE
+HOMO
+TRANNY
+JIZZ
+SEMEN
+ANAL
+ANUS
+HORNY
+NUDE
+SEXY
