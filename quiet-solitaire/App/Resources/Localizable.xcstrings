@@ -341,6 +341,16 @@
         }
       }
     },
+    "Appearance": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apariencia"
+          }
+        }
+      }
+    },
     "At %@ if you haven't played; with a streak of 3 or more, another at %@.": {
       "localizations": {
         "es": {
@@ -711,6 +721,16 @@
         }
       }
     },
+    "Dark": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oscuro"
+          }
+        }
+      }
+    },
     "Deck": {
       "localizations": {
         "es": {
@@ -877,16 +897,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Primera mano"
-          }
-        }
-      }
-    },
-    "Follows your device's light or dark mode.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sigue el modo claro u oscuro de tu dispositivo."
           }
         }
       }
@@ -1201,6 +1211,16 @@
         }
       }
     },
+    "Light": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claro"
+          }
+        }
+      }
+    },
     "Linen": {
       "localizations": {
         "es": {
@@ -1217,6 +1237,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Racha más larga"
+          }
+        }
+      }
+    },
+    "Match system": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igual que el sistema"
           }
         }
       }
@@ -2017,26 +2047,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Petróleo y coral"
-          }
-        }
-      }
-    },
-    "Teal & Coral Dark": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Petróleo y coral oscuro"
-          }
-        }
-      }
-    },
-    "Teal & Coral Light": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Petróleo y coral claro"
           }
         }
       }

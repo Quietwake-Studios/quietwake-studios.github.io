@@ -16,13 +16,11 @@ extension Reward {
 }
 
 enum ThemeChoice: String, Reward {
-    case tealCoral, tealCoralLight, tealCoralDark, sageSand, indigoPeach, sageCoral, highContrast
+    case tealCoral, sageSand, indigoPeach, sageCoral, highContrast
 
     var title: LocalizedStringResource {
         switch self {
         case .tealCoral: "Teal & Coral"
-        case .tealCoralLight: "Teal & Coral Light"
-        case .tealCoralDark: "Teal & Coral Dark"
         case .sageSand: "Sage & Sand"
         case .indigoPeach: "Indigo & Peach"
         case .sageCoral: "Sage & Coral"
@@ -30,10 +28,10 @@ enum ThemeChoice: String, Reward {
         }
     }
 
-    /// The default in a fixed mode and High contrast (accessibility) are never locked.
+    /// The default and High contrast (accessibility) are never locked.
     var unlockedBy: Achievement? {
         switch self {
-        case .tealCoral, .tealCoralLight, .tealCoralDark, .highContrast: nil
+        case .tealCoral, .highContrast: nil
         case .sageSand: .noHelp
         case .indigoPeach: .consistency
         case .sageCoral: .nightOwl
@@ -42,17 +40,13 @@ enum ThemeChoice: String, Reward {
 
     /// Shown instead of an unlock condition.
     var note: LocalizedStringResource? {
-        // Separate returns: string extraction skips literals after the first case of a switch here.
-        if self == .tealCoral { return "Follows your device's light or dark mode." }
-        if self == .highContrast { return "Always available for low vision." }
-        return nil
+        self == .highContrast ? "Always available for low vision." : nil
     }
 
-    /// The kit's palette behind this choice. Teal & Coral Light and Dark are Teal & Coral
-    /// pinned to one mode.
+    /// The kit's palette behind this choice.
     var palette: Palette {
         switch self {
-        case .tealCoral, .tealCoralLight, .tealCoralDark: .tealCoral
+        case .tealCoral: .tealCoral
         case .sageSand: .sageSand
         case .indigoPeach: .indigoPeach
         case .sageCoral: .sageCoral
@@ -60,25 +54,43 @@ enum ThemeChoice: String, Reward {
         }
     }
 
-    /// Teal & Coral follows the system, or stays light or dark whatever the device uses;
-    /// the others have a single mode of their own.
-    var theme: Theme {
-        switch self {
-        case .tealCoralLight: Theme(palette, colorScheme: .light)
-        case .tealCoralDark: Theme(palette, colorScheme: .dark)
-        default: Theme(palette)
-        }
+    /// Every theme has light and dark (2026-11-08): it follows the system, or the mode fixed
+    /// in Settings › Appearance.
+    func theme(_ mode: AppearanceMode) -> Theme {
+        Theme(palette, colorScheme: mode.colorScheme)
     }
 
-    /// Ids saved before the 2026 redesign, mapped to the theme that took their place
-    /// (same unlock, except Ember: its slot went to the always-available High contrast).
-    private static let legacyIDs: [String: ThemeChoice] = [
-        "paper": .tealCoral, "slate": .sageSand, "sand": .indigoPeach, "midnight": .sageCoral, "ember": .highContrast,
+    /// Ids saved by older versions, mapped to the theme that took their place and, for the
+    /// old pinned variants, the appearance mode they fixed.
+    /// - Before the 2026 redesign: same unlock, except Ember, whose slot went to the
+    ///   always-available High contrast.
+    /// - Teal & Coral Light and Dark (2026-10-27 to 2026-11-08): Teal & Coral with the mode
+    ///   fixed in Settings › Appearance. Both were always available, so no unlock is lost.
+    private static let legacyIDs: [String: (theme: ThemeChoice, mode: AppearanceMode?)] = [
+        "paper": (.tealCoral, nil), "slate": (.sageSand, nil), "sand": (.indigoPeach, nil),
+        "midnight": (.sageCoral, nil), "ember": (.highContrast, nil),
+        "tealCoralLight": (.tealCoral, .light), "tealCoralDark": (.tealCoral, .dark),
     ]
 
     static func migrateSavedChoice(in defaults: UserDefaults = .standard) {
-        guard let saved = defaults.string(forKey: PreferenceKey.theme), let theme = legacyIDs[saved] else { return }
-        defaults.set(theme.rawValue, forKey: PreferenceKey.theme)
+        guard let saved = defaults.string(forKey: PreferenceKey.theme), let legacy = legacyIDs[saved] else { return }
+        defaults.set(legacy.theme.rawValue, forKey: PreferenceKey.theme)
+        if let mode = legacy.mode, defaults.string(forKey: PreferenceKey.appearanceMode) == nil {
+            defaults.set(mode.rawValue, forKey: PreferenceKey.appearanceMode)
+        }
+    }
+}
+
+/// "Match system", or a fixed light or dark look for every theme (2026-11-08).
+enum AppearanceMode: String, CaseIterable {
+    case system, light, dark
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
     }
 }
 
@@ -175,6 +187,9 @@ extension EnvironmentValues {
 /// Storage keys for preferences (UserDefaults).
 enum PreferenceKey {
     static let theme = "theme"
+    /// Light or dark: follow the system (default) or fix one (Settings › Appearance, 2026-11-08).
+    /// A setting, not a reward: a reset keeps it.
+    static let appearanceMode = "appearanceMode"
     static let tileStyle = "tileStyle"
     static let numberFont = "numberFont"
     static let clearEffect = "clearEffect"

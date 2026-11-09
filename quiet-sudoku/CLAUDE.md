@@ -166,7 +166,9 @@ Recompensas cosméticas: tableros (los temas de QuietKit), estilo de los número
 | `qsu_centennial` | Centenario / Centennial | Resolver 100 | Ícono dorado |
 | `qsu_in_the_red` | Números rojos / In the Red | Puntaje bajo cero (oculto) | Pistas a 3 solo en clásico |
 
-Siempre disponibles, sin logro: tema **Alto contraste**, **Números grandes** (accesibilidad) y los tableros **Petróleo y coral claro** y **oscuro**.
+Siempre disponibles, sin logro: tema **Alto contraste** y **Números grandes** (accesibilidad).
+
+**Apariencia (decisión 2026-11-08, como Quiet Words):** todos los temas tienen versión clara y oscura (`QuietCore/Palette.swift`; ya no hay temas de un solo modo). El modo se elige en **Ajustes › Apariencia**: "Igual que el sistema" (encendido por defecto); al apagarlo aparece Claro · Oscuro, preseleccionado en el contrario del modo actual para que el cambio se vea al instante (`@AppStorage("appearanceMode")`: system/light/dark, en `AppearanceRoot` con `Theme(palette, colorScheme:)`; es una opción, no una recompensa: reiniciar el progreso no la borra). **Petróleo y coral claro y oscuro dejaron de ser temas aparte:** `AppearanceMode.migrate` (al abrir la app) pasa `board = tealCoralLight/tealCoralDark` a `tealCoral` con `appearanceMode = light/dark` (si no había un modo elegido). Eran gratis y ningún logro los daba, y iCloud guarda logros, no elecciones: nadie pierde nada y cada logro sigue con su recompensa. Las tarjetas de tableros en Colección muestran cada tema en claro y en oscuro. El tablero usa solo roles (`separator`, `ink`, `primary`, `accent`, `muted`, `surface2`), así que sirve igual en los dos modos. Tests: `AppTests/AppearanceTests.swift` (migración) y el UI test `testMatchSystemToggle`.
 
 ## Tutorial (propuesta)
 

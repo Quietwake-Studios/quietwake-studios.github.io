@@ -88,6 +88,7 @@ final class AppModel {
         if arguments.contains("-resetStore") {
             UserDefaults.standard.removeObject(forKey: PreferenceKey.tutorialSeen)
             UserDefaults.standard.removeObject(forKey: PreferenceKey.wordLanguage)
+            UserDefaults.standard.removeObject(forKey: PreferenceKey.appearanceMode)
         }
         if arguments.contains("-unlockAll") {
             profile.progress = PlayerProgress(unlocked: Set(Achievement.allCases))

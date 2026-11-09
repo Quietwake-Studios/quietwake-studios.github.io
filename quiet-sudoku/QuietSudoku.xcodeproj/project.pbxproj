@@ -23,6 +23,7 @@
 		69E2A141226AA7B18B85025B /* ReminderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69B88C3A31DFE0E324D9C79 /* ReminderTests.swift */; };
 		6BA98019A5E99C76E2B48E27 /* PendingReminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFB0E9DDF335FA150A3E745 /* PendingReminders.swift */; };
 		6ED5DF686C8F98AD934E7F3F /* GameplayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8ADE58B69E4DB83AD93CF2 /* GameplayUITests.swift */; };
+		7480A7849F8AE6E0C728A6B3 /* AppearanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6017264D12183ADC2FDCC470 /* AppearanceTests.swift */; };
 		826CB236369A74F43EEC26D3 /* AchievementText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3780911BD1CD61FC679055 /* AchievementText.swift */; };
 		83EAE46E95C82056A9ED632D /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878F8CC7F5732FEC43B49EBF /* CollectionView.swift */; };
 		89EBC361983534AA52FF6633 /* GameModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBD6C2F83A3703302A79E4A /* GameModelTests.swift */; };
@@ -78,6 +79,7 @@
 		4B5B3A1B88F39A24531AFBB8 /* ReminderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderUITests.swift; sourceTree = "<group>"; };
 		4BF50F1172C0D26612562233 /* QuietSudokuUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuietSudokuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E6B6E8D9D8EBF565F483EB3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		6017264D12183ADC2FDCC470 /* AppearanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceTests.swift; sourceTree = "<group>"; };
 		6A1C9EDD3554F2295A35AB93 /* DailyRuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRuleTests.swift; sourceTree = "<group>"; };
 		6AFB0E9DDF335FA150A3E745 /* PendingReminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingReminders.swift; sourceTree = "<group>"; };
 		6DE418DCE2D568B50549AB4E /* Rewards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rewards.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 		C53B1D38C9B2BCFAC7E4ED0A /* AppTests */ = {
 			isa = PBXGroup;
 			children = (
+				6017264D12183ADC2FDCC470 /* AppearanceTests.swift */,
 				6A1C9EDD3554F2295A35AB93 /* DailyRuleTests.swift */,
 				CCBD6C2F83A3703302A79E4A /* GameModelTests.swift */,
 				A69B88C3A31DFE0E324D9C79 /* ReminderTests.swift */,
@@ -436,6 +439,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7480A7849F8AE6E0C728A6B3 /* AppearanceTests.swift in Sources */,
 				5196904A2E30F01E6093E023 /* DailyRuleTests.swift in Sources */,
 				89EBC361983534AA52FF6633 /* GameModelTests.swift in Sources */,
 				69E2A141226AA7B18B85025B /* ReminderTests.swift in Sources */,

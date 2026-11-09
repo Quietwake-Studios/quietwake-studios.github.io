@@ -19,15 +19,15 @@ extension Reward {
     }
 }
 
-/// The board: the family's palettes.
+/// The board: the family's palettes. Every one has light and dark (2026-11-08): the mode
+/// follows the system or Settings › Appearance (`AppearanceMode`). Teal & Coral Light and Dark
+/// used to be separate choices; `AppearanceMode.migrate` turns them into Teal & Coral + a mode.
 enum BoardChoice: String, Reward {
-    case tealCoral, tealCoralLight, tealCoralDark, sageSand, indigoPeach, sageCoral, highContrast
+    case tealCoral, sageSand, indigoPeach, sageCoral, highContrast
 
     var title: LocalizedStringResource {
         switch self {
         case .tealCoral: "Teal & Coral"
-        case .tealCoralLight: "Teal & Coral Light"
-        case .tealCoralDark: "Teal & Coral Dark"
         case .sageSand: "Sage & Sand"
         case .indigoPeach: "Indigo & Peach"
         case .sageCoral: "Sage & Coral"
@@ -37,7 +37,7 @@ enum BoardChoice: String, Reward {
 
     var unlockedBy: Achievement? {
         switch self {
-        case .tealCoral, .tealCoralLight, .tealCoralDark, .highContrast: nil
+        case .tealCoral, .highContrast: nil
         case .sageSand: .noHints
         case .indigoPeach: .consistency
         case .sageCoral: .nightOwl
@@ -45,29 +45,10 @@ enum BoardChoice: String, Reward {
     }
 
     var note: LocalizedStringResource? {
-        // Separate returns: string extraction skips literals after the first case of a switch here.
-        if self == .tealCoral { return "Follows your device's light or dark mode." }
-        if self == .highContrast { return "Always available for low vision." }
-        return nil
+        self == .highContrast ? "Always available for low vision." : nil
     }
 
-    /// Teal & Coral Light and Dark are Teal & Coral pinned to one mode.
-    var palette: Palette {
-        switch self {
-        case .tealCoral, .tealCoralLight, .tealCoralDark: .tealCoral
-        default: Palette(rawValue: rawValue)!
-        }
-    }
-
-    /// Teal & Coral follows the system, or stays light or dark whatever the device uses;
-    /// the others have a single mode of their own.
-    var theme: Theme {
-        switch self {
-        case .tealCoralLight: Theme(palette, colorScheme: .light)
-        case .tealCoralDark: Theme(palette, colorScheme: .dark)
-        default: Theme(palette)
-        }
-    }
+    var palette: Palette { Palette(rawValue: rawValue)! }
 }
 
 /// The digits' typeface. System fonts only: nothing to license.
@@ -191,6 +172,9 @@ enum PreferenceKey {
     static let hapticsEnabled = "hapticsEnabled"
     static let showsMistakes = "showsMistakes"
     static let largeDigits = "largeDigits"
+    /// Light or dark: follow the system (default) or fix one (2026-11-08). An option, not a
+    /// reward: a reset keeps it.
+    static let appearanceMode = "appearanceMode"
     /// The level of the last classic game, offered first next time.
     static let classicDifficulty = "classicDifficulty"
     /// The tutorial was played or skipped. Cleared by a reset, like a fresh install.
@@ -200,4 +184,29 @@ enum PreferenceKey {
 
     /// Cosmetic choices, cleared by a reset.
     static let rewards = [board, digits, notes, highlight, victory, appIcon]
+}
+
+/// "Match system", or a fixed light or dark look (Settings › Appearance, 2026-11-08).
+enum AppearanceMode: String, CaseIterable {
+    case system, light, dark
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
+    }
+
+    /// Up to 1.0 (2), Teal & Coral Light and Dark were boards of their own: they become Teal &
+    /// Coral with the mode fixed. Both were free, so nothing unlocked or synced (iCloud keeps
+    /// achievements, not choices) changes. Runs once per launch; a no-op afterwards.
+    static func migrate(_ defaults: UserDefaults = .standard) {
+        let legacy: [String: AppearanceMode] = ["tealCoralLight": .light, "tealCoralDark": .dark]
+        guard let board = defaults.string(forKey: PreferenceKey.board), let mode = legacy[board] else { return }
+        defaults.set(BoardChoice.tealCoral.rawValue, forKey: PreferenceKey.board)
+        if defaults.string(forKey: PreferenceKey.appearanceMode) == nil {
+            defaults.set(mode.rawValue, forKey: PreferenceKey.appearanceMode)
+        }
+    }
 }

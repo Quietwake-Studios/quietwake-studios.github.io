@@ -8,9 +8,13 @@ protocol Reward: CaseIterable, Hashable {
     /// Nil: always available.
     var achievement: Achievement? { get }
     var title: LocalizedStringResource { get }
+    /// A second line on the reward's card (a theme's modes).
+    var detail: LocalizedStringResource? { get }
 }
 
 extension Reward {
+    var detail: LocalizedStringResource? { nil }
+
     func isUnlocked(in progress: PlayerProgress) -> Bool {
         achievement.map(progress.unlocked.contains) ?? true
     }
@@ -74,6 +78,7 @@ extension Palette: Reward {
         case .highContrast: "High contrast"
         }
     }
+
 }
 
 /// The Home screen icon.

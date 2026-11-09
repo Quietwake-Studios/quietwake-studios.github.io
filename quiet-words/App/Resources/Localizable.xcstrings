@@ -504,6 +504,16 @@
         }
       }
     },
+    "Appearance": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apariencia"
+          }
+        }
+      }
+    },
     "At %@ if you haven't played; with a streak of 3 or more, another at %@.": {
       "localizations": {
         "es": {
@@ -810,6 +820,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reto · %1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "Dark": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oscuro"
           }
         }
       }
@@ -1374,6 +1394,16 @@
         }
       }
     },
+    "Light": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claro"
+          }
+        }
+      }
+    },
     "Longest streak": {
       "localizations": {
         "es": {
@@ -1400,6 +1430,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marcador"
+          }
+        }
+      }
+    },
+    "Match system": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igual que el sistema"
           }
         }
       }

@@ -293,6 +293,40 @@ import Testing
         #expect(defaults.string(forKey: PreferenceKey.theme) == ThemeChoice.highContrast.rawValue)
         defaults.removePersistentDomain(forName: "legacyThemeIDsMigrate")
     }
+
+    /// Teal & Coral Light and Dark stopped being themes of their own (2026-11-08): they become
+    /// Teal & Coral with that mode fixed in Settings › Appearance, and stay unlocked.
+    @Test func pinnedTealCoralMigratesToAppearanceMode() {
+        let suite = "pinnedTealCoralMigratesToAppearanceMode"
+        let defaults = UserDefaults(suiteName: suite)!
+        for (old, mode) in [("tealCoralLight", AppearanceMode.light), ("tealCoralDark", .dark)] {
+            defaults.removePersistentDomain(forName: suite)
+            defaults.set(old, forKey: PreferenceKey.theme)
+            ThemeChoice.migrateSavedChoice(in: defaults)
+            #expect(defaults.string(forKey: PreferenceKey.theme) == ThemeChoice.tealCoral.rawValue)
+            #expect(defaults.string(forKey: PreferenceKey.appearanceMode) == mode.rawValue)
+            #expect(ThemeChoice.tealCoral.isUnlocked(in: PlayerProgress()))
+            #expect(ThemeChoice.tealCoral.theme(mode).colorScheme == mode.colorScheme)
+        }
+        // A mode the player already chose wins; a current id leaves the mode alone.
+        defaults.set("tealCoralLight", forKey: PreferenceKey.theme)
+        defaults.set(AppearanceMode.dark.rawValue, forKey: PreferenceKey.appearanceMode)
+        ThemeChoice.migrateSavedChoice(in: defaults)
+        #expect(defaults.string(forKey: PreferenceKey.appearanceMode) == AppearanceMode.dark.rawValue)
+        defaults.removePersistentDomain(forName: suite)
+        defaults.set(ThemeChoice.sageSand.rawValue, forKey: PreferenceKey.theme)
+        ThemeChoice.migrateSavedChoice(in: defaults)
+        #expect(defaults.string(forKey: PreferenceKey.theme) == ThemeChoice.sageSand.rawValue)
+        #expect(defaults.string(forKey: PreferenceKey.appearanceMode) == nil)
+        #expect(ThemeChoice.sageSand.theme(.system).colorScheme == nil)
+        defaults.removePersistentDomain(forName: suite)
+    }
+
+    /// Every theme's reward is still there: each achievement that gave a theme still does.
+    @Test func everyThemeAchievementStillHasItsTheme() {
+        let rewarded = Set(ThemeChoice.allCases.compactMap(\.unlockedBy))
+        #expect(rewarded == [.noHelp, .consistency, .nightOwl])
+    }
 }
 
 @MainActor

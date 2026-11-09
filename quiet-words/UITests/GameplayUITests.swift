@@ -78,6 +78,23 @@ final class GameplayUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: 5) || app.navigationBars.firstMatch.waitForExistence(timeout: 1))
     }
 
+    /// Appearance: turning "Match system" off switches to the opposite mode (the simulator is
+    /// light, so dark), and turning it on again goes back.
+    func testMatchSystemToggle() throws {
+        let app = launch(["-open", "settings"])
+        let toggle = app.descendants(matching: .any)["matchSystem"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].exists)
+        toggle.tap()
+        let mode = app.descendants(matching: .any)["appearanceMode"].firstMatch
+        XCTAssertTrue(mode.waitForExistence(timeout: 3))
+        XCTAssertEqual(mode.value as? String, "dark")
+        app.buttons["Light"].tap()
+        XCTAssertEqual(mode.value as? String, "light")
+        toggle.tap()
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
+    }
+
     /// The tutorial: the words' language first, then drag CORAL and tap the second word.
     func testTutorial() throws {
         let app = launch(["-tutorial", "-open", "tutorial"])

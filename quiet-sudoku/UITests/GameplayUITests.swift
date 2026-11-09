@@ -47,6 +47,23 @@ final class GameplayUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Solved!"].waitForExistence(timeout: 15))
     }
 
+    /// Appearance: turning "Match system" off switches to the opposite mode (the simulator is
+    /// light, so dark), and turning it on again goes back.
+    func testMatchSystemToggle() throws {
+        let app = launch(["-uiTesting", "-resetStore", "-open", "settings"])
+        let toggle = app.descendants(matching: .any)["matchSystem"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].exists)
+        toggle.tap()
+        let mode = app.descendants(matching: .any)["appearanceMode"].firstMatch
+        XCTAssertTrue(mode.waitForExistence(timeout: 3))
+        XCTAssertEqual(mode.value as? String, "dark")
+        app.buttons["Light"].tap()
+        XCTAssertEqual(mode.value as? String, "light")
+        toggle.tap()
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
+    }
+
     func testTutorialFromScratch() {
         let app = launch(["-uiTesting", "-resetStore", "-tutorial"])
         app.buttons["newGame"].tap()

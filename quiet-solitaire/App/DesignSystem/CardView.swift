@@ -29,7 +29,11 @@ struct DeckColors {
             self.init(face: theme.surface, border: theme.isHighContrast ? theme.ink : theme.ghost,
                       borderWidth: theme.isHighContrast ? 2 : 1, black: theme.ink, red: theme.suitRed, panel: theme.surface2)
             if deck == .fourColor {
-                diamonds = theme.primary
+                // The sage themes' primary is green like the clubs: their diamonds go blue.
+                diamonds = switch theme.palette {
+                case .sageSand, .sageCoral: .dynamic(light: "#2F5DA8", dark: "#86B0F0")
+                default: theme.primary
+                }
                 clubs = .dynamic(light: "#3B7A3A", dark: "#8CCB84")
             }
         }
@@ -370,12 +374,14 @@ struct BackStyle {
         self.back = back
         switch back {
         case .theme:
+            // Every theme has light and dark (2026-11-08): light is the theme's primary, dark a
+            // deeper shade of it that still stands off the dark table.
             fill = switch palette {
             case .tealCoral: .dynamic(light: "#0E6B78", dark: "#1D5961")
-            case .sageSand: .hex("#387454")
-            case .indigoPeach: .hex("#3A3878")
-            case .sageCoral: .hex("#4D7157")
-            case .highContrast: .hex("#003F91")
+            case .sageSand: .dynamic(light: "#387454", dark: "#2D5C44")
+            case .indigoPeach: .dynamic(light: "#4B48C4", dark: "#3A3878")
+            case .sageCoral: .dynamic(light: "#4D7157", dark: "#3C5B46")
+            case .highContrast: .dynamic(light: "#003F91", dark: "#1C4D96")
             }
             (line, mark, pattern) = (.white.opacity(0.32), .white.opacity(0.62), .white.opacity(0.07))
         case .coral:

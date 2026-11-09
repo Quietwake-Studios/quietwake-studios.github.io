@@ -13,6 +13,8 @@ enum PreferenceKey {
     static let lastLevel = "lastLevel"
     static let lastTheme = "lastTheme"
     static let palette = "palette"
+    /// Light or dark when the theme has both: follow the system (default) or fix one (2026-11-08).
+    static let appearanceMode = "appearanceMode"
     static let marker = "marker"
     static let boardFont = "boardFont"
     static let appIcon = "appIcon"
@@ -21,6 +23,19 @@ enum PreferenceKey {
 
     /// Cosmetic choices, cleared by "Reset progress".
     static let rewards = [palette, marker, boardFont, appIcon]
+}
+
+/// "Match system", or a fixed light or dark look (only for themes with both modes).
+enum AppearanceMode: String, CaseIterable {
+    case system, light, dark
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
+    }
 }
 
 extension WordLanguage {

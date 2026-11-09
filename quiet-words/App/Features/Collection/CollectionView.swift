@@ -172,8 +172,7 @@ private struct RewardsList: View {
                 Text(verbatim: "ABC").font(font.font(size: 20)).tracking(2).foregroundStyle(theme.ink)
             }
             section("Theme", Palette.allCases, selection: $palette) { option in
-                let t = Theme(option)
-                HStack(spacing: 4) { Circle().fill(t.primary).frame(width: 20); Circle().fill(t.accent).frame(width: 20) }.frame(height: 20)
+                ThemePreview(palette: option)
             }
             section("App icon", AppIconChoice.allCases, selection: Binding(get: { icon }, set: { choice in
                 icon = choice
@@ -199,6 +198,9 @@ private struct RewardsList: View {
                                 .background(theme.background, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                                 .opacity(unlocked ? 1 : 0.45)
                             Text(item.title).font(.subheadline.weight(.semibold)).foregroundStyle(theme.ink)
+                            if let detail = item.detail {
+                                Text(detail).font(.caption2).foregroundStyle(theme.muted)
+                            }
                             if let achievement = item.achievement, !unlocked {
                                 Label { Text(achievement.title) } icon: { Image(systemName: "lock.fill") }
                                     .font(.caption2).foregroundStyle(theme.muted)
@@ -234,5 +236,38 @@ private struct MarkerPreview: View {
             .frame(width: 90, height: 30)
             Text(verbatim: "MAREA").font(.system(size: 11, weight: .semibold, design: .rounded)).tracking(4).foregroundStyle(theme.ink)
         }
+    }
+}
+
+/// A theme in both modes, side by side: background with its primary and accent (2026-11-08,
+/// every theme has light and dark).
+private struct ThemePreview: View {
+    let palette: Palette
+
+    var body: some View {
+        HStack(spacing: 0) {
+            half(\.light).accessibilityLabel(Text("Light"))
+            half(\.dark).accessibilityLabel(Text("Dark"))
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding(6)
+    }
+
+    private func half(_ mode: KeyPath<(light: String, dark: String), String>) -> some View {
+        let color = { (role: Palette.Role) in Color(hex: palette.hex(role)[keyPath: mode]) }
+        return HStack(spacing: 3) {
+            Circle().fill(color(.primary)).frame(width: 14, height: 14)
+            Circle().fill(color(.accent)).frame(width: 14, height: 14)
+        }
+        .frame(maxWidth: .infinity, minHeight: 34)
+        .background(color(.background))
+    }
+}
+
+extension Color {
+    /// `#RRGGBB` (palette previews).
+    init(hex: String) {
+        let (r, g, b) = Contrast.components(hex)
+        self.init(red: r, green: g, blue: b)
     }
 }

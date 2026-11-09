@@ -22,7 +22,7 @@ struct CollectionView: View {
                 }
                 BackPicker(selection: $back, progress: app.progress)
                 RewardSection(title: "Board", selection: $board, progress: app.progress) { choice in
-                    PaletteSwatch(theme: choice.theme)
+                    ThemePreview(palette: choice.palette)
                 }
                 RewardSection(title: "Victory", selection: $victory, progress: app.progress)
                 RewardSection(title: "App icon", selection: $appIcon, progress: app.progress)
@@ -174,23 +174,32 @@ private struct BackPicker: View {
     }
 }
 
-/// A palette's primary and accent, as two overlapping dots.
-private struct PaletteSwatch: View {
-    let theme: Theme
-
-    @Environment(\.quietTheme) private var current
-    @Environment(\.colorScheme) private var colorScheme
+/// A theme in both modes, side by side: its background with primary and accent dots
+/// (2026-11-08, every theme has light and dark).
+private struct ThemePreview: View {
+    let palette: Palette
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            Circle().fill(theme.primary).frame(width: 24, height: 24)
-            Circle().fill(theme.accent).frame(width: 24, height: 24)
-                .overlay { Circle().stroke(current.surface, lineWidth: 2) }
-                .offset(x: 12)
+        HStack(spacing: 0) {
+            half(\.light)
+            half(\.dark)
         }
-        // Single-mode palettes show their own colors whatever the current scheme.
-        .environment(\.colorScheme, theme.colorScheme ?? colorScheme)
-        .frame(width: 36, alignment: .leading)
+        .frame(width: 64, height: 30)
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .strokeBorder(Color.hex(palette.hex(.ghost).light).opacity(0.6), lineWidth: 1)
+        }
+    }
+
+    private func half(_ mode: KeyPath<(light: String, dark: String), String>) -> some View {
+        let color = { (role: Palette.Role) in Color.hex(palette.hex(role)[keyPath: mode]) }
+        return HStack(spacing: 3) {
+            Circle().fill(color(.primary)).frame(width: 11, height: 11)
+            Circle().fill(color(.accent)).frame(width: 11, height: 11)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(color(.background))
     }
 }
 

@@ -14,9 +14,10 @@ struct AppearanceRoot: ViewModifier {
     @AppStorage(PreferenceKey.numberFont) private var numberFont = NumberFont.rounded
     @AppStorage(PreferenceKey.clearEffect) private var clearEffect = ClearEffect.outline
     @AppStorage(PreferenceKey.largerNumbers) private var largerNumbers = false
+    @AppStorage(PreferenceKey.appearanceMode) private var mode = AppearanceMode.system
 
     func body(content: Content) -> some View {
-        let colors = available(theme, or: .tealCoral).theme
+        let colors = available(theme, or: .tealCoral).theme(mode)
         content
             .environment(\.quietTheme, colors)
             .environment(\.appearance, Appearance(

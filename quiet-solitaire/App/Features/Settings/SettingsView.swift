@@ -7,7 +7,9 @@ struct SettingsView: View {
     @AppStorage(PreferenceKey.tapToMove) private var tapToMove = true
     @AppStorage(PreferenceKey.winnableOnly) private var winnableOnly = true
     @AppStorage(PreferenceKey.leftHanded) private var leftHanded = false
+    @AppStorage(PreferenceKey.appearanceMode) private var mode = AppearanceMode.system
     @Environment(\.quietTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(AppModel.self) private var app
     @State private var confirmsReset = false
@@ -32,6 +34,8 @@ struct SettingsView: View {
                     if PendingReminders.isRequested { PendingReminders() }
                     #endif
                 }
+
+                appearance
 
                 GroupSection("Account") {
                     Button {
@@ -96,6 +100,30 @@ struct SettingsView: View {
             Button("Reset Progress", role: .destructive, action: reset)
         } message: {
             Text("Your games, daily challenge results, streaks, achievements and unlocked rewards will be deleted on this device and in iCloud. Scores already on Game Center leaderboards stay there. This can't be undone.")
+        }
+    }
+
+    /// "Match system", and off: Light · Dark, starting on the opposite of what's on screen so
+    /// the change shows right away. Every theme has both modes (2026-11-08).
+    private var appearance: some View {
+        GroupSection("Appearance") {
+            Toggle("Match system", isOn: Binding(
+                get: { mode == .system },
+                set: { matches in
+                    withAnimation(.quiet) {
+                        mode = matches ? .system : (colorScheme == .dark ? .light : .dark)
+                    }
+                }
+            ))
+            .toggleStyle(ThemedToggleStyle())
+            .accessibilityIdentifier("matchSystem")
+            if mode != .system {
+                Segments(selection: $mode, options: [(.light, "Light"), (.dark, "Dark")])
+                    .padding(.vertical, 6)
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("appearanceMode")
+                    .accessibilityValue(Text(verbatim: mode.rawValue))
+            }
         }
     }
 

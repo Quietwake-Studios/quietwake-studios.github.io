@@ -217,6 +217,10 @@ ES = {
     "guessed early · +%lld": "adivinada antes · +%lld",
     "revealed · +%lld": "revelada · +%lld",
     "Look Up": "Definición",
+    "Appearance": "Apariencia",
+    "Match system": "Igual que el sistema",
+    "Light": "Claro",
+    "Dark": "Oscuro",
     "Missing words show only their length. Tap a word with a book to see its definition.":
         "Las que faltan solo muestran su largo. Toca una palabra con un libro para ver su definición.",
     "Shows the definition": "Muestra la definición",

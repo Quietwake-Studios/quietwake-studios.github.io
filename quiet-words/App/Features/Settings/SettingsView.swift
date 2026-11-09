@@ -11,6 +11,8 @@ struct SettingsView: View {
     @AppStorage(PreferenceKey.soundEnabled) private var sound = true
     @AppStorage(PreferenceKey.hapticsEnabled) private var haptics = true
     @AppStorage(PreferenceKey.largerLetters) private var largerLetters = false
+    @AppStorage(PreferenceKey.appearanceMode) private var mode = AppearanceMode.system
+    @Environment(\.colorScheme) private var colorScheme
     @State private var confirmsReset = false
 
     var body: some View {
@@ -38,6 +40,7 @@ struct SettingsView: View {
                     .toggleStyle(ThemedToggleStyle())
                     DailyReminderToggle(reminders: app.reminders)
                 }
+                appearance
                 GroupSection("Account") {
                     Button {
                         app.gameCenter.isAuthenticated ? app.gameCenter.showDashboard() : app.gameCenter.signIn()
@@ -73,6 +76,32 @@ struct SettingsView: View {
             Button("Reset progress", role: .destructive) { app.resetProgress() }
         } message: {
             Text("Games, the album, streaks and rewards are erased here and in iCloud. Sound and settings stay.")
+        }
+    }
+
+    // MARK: Appearance
+
+    /// "Match system", and off: Light · Dark, starting on the opposite of what's on screen so
+    /// the change shows right away. Every theme has both modes (2026-11-08).
+    private var appearance: some View {
+        GroupSection("Appearance") {
+            Toggle("Match system", isOn: Binding(
+                get: { mode == .system },
+                set: { matches in
+                    withAnimation(.quiet) {
+                        mode = matches ? .system : (colorScheme == .dark ? .light : .dark)
+                    }
+                }
+            ))
+            .toggleStyle(ThemedToggleStyle())
+            .accessibilityIdentifier("matchSystem")
+            if mode != .system {
+                Segments(selection: $mode, options: [(.light, "Light"), (.dark, "Dark")])
+                    .padding(.vertical, 6)
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("appearanceMode")
+                    .accessibilityValue(Text(verbatim: mode.rawValue))
+            }
         }
     }
 

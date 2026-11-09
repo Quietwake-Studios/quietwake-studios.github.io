@@ -72,7 +72,6 @@ ES = {
     "Few-moves bonus": "Bono por pocos movimientos",
     "Fifty": "Cincuenta",
     "First Hand": "Primera mano",
-    "Follows your device's light or dark mode.": "Sigue el modo claro u oscuro de tu dispositivo.",
     "Four colors": "Cuatro colores",
     "Friends": "Amigos",
     "Game Center": "Game Center",
@@ -165,8 +164,6 @@ ES = {
         "Toca el mazo para voltear una carta. Cuando se acabe, tócalo otra vez para dar vuelta el descarte. Todas las veces que quieras.",
     "Tap to move": "Tocar para mover",
     "Teal & Coral": "Petróleo y coral",
-    "Teal & Coral Dark": "Petróleo y coral oscuro",
-    "Teal & Coral Light": "Petróleo y coral claro",
     "Ten Wins": "Diez victorias",
     "Theme": "Del tema",
     "This week": "Dificultad de la semana",
@@ -240,6 +237,11 @@ ES = {
     "Your %lld-day streak ends at midnight.": "Tu racha de %lld días termina a medianoche.",
     "Your streak": "Tu racha",
     "Opens their profile": "Abre su perfil",
+    # Settings › Appearance (2026-11-08).
+    "Appearance": "Apariencia",
+    "Match system": "Igual que el sistema",
+    "Light": "Claro",
+    "Dark": "Oscuro",
 }
 
 # QuietKit's texts (QuietUI looks them up in the app's catalog). The compiler doesn't

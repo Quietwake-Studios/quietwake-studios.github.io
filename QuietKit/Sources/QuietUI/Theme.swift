@@ -3,8 +3,8 @@ import QuietCore
 import SwiftUI
 import UIKit
 
-/// Colors for a palette, by role. Single-mode palettes force their color scheme so system
-/// controls match; Teal & Coral follows the system unless an app pins it light or dark.
+/// Colors for a palette, by role, in light and dark. The app follows the system unless the
+/// player pins light or dark in Settings › Appearance.
 public struct Theme: Sendable {
     public let palette: Palette
     /// Screen background.
@@ -28,19 +28,15 @@ public struct Theme: Sendable {
     public let separator: Color
     /// Red suits on card faces.
     public let suitRed: Color
-    /// Forced on the app (`preferredColorScheme`): the palette's own mode, or the one the
-    /// app pinned. `nil` follows the system.
+    /// Forced on the app (`preferredColorScheme`): the mode the player pinned. `nil` follows
+    /// the system.
     public let colorScheme: ColorScheme?
 
-    /// `colorScheme` pins a palette that follows the system to light or dark (e.g. Teal &
-    /// Coral Light); single-mode palettes keep their own mode.
+    /// Every palette has light and dark (2026-11-08). `colorScheme` pins one (Settings ›
+    /// Appearance); `nil` follows the system.
     public init(_ palette: Palette, colorScheme pinned: ColorScheme? = nil) {
         self.palette = palette
-        colorScheme = switch palette.mode {
-        case .system: pinned
-        case .lightOnly: .light
-        case .darkOnly: .dark
-        }
+        colorScheme = pinned
         func color(_ role: Palette.Role) -> Color {
             let hex = palette.hex(role)
             let light = UIColor(hex: hex.light), dark = UIColor(hex: hex.dark)

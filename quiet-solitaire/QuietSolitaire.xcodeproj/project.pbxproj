@@ -37,6 +37,7 @@
 		B80D284C38EDB7C53B718654 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B073CE3BF38DA394219A37D0 /* BoardView.swift */; };
 		C0001125044B6421A6301DE3 /* AppearanceRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C0C71637C81DE09E7B2D55 /* AppearanceRoot.swift */; };
 		CCC8414FB94FB1139C9BF469 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C838AB33AB932D01E914CF /* GameModel.swift */; };
+		CF024CABEA9466E41A08DFCA /* AppearanceMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989996CC73B1AE4A819CE89F /* AppearanceMigrationTests.swift */; };
 		E13723E16368634364DB72AA /* NewGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0860FFD1667C350EF0D382D8 /* NewGameTests.swift */; };
 		E286052F3D4F7D31ED91839B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2CAAEAFC19DBFB9A221F26 /* SettingsView.swift */; };
 		EADEDCF7255741B60C87B6C2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A68668B33B1C84366ACA2B /* HomeView.swift */; };
@@ -101,6 +102,7 @@
 		82C838AB33AB932D01E914CF /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		8F3CE59A61B55CA0C7F050E6 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		935188F0619C49561C0EDD99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		989996CC73B1AE4A819CE89F /* AppearanceMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceMigrationTests.swift; sourceTree = "<group>"; };
 		9A975A3C7BA70E5AE2664432 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		9CC760EECB00E2DB6A4A3169 /* PixelArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelArt.swift; sourceTree = "<group>"; };
 		A1598119819D74D1885B44B5 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 		C405204290ED1D355119646E /* AppTests */ = {
 			isa = PBXGroup;
 			children = (
+				989996CC73B1AE4A819CE89F /* AppearanceMigrationTests.swift */,
 				F0822C2D5698722A6EC5BE80 /* DailyRuleTests.swift */,
 				0860FFD1667C350EF0D382D8 /* NewGameTests.swift */,
 				0F309760749C65769E775FC3 /* ReminderTests.swift */,
@@ -542,6 +545,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF024CABEA9466E41A08DFCA /* AppearanceMigrationTests.swift in Sources */,
 				A204A6CA521109A927A42117 /* DailyRuleTests.swift in Sources */,
 				E13723E16368634364DB72AA /* NewGameTests.swift in Sources */,
 				F3AE73F752DCC95460E1833F /* ReminderTests.swift in Sources */,

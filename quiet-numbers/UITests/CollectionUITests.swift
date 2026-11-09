@@ -32,6 +32,29 @@ final class CollectionUITests: XCTestCase {
         app.buttons["SF Rounded"].tap()
     }
 
+    /// Settings › Appearance: turning "Match system" off switches to the opposite mode (the
+    /// simulator is light, so dark), and turning it on again goes back (2026-11-08).
+    @MainActor
+    func testMatchSystemToggle() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        app.buttons["Settings"].tap()
+        let toggle = app.descendants(matching: .any)["matchSystem"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].exists)
+        toggle.tap()
+        let mode = app.descendants(matching: .any)["appearanceMode"].firstMatch
+        XCTAssertTrue(mode.waitForExistence(timeout: 3))
+        XCTAssertEqual(mode.value as? String, "dark")
+        snapshot(app, "settings-dark")
+        app.buttons["Light"].tap()
+        XCTAssertEqual(mode.value as? String, "light")
+        snapshot(app, "settings-light")
+        toggle.tap()
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
+    }
+
     /// Signed out of Game Center, leaderboards explain how to sign in instead of failing.
     @MainActor
     func testLeaderboardsSignedOut() {

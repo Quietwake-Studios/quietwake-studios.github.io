@@ -34,7 +34,7 @@ struct CollectionView: View {
                 }
                 RewardSection(title: "Highlight", selection: $highlight, progress: app.progress)
                 RewardSection(title: "Board", selection: $board, progress: app.progress) { choice in
-                    PaletteSwatch(theme: choice.theme)
+                    ThemePreview(palette: choice.palette)
                 }
                 RewardSection(title: "Victory", selection: $victory, progress: app.progress)
                 RewardSection(title: "App icon", selection: $appIcon, progress: app.progress)
@@ -124,23 +124,37 @@ extension RewardSection where Preview == EmptyView {
     }
 }
 
-/// A palette's primary and accent, as two overlapping dots.
-private struct PaletteSwatch: View {
-    let theme: Theme
+/// A theme in both modes, side by side: its background with the primary and accent dots, light
+/// then dark (2026-11-08, every theme has both).
+private struct ThemePreview: View {
+    let palette: Palette
 
     @Environment(\.quietTheme) private var current
-    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            Circle().fill(theme.primary).frame(width: 24, height: 24)
-            Circle().fill(theme.accent).frame(width: 24, height: 24)
-                .overlay { Circle().stroke(current.surface, lineWidth: 2) }
-                .offset(x: 12)
+        HStack(spacing: 0) {
+            half(\.light)
+            half(\.dark)
         }
-        // Single-mode palettes show their own colors whatever the current scheme.
-        .environment(\.colorScheme, theme.colorScheme ?? colorScheme)
-        .frame(width: 36, alignment: .leading)
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay { RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(current.separator, lineWidth: 1) }
+        .frame(width: 72, height: 36)
+    }
+
+    private func half(_ mode: KeyPath<(light: String, dark: String), String>) -> some View {
+        let color = { (role: Palette.Role) -> Color in
+            let (r, g, b) = Contrast.components(palette.hex(role)[keyPath: mode])
+            return Color(red: r, green: g, blue: b)
+        }
+        return ZStack(alignment: .leading) {
+            Circle().fill(color(.primary)).frame(width: 16, height: 16)
+            Circle().fill(color(.accent)).frame(width: 16, height: 16)
+                .overlay { Circle().stroke(color(.background), lineWidth: 1.5) }
+                .offset(x: 9)
+        }
+        .frame(width: 25, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(color(.background))
     }
 }
 

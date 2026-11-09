@@ -110,6 +110,13 @@ import Testing
             }
         }
     }
+
+    /// Every palette has a real light and dark mode (2026-11-08).
+    @Test(arguments: Palette.allCases)
+    func everyPaletteHasBothModes(palette: Palette) {
+        #expect(palette.hex(.background).light != palette.hex(.background).dark)
+        #expect(palette.hex(.ink).light != palette.hex(.ink).dark)
+    }
 }
 
 @Suite struct DailyReminderPlanTests {

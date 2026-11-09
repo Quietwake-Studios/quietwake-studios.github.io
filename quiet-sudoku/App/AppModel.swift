@@ -75,10 +75,12 @@ final class AppModel {
         self.persistence = persistence
         self.gameCenter = gameCenter
         self.reminders = reminders
+        AppearanceMode.migrate()
         progress = persistence.loadProgress()
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-resetStore") {
             UserDefaults.standard.removeObject(forKey: PreferenceKey.tutorialSeen)
+            UserDefaults.standard.removeObject(forKey: PreferenceKey.appearanceMode)
         }
         if ProcessInfo.processInfo.arguments.contains("-unlockAll") {
             progress = PlayerProgress(unlocked: Set(Achievement.allCases))

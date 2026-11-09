@@ -13,9 +13,12 @@ struct AppearanceRoot: ViewModifier {
     @AppStorage(PreferenceKey.victory) private var victory = VictoryEffect.fireworks
     @AppStorage(PreferenceKey.largeDigits) private var largeDigits = false
     @AppStorage(PreferenceKey.showsMistakes) private var showsMistakes = true
+    @AppStorage(PreferenceKey.appearanceMode) private var mode = AppearanceMode.system
 
     func body(content: Content) -> some View {
-        let theme = available(board, or: .tealCoral).theme
+        // Every theme has light and dark (2026-11-08): it follows the system, or the mode the
+        // player fixed in Settings › Appearance.
+        let theme = Theme(available(board, or: .tealCoral).palette, colorScheme: mode.colorScheme)
         content
             .environment(\.quietTheme, theme)
             .environment(\.appearance, Appearance(

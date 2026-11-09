@@ -37,9 +37,12 @@ struct AppearanceRoot: ViewModifier {
     @AppStorage(PreferenceKey.marker) private var marker = Marker.highlighter
     @AppStorage(PreferenceKey.boardFont) private var boardFont = BoardFont.rounded
     @AppStorage(PreferenceKey.largerLetters) private var largerLetters = false
+    @AppStorage(PreferenceKey.appearanceMode) private var mode = AppearanceMode.system
 
     func body(content: Content) -> some View {
-        let theme = Theme(app.isUnlocked(palette) ? palette : .tealCoral)
+        // Every theme has light and dark (2026-11-08): it follows the system, or the mode the
+        // player fixed in Settings › Appearance.
+        let theme = Theme(app.isUnlocked(palette) ? palette : .tealCoral, colorScheme: mode.colorScheme)
         content
             .environment(\.quietTheme, theme)
             .environment(\.appearance, Appearance(

@@ -31,6 +31,26 @@ final class GameplayUITests: XCTestCase {
         XCTAssertTrue(app.buttons["autoComplete"].waitForExistence(timeout: 3))
     }
 
+    /// Settings › Appearance: turning "Match system" off switches to the opposite mode (the
+    /// simulator is light, so dark), and turning it on again goes back.
+    func testMatchSystemToggle() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore"]
+        app.launch()
+        app.buttons["settings"].tap()
+        let toggle = app.descendants(matching: .any)["matchSystem"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].exists)
+        toggle.tap()
+        let mode = app.descendants(matching: .any)["appearanceMode"].firstMatch
+        XCTAssertTrue(mode.waitForExistence(timeout: 3))
+        XCTAssertEqual(mode.value as? String, "dark")
+        app.buttons["Light"].tap()
+        XCTAssertEqual(mode.value as? String, "light")
+        toggle.tap()
+        XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
+    }
+
     /// The tutorial walks through its six moves by tapping, then starts a game.
     func testTutorial() {
         let app = XCUIApplication()

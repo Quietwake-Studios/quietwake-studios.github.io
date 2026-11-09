@@ -1,3 +1,4 @@
+import QuietCore
 import QuietNumbersCore
 import QuietUI
 import SwiftUI
@@ -18,7 +19,7 @@ struct CollectionView: View {
         ScrollView {
             VStack(spacing: 18) {
                 RewardSection(title: "Theme", selection: $theme, progress: app.progress) { choice in
-                    ThemeSwatch(theme: choice.theme)
+                    ThemePreview(palette: choice.palette)
                 }
                 RewardSection(title: "Tiles", selection: $tileStyle, progress: app.progress) { style in
                     TilePreview(style: style)
@@ -117,24 +118,42 @@ extension RewardSection where Preview == EmptyView {
     }
 }
 
-/// A theme's primary and accent, as two overlapping dots.
-private struct ThemeSwatch: View {
-    let theme: Theme
+/// A theme in both modes, side by side: background with its primary and accent
+/// (2026-11-08, every theme has light and dark; the mode is chosen in Settings › Appearance).
+private struct ThemePreview: View {
+    let palette: Palette
 
-    @Environment(\.quietTheme) private var colors
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.quietTheme) private var theme
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            Circle().fill(theme.primary).frame(width: 24, height: 24)
-            Circle().fill(theme.accent).frame(width: 24, height: 24)
-                .overlay { Circle().stroke(colors.surface, lineWidth: 2) }
-                .offset(x: 12)
+        HStack(spacing: 0) {
+            half(\.light)
+            half(\.dark)
         }
-        // Single-mode themes show their own colors whatever the current scheme.
-        .environment(\.colorScheme, theme.colorScheme ?? colorScheme)
-        .frame(width: 36, alignment: .leading)
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .strokeBorder(theme.separator, lineWidth: 1)
+        }
         .accessibilityHidden(true)
+    }
+
+    private func half(_ mode: KeyPath<(light: String, dark: String), String>) -> some View {
+        let color = { (role: Palette.Role) in Color(hex: palette.hex(role)[keyPath: mode]) }
+        return HStack(spacing: 3) {
+            Circle().fill(color(.primary)).frame(width: 12, height: 12)
+            Circle().fill(color(.accent)).frame(width: 12, height: 12)
+        }
+        .frame(width: 38, height: 30)
+        .background(color(.background))
+    }
+}
+
+extension Color {
+    /// `#RRGGBB` (palette previews).
+    init(hex: String) {
+        let (r, g, b) = Contrast.components(hex)
+        self.init(red: r, green: g, blue: b)
     }
 }
 
