@@ -1,0 +1,337 @@
+{
+  "achievements": [
+    {
+      "id": "qw_first_puzzle",
+      "codeCase": "Achievement.firstPuzzle",
+      "points": 10,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Pencil marker",
+        "es": "Marcador Lápiz"
+      },
+      "name": {
+        "en": "First Puzzle",
+        "es": "Primera sopa"
+      },
+      "preEarnedDescription": {
+        "en": "Finish your first puzzle.",
+        "es": "Termina tu primera sopa."
+      },
+      "earnedDescription": {
+        "en": "You finished your first puzzle.",
+        "es": "Terminaste tu primera sopa."
+      },
+      "image": "AppStore/achievements/qw_first_puzzle.png"
+    },
+    {
+      "id": "qw_words_100",
+      "codeCase": "Achievement.words100",
+      "points": 20,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Sage & sand theme",
+        "es": "Tema Salvia y arena"
+      },
+      "name": {
+        "en": "A Hundred Words",
+        "es": "Cien palabras"
+      },
+      "preEarnedDescription": {
+        "en": "Find 100 words.",
+        "es": "Encuentra 100 palabras."
+      },
+      "earnedDescription": {
+        "en": "You found 100 words.",
+        "es": "Encontraste 100 palabras."
+      },
+      "image": "AppStore/achievements/qw_words_100.png"
+    },
+    {
+      "id": "qw_words_1000",
+      "codeCase": "Achievement.words1000",
+      "points": 60,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Gold icon",
+        "es": "Ícono dorado"
+      },
+      "name": {
+        "en": "A Thousand Words",
+        "es": "Mil palabras"
+      },
+      "preEarnedDescription": {
+        "en": "Find 1,000 words.",
+        "es": "Encuentra 1.000 palabras."
+      },
+      "earnedDescription": {
+        "en": "You found 1,000 words.",
+        "es": "Encontraste 1.000 palabras."
+      },
+      "image": "AppStore/achievements/qw_words_1000.png"
+    },
+    {
+      "id": "qw_words_10000",
+      "codeCase": "Achievement.words10000",
+      "points": 100,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Mono letters",
+        "es": "Letra Mono"
+      },
+      "name": {
+        "en": "Ten Thousand Words",
+        "es": "Diez mil palabras"
+      },
+      "preEarnedDescription": {
+        "en": "Find 10,000 words.",
+        "es": "Encuentra 10.000 palabras."
+      },
+      "earnedDescription": {
+        "en": "You found 10,000 words.",
+        "es": "Encontraste 10.000 palabras."
+      },
+      "image": "AppStore/achievements/qw_words_10000.png"
+    },
+    {
+      "id": "qw_theme_complete",
+      "codeCase": "Achievement.themeComplete",
+      "points": 100,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Serif letters",
+        "es": "Letra Serif"
+      },
+      "name": {
+        "en": "Theme Complete",
+        "es": "Tema completo"
+      },
+      "preEarnedDescription": {
+        "en": "Find every word of a theme in the album.",
+        "es": "Encuentra todas las palabras de un tema del álbum."
+      },
+      "earnedDescription": {
+        "en": "You found every word of a theme.",
+        "es": "Encontraste todas las palabras de un tema."
+      },
+      "image": "AppStore/achievements/qw_theme_complete.png"
+    },
+    {
+      "id": "qw_hidden_early",
+      "codeCase": "Achievement.inPlainSight",
+      "points": 50,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Ink marker",
+        "es": "Marcador Tinta"
+      },
+      "name": {
+        "en": "In Plain Sight",
+        "es": "A simple vista"
+      },
+      "preEarnedDescription": {
+        "en": "Guess the hidden word before the end, without hints.",
+        "es": "Adivina la palabra oculta antes de terminar, sin pistas."
+      },
+      "earnedDescription": {
+        "en": "You guessed the hidden word early, without hints.",
+        "es": "Adivinaste la palabra oculta antes de terminar, sin pistas."
+      },
+      "image": "AppStore/achievements/qw_hidden_early.png"
+    },
+    {
+      "id": "qw_daily_7",
+      "codeCase": "Achievement.habit",
+      "points": 70,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Indigo & peach theme",
+        "es": "Tema Índigo y durazno"
+      },
+      "name": {
+        "en": "Habit",
+        "es": "Hábito"
+      },
+      "preEarnedDescription": {
+        "en": "Complete 7 daily challenges in a row.",
+        "es": "Completa 7 retos diarios seguidos."
+      },
+      "earnedDescription": {
+        "en": "You completed 7 daily challenges in a row.",
+        "es": "Completaste 7 retos diarios seguidos."
+      },
+      "image": "AppStore/achievements/qw_daily_7.png"
+    },
+    {
+      "id": "qw_daily_30",
+      "codeCase": "Achievement.consistency",
+      "points": 100,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Sage & coral theme",
+        "es": "Tema Salvia y coral"
+      },
+      "name": {
+        "en": "Consistency",
+        "es": "Constancia"
+      },
+      "preEarnedDescription": {
+        "en": "Complete 30 daily challenges in a row.",
+        "es": "Completa 30 retos diarios seguidos."
+      },
+      "earnedDescription": {
+        "en": "You completed 30 daily challenges in a row.",
+        "es": "Completaste 30 retos diarios seguidos."
+      },
+      "image": "AppStore/achievements/qw_daily_30.png"
+    },
+    {
+      "id": "qw_hard_fast",
+      "codeCase": "Achievement.steadyHand",
+      "points": 60,
+      "hidden": false,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Underline marker",
+        "es": "Marcador Subrayado"
+      },
+      "name": {
+        "en": "Steady Hand",
+        "es": "Pulso firme"
+      },
+      "preEarnedDescription": {
+        "en": "Finish a Hard puzzle without hints in under 5 minutes.",
+        "es": "Termina una sopa Difícil sin pistas en menos de 5 minutos."
+      },
+      "earnedDescription": {
+        "en": "You finished a Hard puzzle without hints in under 5 minutes.",
+        "es": "Terminaste una sopa Difícil sin pistas en menos de 5 minutos."
+      },
+      "image": "AppStore/achievements/qw_hard_fast.png"
+    },
+    {
+      "id": "qw_bilingual",
+      "codeCase": "Achievement.bilingual",
+      "points": 30,
+      "hidden": true,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Just the achievement",
+        "es": "Solo el logro"
+      },
+      "name": {
+        "en": "Bilingual",
+        "es": "Bilingüe"
+      },
+      "preEarnedDescription": {
+        "en": "Complete the day's challenge in both languages.",
+        "es": "Completa el reto del día en los dos idiomas."
+      },
+      "earnedDescription": {
+        "en": "You completed the day's challenge in both languages.",
+        "es": "Completaste el reto del día en los dos idiomas."
+      },
+      "image": "AppStore/achievements/qw_bilingual.png"
+    }
+  ],
+  "totalPoints": 600,
+  "leaderboards": [
+    {
+      "id": "qw_daily_en",
+      "codeCase": "Leaderboard.dailyEN",
+      "type": "recurring",
+      "recurrence": "Every 1 day, starting at 05:00 UTC (00:00 in Colombia)",
+      "name": {
+        "en": "Daily Challenge · English words",
+        "es": "Reto diario · palabras en inglés"
+      },
+      "scoreFormat": "Integer",
+      "formatSuffix": {
+        "en": " points",
+        "es": " puntos"
+      },
+      "sortOrder": "High to Low",
+      "scoreSubmission": "Most recent score",
+      "source": "Today's best daily result with English words, sent after every attempt (AppModel.pushToGameCenter); time in context"
+    },
+    {
+      "id": "qw_daily_es",
+      "codeCase": "Leaderboard.dailyES",
+      "type": "recurring",
+      "recurrence": "Every 1 day, starting at 05:00 UTC (00:00 in Colombia)",
+      "name": {
+        "en": "Daily Challenge · Spanish words",
+        "es": "Reto diario · palabras en español"
+      },
+      "scoreFormat": "Integer",
+      "formatSuffix": {
+        "en": " points",
+        "es": " puntos"
+      },
+      "sortOrder": "High to Low",
+      "scoreSubmission": "Most recent score",
+      "source": "Today's best daily result with Spanish words, sent after every attempt (AppModel.pushToGameCenter); time in context"
+    },
+    {
+      "id": "qw_best_hard_en",
+      "codeCase": "Leaderboard.bestHardEN",
+      "type": "classic",
+      "recurrence": null,
+      "name": {
+        "en": "Best Hard · English words",
+        "es": "Mejor Difícil · palabras en inglés"
+      },
+      "scoreFormat": "Integer",
+      "formatSuffix": {
+        "en": " points",
+        "es": " puntos"
+      },
+      "sortOrder": "High to Low",
+      "scoreSubmission": "Best score",
+      "source": "Best free-play Hard score with English words (PlayerProgress.bestScores)"
+    },
+    {
+      "id": "qw_best_hard_es",
+      "codeCase": "Leaderboard.bestHardES",
+      "type": "classic",
+      "recurrence": null,
+      "name": {
+        "en": "Best Hard · Spanish words",
+        "es": "Mejor Difícil · palabras en español"
+      },
+      "scoreFormat": "Integer",
+      "formatSuffix": {
+        "en": " points",
+        "es": " puntos"
+      },
+      "sortOrder": "High to Low",
+      "scoreSubmission": "Best score",
+      "source": "Best free-play Hard score with Spanish words (PlayerProgress.bestScores)"
+    },
+    {
+      "id": "qw_longest_streak",
+      "codeCase": "Leaderboard.longestStreak",
+      "type": "classic",
+      "recurrence": null,
+      "name": {
+        "en": "Longest Streak",
+        "es": "Racha más larga"
+      },
+      "scoreFormat": "Integer",
+      "formatSuffix": {
+        "en": " days",
+        "es": " días"
+      },
+      "sortOrder": "High to Low",
+      "scoreSubmission": "Best score",
+      "source": "Longest run of completed daily challenges, either language (AppModel.longestStreak)"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 Sopa de letras con **temas para adultos**: cada tablero es una colección de palabras de un tema (Océano, Espacio, Botánica, Café y té…), y las letras que no usa ninguna palabra forman la **palabra oculta**. Lo que la aleja de lo infantil no es el arte sino el vocabulario ("abisal", "nebulosa", "tueste"), la tipografía, la calma y los hápticos; nada de dibujos ni mascotas. Gratis para siempre, sin anuncios, sin compras y sin recolectar datos. Cuarta app de la familia Quiet (ver `../CLAUDE.md` y `../studio/roadmap.md`).
 
 - **Nombre (aprobado 2026-11-08):** Quiet Words; en la tienda "Quiet Words: Word Search" / "Quiet Words: Sopa de letras"; en la pantalla de inicio, Quiet Words. "Sopa de letras" / "word search" es el nombre genérico de la mecánica (de dominio público, años 60–70): nunca usar nombres, textos ni tableros de otras apps o revistas.
-- Bundle `com.tavoohoh.quietwords` (solo en `project.yml`/`Config/Base.xcconfig`; **no está registrado**), SKU `quietwords-ios`, prefijo de Game Center `qw_`. Confirmar el nombre en App Store Connect justo antes de registrar (no se puede borrar) y solo con permiso del usuario.
+- Bundle `com.tavoohoh.quietwords` (registrado por Xcode el 2026-11-08, con Game Center e iCloud), SKU `quietwords-ios`, app ID `6832387795` ("Quiet Words: Word Search", creada por el usuario en la web), prefijo de Game Center `qw_`.
 
 ## Principios no negociables
 
@@ -35,6 +35,11 @@ Un solo target iOS (iPhone y iPad), un bundle ID, proyecto con XcodeGen (`projec
 - Simuladores propios de esta app, **uno a la vez**: "QW iPhone 17" y "QW iPad 13". Apagar por udid (`xcrun simctl shutdown <udid>`), nunca `shutdown all`.
 - Textos: `python3 scripts/strings.py` después de compilar con `-derivedDataPath build/dd` (falla si una clave extraída no tiene español).
 - Ícono: `python3 scripts/render-icon.py` (estándar y Gold, claro/oscuro/tinted, y el ícono de Inicio).
+- **Publicación** (`AppStore/app-store-connect.md`: campos para crear la app, privacidad, versión y TestFlight). **Nada se sube ni se registra sin permiso explícito del usuario.**
+  - Textos: `fastlane/metadata/{en-US,es-MX}` (solo la estructura de carpetas; no se usa la gema), validar con `python3 scripts/validate-metadata.py`, subir con `scripts/upload-metadata.py [--apply]` (textos, categoría Palabras + Puzle, copyright). Cliente `scripts/asc.py`, credenciales fuera del repo en `~/.appstoreconnect` (las de Quiet Numbers). Subtítulo: borrador.
+  - Game Center: `AppStore/game-center.json` (10 logros, 600 puntos, y 5 clasificaciones; IDs verificados contra el código), `scripts/setup-game-center.py [--apply]` los crea con las 10 insignias de `AppStore/achievements/` (1024 sin alfa, `python3 scripts/achievement-badges.py`, con `scripts/render-svg.swift`).
+  - TestFlight: "What to Test" en `AppStore/testflight.md`; `scripts/ExportOptions.plist` (app-store-connect, upload, firma automática, sin Team ID). Notas para Apple y guion del video en `AppStore/app-review-notes.md`.
+  - Web: `../docs/quiet-words/{index,privacy,support}.html` (GitHub Pages desde `/docs`, se publica con el push a main).
 - **Argumentos DEBUG:** `-startGame` abre una partida libre (`-seedKey <texto>`, `-level gentle|medium|hard`, `-theme <id>`, `-words en|es`, `-found <n>`, `-nearlyWon`, `-won` encuentra la última, `-hint`); `-open <daily|leaderboards|collection|album|settings|tutorial|newGame>`; `-uiTesting` (almacén propio; las celdas marcan "start"/"end" de la siguiente palabra y la palabra oculta se lee en `hiddenWord`), `-resetStore`, `-tutorial`, `-unlockAll`, `-date <ISO8601>`, `-forceLookUp` (muestra la acción del diccionario aunque el simulador no tenga diccionarios).
 
 ## QuietKit
@@ -175,7 +180,7 @@ Inglés (development language) y español con String Catalogs (`scripts/strings.
 
 ## Privacidad
 
-"Data Not Collected"; mismo `PrivacyInfo.xcprivacy` que Quiet Sudoku. Falta la web en `../docs/quiet-words/` (fase 6).
+"Data Not Collected"; mismo `PrivacyInfo.xcprivacy` que Quiet Sudoku. Web (página, privacidad y soporte en/es) en `../docs/quiet-words/`.
 
 ## Fases
 
@@ -188,6 +193,8 @@ Inglés (development language) y español con String Catalogs (`scripts/strings.
 6. **Pulido y lanzamiento:** 30 temas, capturas, ficha (con el esquema de `quiet-release`), web, TestFlight (con el usuario: Bundle ID y App Store Connect).
 
 ## Estado (2026-11-08)
+
+Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos de la ficha subidos en en-US y es-MX. Falta para enviar a revisión: capturas, Game Center en ASC (`setup-game-center.py --apply`), subtítulo y la aprobación de las listas.
 
 | Fase | Estado |
 |---|---|
