@@ -95,6 +95,43 @@ final class GameplayUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
     }
 
+    /// Collection › Achievements: every achievement with how it's earned; hidden ones say only
+    /// "Hidden achievement" until earned (2026-11-09).
+    func testAchievementsTab() throws {
+        let app = launch(["-open", "collection"])
+        let tab = app.buttons["Achievements"]
+        XCTAssertTrue(tab.waitForExistence(timeout: 10))
+        tab.tap()
+        let first = app.descendants(matching: .any)["achievement-firstPuzzle"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 3))
+        XCTAssertTrue(first.label.contains("Finish your first puzzle."), first.label)
+        let words = app.descendants(matching: .any)["achievement-words100"].firstMatch
+        XCTAssertTrue(words.label.contains("0 of 100 words"), words.label)
+        let red = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
+        if !red.exists { app.swipeUp() }
+        XCTAssertTrue(red.waitForExistence(timeout: 3))
+        XCTAssertTrue(red.label.contains("Hidden achievement"), red.label)
+        XCTAssertFalse(red.label.contains("below zero"), red.label)
+    }
+
+    /// "Cheaper hints" shows in Rewards only once "In the Red" is earned, and starts on.
+    func testCheapHintsToggle() throws {
+        var app = launch(["-open", "collection"])
+        XCTAssertTrue(app.buttons["Rewards"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.descendants(matching: .any)["cheapHints"].exists)
+        app.terminate()
+        app = launch(["-open", "collection", "-unlockAll"])
+        let toggle = app.switches["cheapHints"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        XCTAssertEqual(toggle.value as? String, "1")
+        toggle.tap()
+        XCTAssertEqual(toggle.value as? String, "0")
+        app.buttons["Achievements"].tap()
+        let red = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
+        if !red.waitForExistence(timeout: 2) { app.swipeUp() }
+        XCTAssertTrue(red.label.contains("In the Red"), red.label)
+    }
+
     /// The tutorial: the words' language first, then drag CORAL and tap the second word.
     func testTutorial() throws {
         let app = launch(["-tutorial", "-open", "tutorial"])

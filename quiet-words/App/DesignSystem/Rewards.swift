@@ -104,6 +104,7 @@ extension Achievement {
         case .consistency: "qw_daily_30"
         case .steadyHand: "qw_hard_fast"
         case .bilingual: "qw_bilingual"
+        case .inTheRed: "qw_in_the_red"
         }
     }
 
@@ -119,6 +120,7 @@ extension Achievement {
         case .consistency: "Consistency"
         case .steadyHand: "Steady Hand"
         case .bilingual: "Bilingual"
+        case .inTheRed: "In the Red"
         }
     }
 
@@ -134,6 +136,7 @@ extension Achievement {
         case .consistency: "Complete 30 daily challenges in a row."
         case .steadyHand: "Finish a Hard puzzle without hints in under 10 minutes."
         case .bilingual: "Complete the day's challenge in both languages."
+        case .inTheRed: "Take your score below zero."
         }
     }
 
@@ -149,6 +152,7 @@ extension Achievement {
         case .consistency: "calendar"
         case .steadyHand: "clock"
         case .bilingual: "globe"
+        case .inTheRed: "minus.circle"
         }
     }
 
@@ -165,6 +169,7 @@ extension Achievement {
         case .consistency: "Sage & coral theme"
         case .steadyHand: "Underline marker"
         case .bilingual: nil
+        case .inTheRed: "Cheaper hints in free play"
         }
     }
 }

@@ -8,8 +8,14 @@ public struct Scoring: Hashable, Codable, Sendable {
     public var maxTimeBonusPercent = 50
 
     public static let standard = Scoring()
+    /// "In the Red" (hidden achievement), free play only: a hint costs one letter instead of
+    /// three, the family's 10 → 3 cut rounded to Words' letter value (2026-11-09). Daily
+    /// challenges, today's or past, always use `.standard`.
+    public static let cheapHints = Scoring(hint: 10)
 
-    public init() {}
+    public init(hint: Int = 30) {
+        self.hint = hint
+    }
 
     public func points(for word: Word) -> Int { perLetter * word.count }
 
@@ -98,8 +104,8 @@ public struct GameSession: Codable, Hashable, Sendable {
         }
     }
     public var hintCost: Int { hintsUsed * scoring.hint }
-    /// Never below zero.
-    public var score: Int { max(0, wordPoints + hiddenPoints + (timeBonus ?? 0) - hintCost) }
+    /// Can go below zero: hints always cost, like in the rest of the family ("In the Red").
+    public var score: Int { wordPoints + hiddenPoints + (timeBonus ?? 0) - hintCost }
 
     public func isFound(_ index: Int) -> Bool { found.contains(index) }
 
@@ -135,7 +141,8 @@ public struct GameSession: Codable, Hashable, Sendable {
         return events
     }
 
-    /// Lights the first letter of a word not found yet. Costs points (the same in the daily).
+    /// Lights the first letter of a word not found yet. Costs points even below zero (the
+    /// game's `scoring`: dailies always `.standard`).
     @discardableResult
     public mutating func hint() -> Event? {
         guard !isWon else { return nil }

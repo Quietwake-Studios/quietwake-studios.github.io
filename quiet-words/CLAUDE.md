@@ -9,7 +9,7 @@ Sopa de letras con **temas para adultos**: cada tablero es una colección de pal
 
 ## Principios no negociables
 
-Los de la familia: sin anuncios, compras, suscripciones ni tip jar; sin backend, analytics ni SDKs; 100 % offline (Game Center es un extra); recompensas solo cosméticas; sin identificadores propios ni ATT. Frameworks: SwiftUI, SwiftData, GameKit (y StoreKit solo para `requestReview()`). **Todo el contenido viaja en la app** (listas curadas en JSON) y **todos los tableros se generan en el dispositivo**.
+Los de la familia: sin anuncios, compras, suscripciones ni tip jar; sin backend, analytics ni SDKs; 100 % offline (Game Center es un extra); recompensas solo cosméticas (única excepción, la de la familia: "Números rojos", pistas más baratas solo en libre); sin identificadores propios ni ATT. Frameworks: SwiftUI, SwiftData, GameKit (y StoreKit solo para `requestReview()`). **Todo el contenido viaja en la app** (listas curadas en JSON) y **todos los tableros se generan en el dispositivo**.
 
 ## Stack
 
@@ -37,10 +37,10 @@ Un solo target iOS (iPhone y iPad), un bundle ID, proyecto con XcodeGen (`projec
 - Ícono: `python3 scripts/render-icon.py` (estándar y Gold, claro/oscuro/tinted, y el ícono de Inicio).
 - **Publicación** (`AppStore/app-store-connect.md`: campos para crear la app, privacidad, versión y TestFlight). **Nada se sube ni se registra sin permiso explícito del usuario.**
   - Textos: `fastlane/metadata/{en-US,es-MX}` (solo la estructura de carpetas; no se usa la gema), validar con `python3 scripts/validate-metadata.py`, subir con `scripts/upload-metadata.py [--apply]` (textos, categoría Palabras + Puzle, copyright). Cliente `scripts/asc.py`, credenciales fuera del repo en `~/.appstoreconnect` (las de Quiet Numbers). Subtítulo: borrador.
-  - Game Center: `AppStore/game-center.json` (10 logros, 600 puntos, y 5 clasificaciones; IDs verificados contra el código), `scripts/setup-game-center.py [--apply]` los crea con las 10 insignias de `AppStore/achievements/` (1024 sin alfa, `python3 scripts/achievement-badges.py`, con `scripts/render-svg.swift`).
+  - Game Center: `AppStore/game-center.json` (11 logros, 620 puntos, y 5 clasificaciones; IDs verificados contra el código), `scripts/setup-game-center.py [--apply]` los crea con las 11 insignias de `AppStore/achievements/` (1024 sin alfa, `python3 scripts/achievement-badges.py`, con `scripts/render-svg.swift`).
   - TestFlight: "What to Test" en `AppStore/testflight.md`; `scripts/ExportOptions.plist` (app-store-connect, upload, firma automática, sin Team ID). Notas para Apple y guion del video en `AppStore/app-review-notes.md`.
   - Web: `../docs/quiet-words/{index,privacy,support}.html` (GitHub Pages desde `/docs`, se publica con el push a main).
-- **Argumentos DEBUG:** `-startGame` abre una partida libre (`-seedKey <texto>`, `-level gentle|medium|hard`, `-theme <id>`, `-words en|es`, `-found <n>`, `-nearlyWon`, `-won` encuentra la última, `-hint`); `-open <daily|leaderboards|collection|album|settings|tutorial|newGame>`; `-uiTesting` (almacén propio; las celdas marcan "start"/"end" de la siguiente palabra y la palabra oculta se lee en `hiddenWord`), `-resetStore`, `-tutorial`, `-unlockAll`, `-date <ISO8601>`, `-forceLookUp` (muestra la acción del diccionario aunque el simulador no tenga diccionarios).
+- **Argumentos DEBUG:** `-startGame` abre una partida libre (`-seedKey <texto>`, `-level gentle|medium|hard`, `-theme <id>`, `-words en|es`, `-found <n>`, `-nearlyWon`, `-won` encuentra la última, `-hint`); `-open <daily|leaderboards|collection|album|achievements|settings|tutorial|newGame>`; `-uiTesting` (almacén propio; las celdas marcan "start"/"end" de la siguiente palabra y la palabra oculta se lee en `hiddenWord`), `-resetStore`, `-tutorial`, `-unlockAll`, `-date <ISO8601>`, `-forceLookUp` (muestra la acción del diccionario aunque el simulador no tenga diccionarios).
 
 ## QuietKit
 
@@ -54,7 +54,7 @@ quiet-words/
 ├── App/
 │   ├── QuietWordsApp.swift · AppModel.swift · Preferences.swift
 │   ├── Features/   Home, NewGame, Game (GameModel, BoardView, WordParts, GameView, SummarySheet),
-│   │               DailyChallenge (+ CalendarView), Leaderboards, Collection (álbum + recompensas), Settings, Tutorial
+│   │               DailyChallenge (+ CalendarView), Leaderboards, Collection (álbum, recompensas y logros), Settings, Tutorial
 │   ├── Services/   PersistenceService (SwiftData), FeedbackService, Reminders, AppClock
 │   ├── DesignSystem/ Appearance (marcador, letra, Letras más grandes), LanguagePill, Rewards, DayKeyFormat
 │   └── Resources/  Assets, Localizable.xcstrings, InfoPlist.xcstrings, PrivacyInfo.xcprivacy
@@ -107,13 +107,13 @@ quiet-words/
   La tabla aprobada decía ~11/20/22; el número sale de los cruces y es lo que mide el generador con las listas actuales.
 - Se marca una palabra **arrastrando** de la primera a la última letra: el trazo salta de letra en letra y se ajusta a la dirección más cercana (sectores de 45°). Vale en cualquier sentido (de la última a la primera también). Alternativa accesible: **tocar la primera y la última letra**; si la segunda no está en línea, pasa a ser la nueva primera.
 - **Palabra oculta (2026-11-08):** las letras que sobran, en orden de lectura, forman una palabra del tema. Se puede adivinar antes de terminar: **3 intentos por partida, fallar no cuesta**. Si no, se revela al encontrar la última palabra (las letras se encienden en orden y van a sus casillas).
-- **Pista:** ilumina la primera letra de una palabra que falte (anillo punteado hasta encontrarla). Cuesta lo mismo en el reto.
+- **Pista:** ilumina la primera letra de una palabra que falte (anillo punteado hasta encontrarla). En el reto, de hoy o pasado, cuesta siempre lo normal.
 - Sin vidas ni límite de tiempo; el reloj solo cuenta para el puntaje y el desempate.
 
 ## Puntaje
 
 - Palabra: 10 × letras. Bono por tiempo al terminar: hasta +50 % de los puntos de palabras, lineal hasta 0 en el objetivo (Suave 3 min, Medio 5, Difícil 8).
-- Palabra oculta: +100 si se adivina antes, +30 si se revela al final. Pista: −30 (el puntaje nunca baja de 0).
+- Palabra oculta: +100 si se adivina antes, +30 si se revela al final. Pista: −30, **aunque el puntaje quede negativo** (2026-11-09, regla de la familia; antes tenía piso en 0). Con "Números rojos", −10 solo en libre (`Scoring.cheapHints`, `AppModel.freeScoring`); cada partida guarda su `Scoring`, así que el cambio aplica desde la siguiente.
 - Reto: mejor del día por idioma (más puntaje, luego menos tiempo; `GameCenterService.rankedByScoreAndTime`).
 
 ## Generador
@@ -143,6 +143,8 @@ Regla de la familia (`../CLAUDE.md`), con lo propio:
 | `qw_best_hard_en`, `qw_best_hard_es` | Mejor puntaje en modo libre Difícil, por idioma. |
 | `qw_longest_streak` | Racha más larga (una sola). |
 
+El reto diario guarda el más reciente y acepta 0 o negativo (`always: true`); mejor Difícil y racha solo valores > 0.
+
 Partidas guardadas en iCloud: `Snapshot` = perfil (progreso + álbum) + retos; la fusión nunca pierde progreso. `GKAccessPoint` solo en Inicio. Amigos: `FriendsTodayCard` en Reto diario y `FriendProfileView` con los tableros del idioma elegido. **Nada creado en App Store Connect.**
 
 ## Logros y recompensas (aprobados 2026-11-08)
@@ -159,8 +161,13 @@ Partidas guardadas en iCloud: `Snapshot` = perfil (progreso + álbum) + retos; l
 | `qw_daily_30` | Constancia / Consistency | Racha de 30 retos | Tema Salvia y coral |
 | `qw_hard_fast` | Pulso firme / Steady Hand | Difícil sin pistas en menos de 10 min (2026-11-08) | Marcador Subrayado |
 | `qw_bilingual` | Bilingüe / Bilingual (oculto) | Reto del día en los dos idiomas | Solo el logro |
+| `qw_in_the_red` | Números rojos / In the Red (oculto, 20 puntos; 2026-11-09) | Llevar el puntaje por debajo de cero | Pistas a 10 en vez de 30 solo en libre; el reto diario siempre a 30. Interruptor "Pistas más baratas" en Recompensas: aparece al ganarlo, encendido |
 
 Siempre disponibles: marcador Resaltador, letra Redonda, Petróleo y coral, **Alto contraste** y **Letras más grandes**.
+
+**Números rojos (2026-11-09, pedido del usuario tras probar el build):** la regla de la familia (ver `quiet-numbers/CLAUDE.md`). En Numbers, Solitaire y Sudoku la pista pasa de 10 a 3 (−70 %); en Words la pista vale 30 y se eligió **10**: el mismo recorte redondeado (30 × 0,3 = 9) y justo lo que vale una letra (`perLetter`), así que una pista "cuesta una letra". Es la única recompensa que toca el juego, por eso se puede apagar: interruptor "Pistas más baratas" arriba en Recompensas (`@AppStorage("cheapHints")`, encendido por defecto, borrado con "Restablecer progreso"); no aparece hasta ganar el logro. El logro se evalúa con cada pista (`ProgressEvent.scoreChanged`).
+
+**Logros en Colección (2026-11-09, el usuario no tenía forma de saber cómo ganarlos):** Colección tiene tres pestañas, Álbum · Recompensas · Logros. Logros: "N ganados de 11" y una fila por logro con nombre, condición, progreso cuando cuenta algo (palabras 100/1.000/10.000, mejor racha 7/30, % del tema más avanzado para Tema completo, `Album.bestThemeFraction`), sello si está ganado y la recompensa. Los ocultos (Bilingüe y Números rojos) dicen "Logro oculto" sin condición ni recompensa hasta ganarlos. Las otras apps muestran los logros como sección al final de Colección; en Words va como pestaña porque Colección ya está dividida en segmentos. UI tests `testAchievementsTab` y `testCheapHintsToggle`.
 
 ## Estética y UX
 
@@ -203,7 +210,7 @@ Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos d
 | 1. Motor | ✅ 21 tests del Core en release: referencias por fecha en/es, 10.000 tableros, un año de retos, candado, sesión, puntaje, progreso y álbum. 1–4 ms por tablero en Mac. |
 | 2. Jugable | ✅ en simulador: partida completa en "QW iPhone 17" y "QW iPad 13" (UI tests de arrastre y toque en los dos), adivinar, resumen, tutorial con el paso del idioma. Falta probar en iPhone real. |
 | 3. Persistencia y reto | ✅ en simulador: guardado por día e idioma, Continuar / Empezar de nuevo, racha única, días pasados, calendario, recordatorios; `DailyRuleTests` (7) y `ReminderTests` (2). |
-| 4. Game Center | 🟡 10 logros (con insignias, en/es) y 5 clasificaciones creados en App Store Connect (2026-11-08, `setup-game-center.py --apply`; reto diario desde 2026-11-09 05:00 UTC). Falta activarlos en la versión 1.0 y verificar envío y sincronización en el dispositivo. |
+| 4. Game Center | 🟡 10 logros (con insignias, en/es) y 5 clasificaciones creados en App Store Connect (2026-11-08, `setup-game-center.py --apply`; reto diario desde 2026-11-09 05:00 UTC). Falta activarlos en la versión 1.0 y verificar envío y sincronización en el dispositivo. `qw_in_the_red` (2026-11-09) está en `game-center.json` con su insignia pero **no creado** en App Store Connect (lo hace quiet-studio con permiso del usuario). |
 | 5. Álbum y recompensas | 🟡 Álbum por tema e idioma con insignias y definiciones del diccionario del sistema, recompensas seleccionables y bloqueadas con su condición, ícono dorado. Falta revisar en dispositivo (con diccionarios descargados). |
 | 6. Lanzamiento | ⬜ App Store pendiente hasta tener capturas reales (decisión 2026-11-08). |
 

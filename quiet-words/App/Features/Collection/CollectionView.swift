@@ -3,23 +3,32 @@ import QuietUI
 import QuietWordsCore
 import SwiftUI
 
-/// The album (every word found, per theme and language) and the rewards.
+enum CollectionTab: Hashable {
+    case album, rewards, achievements
+}
+
+/// The album (every word found, per theme and language), the rewards and the achievements
+/// (how each one is earned, 2026-11-09).
 struct CollectionView: View {
-    let startsOnAlbum: Bool
+    let startsOn: CollectionTab
 
     @Environment(AppModel.self) private var app
     @Environment(\.quietTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @State private var showsAlbum = true
+    @State private var tab = CollectionTab.album
     @State private var language = WordLanguage.en
     @State private var didAppear = false
 
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
-                Segments(selection: $showsAlbum, options: [(true, "Album"), (false, "Rewards")])
+                Segments(selection: $tab, options: [(.album, "Album"), (.rewards, "Rewards"), (.achievements, "Achievements")])
                     .accessibilityIdentifier("collectionTabs")
-                if showsAlbum { album } else { RewardsList() }
+                switch tab {
+                case .album: album
+                case .rewards: RewardsList()
+                case .achievements: AchievementsList()
+                }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
@@ -30,7 +39,7 @@ struct CollectionView: View {
         .onAppear {
             guard !didAppear else { return }
             didAppear = true
-            showsAlbum = startsOnAlbum
+            tab = startsOn
             language = app.wordLanguage
         }
     }
@@ -164,9 +173,26 @@ private struct RewardsList: View {
     @AppStorage(PreferenceKey.boardFont) private var boardFont = BoardFont.rounded
     @AppStorage(PreferenceKey.palette) private var palette = Palette.tealCoral
     @AppStorage(PreferenceKey.appIcon) private var icon = AppIconChoice.standard
+    @AppStorage(PreferenceKey.cheapHints) private var cheapHints = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
+            // "In the Red" (hidden): the only reward that touches play, so it can be turned off.
+            // It doesn't show until earned.
+            if app.progress.unlocked.contains(.inTheRed) {
+                GroupSection("Hints") {
+                    Toggle(isOn: $cheapHints) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Cheaper hints")
+                            Text("Free play: a hint costs 10 points instead of 30. Daily challenges always cost 30. From your next game.")
+                                .font(.footnote).foregroundStyle(theme.muted)
+                        }
+                    }
+                    .toggleStyle(ThemedToggleStyle())
+                    .padding(.vertical, 8)
+                    .accessibilityIdentifier("cheapHints")
+                }
+            }
             section("Marker", Marker.allCases, selection: $marker) { MarkerPreview(marker: $0) }
             section("Board letters", BoardFont.allCases, selection: $boardFont) { font in
                 Text(verbatim: "ABC").font(font.font(size: 20)).tracking(2).foregroundStyle(theme.ink)
@@ -218,6 +244,116 @@ private struct RewardsList: View {
                 }
             }
         }
+    }
+}
+
+/// Every achievement: how it's earned, progress when it counts something, whether it's
+/// earned and what it unlocks. Hidden ones keep their condition until earned.
+private struct AchievementsList: View {
+    @Environment(AppModel.self) private var app
+    @Environment(\.quietTheme) private var theme
+
+    var body: some View {
+        let progress = app.progress
+        let earned = Achievement.allCases.filter(progress.unlocked.contains).count
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(earned) earned").font(.system(.title2, design: .rounded, weight: .heavy)).foregroundStyle(theme.ink)
+                Spacer()
+                Text("of \(Achievement.allCases.count)").font(.subheadline).foregroundStyle(theme.muted)
+            }
+            .padding(.horizontal, 4)
+            .accessibilityElement(children: .combine)
+            GroupSection {
+                ForEach(Achievement.allCases, id: \.self) { achievement in
+                    AchievementRow(achievement: achievement, isEarned: progress.unlocked.contains(achievement),
+                                   step: step(achievement, progress))
+                }
+            }
+        }
+    }
+
+    /// Progress for the ones that count something (nil: one-off).
+    private func step(_ achievement: Achievement, _ progress: PlayerProgress) -> AchievementRow.Step? {
+        switch achievement {
+        case .words100, .words1000, .words10000:
+            .count(progress.wordsFound, of: achievement.target)
+        case .habit, .consistency:
+            .streak(progress.bestStreak, of: achievement.target)
+        case .themeComplete:
+            .percent(app.profile.album.bestThemeFraction(in: app.library))
+        default:
+            nil
+        }
+    }
+}
+
+private struct AchievementRow: View {
+    enum Step {
+        case count(Int, of: Int)
+        case streak(Int, of: Int)
+        /// The most advanced theme.
+        case percent(Double)
+
+        var fraction: Double {
+            switch self {
+            case .count(let n, let target), .streak(let n, let target): min(Double(n) / Double(target), 1)
+            case .percent(let value): value
+            }
+        }
+
+        var text: Text {
+            switch self {
+            case .count(let n, let target): Text("\(min(n, target)) of \(target) words")
+            case .streak(let n, let target): Text("Best streak: \(min(n, target)) of \(target) days")
+            case .percent(let value): Text("Most advanced theme: \(value, format: .percent.precision(.fractionLength(0)))")
+            }
+        }
+    }
+
+    let achievement: Achievement
+    let isEarned: Bool
+    let step: Step?
+
+    @Environment(\.quietTheme) private var theme
+
+    var body: some View {
+        let secret = achievement.isHidden && !isEarned
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: secret ? "questionmark" : achievement.systemImage)
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(isEarned ? theme.onPrimary : theme.muted)
+                .frame(width: 42, height: 42)
+                .background(isEarned ? theme.primary : theme.surface2, in: Circle())
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(secret ? "Hidden achievement" : achievement.title)
+                    .font(.headline)
+                    .foregroundStyle(theme.ink)
+                Text(secret ? "Keep playing: it shows here once earned." : achievement.condition)
+                    .font(.subheadline)
+                    .foregroundStyle(theme.muted)
+                if let step, !isEarned {
+                    ProgressView(value: step.fraction).tint(theme.primary)
+                    step.text.font(.caption.monospacedDigit()).foregroundStyle(theme.muted)
+                }
+                if !secret, let reward = achievement.reward {
+                    Label { Text(reward) } icon: { Image(systemName: "gift") }
+                        .font(.caption)
+                        .foregroundStyle(isEarned ? theme.primary : theme.muted)
+                }
+            }
+            Spacer(minLength: 8)
+            if isEarned {
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.title3)
+                    .foregroundStyle(theme.primary)
+                    .accessibilityLabel(Text("Earned"))
+            }
+        }
+        .padding(.vertical, 12)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("achievement-\(achievement.rawValue)")
     }
 }
 

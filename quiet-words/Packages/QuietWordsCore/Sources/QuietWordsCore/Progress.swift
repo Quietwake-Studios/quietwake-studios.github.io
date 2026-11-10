@@ -17,6 +17,8 @@ public enum Achievement: String, CaseIterable, Codable, Sendable {
     case steadyHand
     /// Finish the day's challenge in both languages. Hidden.
     case bilingual
+    /// Take the score below zero. Hidden; makes hints cheaper in free play (2026-11-09).
+    case inTheRed
 
     /// Amount needed for counted achievements; 1 for one-off ones.
     public var target: Int {
@@ -30,7 +32,7 @@ public enum Achievement: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    public var isHidden: Bool { self == .bilingual }
+    public var isHidden: Bool { self == .bilingual || self == .inTheRed }
 
     /// "Steady Hand" needs a Hard puzzle in less than this.
     public static let steadyHandSeconds = 600
@@ -41,6 +43,8 @@ public enum ProgressEvent: Sendable {
     case won(GameSummary, isFree: Bool)
     /// Words found in a game (each find, even replays: "1,000 words").
     case wordsFound(Int)
+    /// The active game's score after a hint (below zero: "In the Red").
+    case scoreChanged(Int)
     case themeCompleted
     /// A free game was replaced before it ended; it counts as played if anything was played.
     case abandoned(played: Bool)
@@ -91,6 +95,8 @@ public struct PlayerProgress: Codable, Hashable, Sendable {
             }
         case .wordsFound(let count):
             wordsFound += count
+        case .scoreChanged(let score):
+            if score < 0 { hits.append(.inTheRed) }
         case .themeCompleted:
             hits.append(.themeComplete)
         case .abandoned(let played):
@@ -187,6 +193,16 @@ public struct Album: Codable, Hashable, Sendable {
             if c.total > 0, c.found == c.total { badges += 1 }
         }
         return (found, total, badges)
+    }
+
+    /// How far the most advanced theme is, in either language, 0...1 ("Theme Complete").
+    public func bestThemeFraction(in library: ThemeLibrary) -> Double {
+        WordLanguage.allCases.flatMap { language in
+            library.themes(for: language).map { theme in
+                let c = count(theme, language)
+                return c.total > 0 ? Double(c.found) / Double(c.total) : 0
+            }
+        }.max() ?? 0
     }
 
     public func merged(with other: Album) -> Album {

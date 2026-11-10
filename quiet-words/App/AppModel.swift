@@ -89,6 +89,7 @@ final class AppModel {
             UserDefaults.standard.removeObject(forKey: PreferenceKey.tutorialSeen)
             UserDefaults.standard.removeObject(forKey: PreferenceKey.wordLanguage)
             UserDefaults.standard.removeObject(forKey: PreferenceKey.appearanceMode)
+            UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
         }
         if arguments.contains("-unlockAll") {
             profile.progress = PlayerProgress(unlocked: Set(Achievement.allCases))
@@ -119,6 +120,14 @@ final class AppModel {
     // MARK: Rewards
 
     func isUnlocked<R: Reward>(_ reward: R) -> Bool { reward.isUnlocked(in: progress) }
+
+    /// Free play only: "In the Red" makes hints cheaper unless the player turned it off in
+    /// Rewards (2026-11-09). Daily challenges, today's or past, always use `.standard` (the
+    /// family's daily rule). Each game keeps the scoring it started with.
+    var freeScoring: Scoring {
+        let enabled = UserDefaults.standard.object(forKey: PreferenceKey.cheapHints) as? Bool ?? true
+        return progress.unlocked.contains(.inTheRed) && enabled ? .cheapHints : .standard
+    }
 
     // MARK: Achievements
 
@@ -232,7 +241,7 @@ final class AppModel {
         }.value
         isPreparing = false
         guard let board else { return }
-        let session = GameSession(mode: .free, themeID: id, level: level, board: board)
+        let session = GameSession(mode: .free, themeID: id, level: level, board: board, scoring: freeScoring)
         persistence.saveGame(session, in: .free)
         freeInProgress = session
         start(GameModel(session: session), as: .free)
@@ -242,7 +251,9 @@ final class AppModel {
     func restart() {
         guard let game = activeGame, let kind = activeKind else { return }
         let old = game.session
-        let session = GameSession(mode: old.mode, themeID: old.themeID, level: old.level, board: old.board)
+        // Free play takes the current hint price; a daily is always `.standard`.
+        let scoring = kind == .free ? freeScoring : .standard
+        let session = GameSession(mode: old.mode, themeID: old.themeID, level: old.level, board: old.board, scoring: scoring)
         switch kind {
         case .free:
             persistence.saveGame(session, in: .free)
@@ -360,6 +371,8 @@ final class AppModel {
         switch event {
         case .found:
             record(.wordsFound(1))
+        case .hint:
+            if let score = activeGame?.session.score { record(.scoreChanged(score)) }
         case .won(let summary):
             let isFree = activeKind == .free
             record(.won(summary, isFree: isFree))

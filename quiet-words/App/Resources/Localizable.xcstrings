@@ -124,6 +124,16 @@
         }
       }
     },
+    "%lld earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ganados"
+          }
+        }
+      }
+    },
     "%lld friends already played; %@ leads with %@.": {
       "localizations": {
         "en": {
@@ -210,6 +220,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld de %2$lld encontradas"
+          }
+        }
+      }
+    },
+    "%lld of %lld words": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld palabras"
           }
         }
       }
@@ -464,6 +484,16 @@
         }
       }
     },
+    "Achievements": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logros"
+          }
+        }
+      }
+    },
     "Album": {
       "localizations": {
         "es": {
@@ -594,6 +624,16 @@
         }
       }
     },
+    "Best streak: %lld of %lld days": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor racha: %1$lld de %2$lld días"
+          }
+        }
+      }
+    },
     "Best · Hard": {
       "localizations": {
         "es": {
@@ -660,6 +700,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Reto completado!"
+          }
+        }
+      }
+    },
+    "Cheaper hints": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas"
+          }
+        }
+      }
+    },
+    "Cheaper hints in free play": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas en juego libre"
           }
         }
       }
@@ -1034,6 +1094,16 @@
         }
       }
     },
+    "Free play: a hint costs 10 points instead of 30. Daily challenges always cost 30. From your next game.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juego libre: una pista cuesta 10 puntos en vez de 30. En los retos diarios siempre cuesta 30. Desde tu próxima partida."
+          }
+        }
+      }
+    },
     "Friends": {
       "localizations": {
         "es": {
@@ -1114,6 +1184,16 @@
         }
       }
     },
+    "Gold icon": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ícono dorado"
+          }
+        }
+      }
+    },
     "Guess": {
       "localizations": {
         "es": {
@@ -1190,6 +1270,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Difícil"
+          }
+        }
+      }
+    },
+    "Hidden achievement": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logro oculto"
           }
         }
       }
@@ -1344,6 +1434,16 @@
         }
       }
     },
+    "In the Red": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números rojos"
+          }
+        }
+      }
+    },
     "Indigo & peach": {
       "localizations": {
         "es": {
@@ -1354,12 +1454,42 @@
         }
       }
     },
+    "Indigo & peach theme": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema Índigo y durazno"
+          }
+        }
+      }
+    },
     "Ink": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Tinta"
+          }
+        }
+      }
+    },
+    "Ink marker": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcador Tinta"
+          }
+        }
+      }
+    },
+    "Keep playing: it shows here once earned.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue jugando: aparece aquí cuando lo ganes."
           }
         }
       }
@@ -1530,6 +1660,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mono"
+          }
+        }
+      }
+    },
+    "Mono letters": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letra Mono"
+          }
+        }
+      }
+    },
+    "Most advanced theme: %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema más avanzado: %@"
           }
         }
       }
@@ -1924,12 +2074,32 @@
         }
       }
     },
+    "Sage & coral theme": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema Salvia y coral"
+          }
+        }
+      }
+    },
     "Sage & sand": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Salvia y arena"
+          }
+        }
+      }
+    },
+    "Sage & sand theme": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema Salvia y arena"
           }
         }
       }
@@ -1960,6 +2130,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Serif"
+          }
+        }
+      }
+    },
+    "Serif letters": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letra Serif"
           }
         }
       }
@@ -2134,6 +2314,16 @@
         }
       }
     },
+    "Take your score below zero.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lleva tu puntaje por debajo de cero."
+          }
+        }
+      }
+    },
     "Teal & coral": {
       "localizations": {
         "es": {
@@ -2290,6 +2480,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Subrayado"
+          }
+        }
+      }
+    },
+    "Underline marker": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcador Subrayado"
           }
         }
       }
@@ -2490,6 +2690,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "adivinada antes · +%lld"
+          }
+        }
+      }
+    },
+    "of %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de %lld"
           }
         }
       }

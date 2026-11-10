@@ -14,7 +14,7 @@
 - **Qué:** capturas reales, header y búsqueda con el esquema de la sección "Ficha de la App Store" de `quiet-release` y mirando las de Numbers, Solitaire y Sudoku (`quiet-*/AppStore/`). Subtítulo y letras del ícono se deciden ahí. Después, la página App Store del canvas.
 
 ### Game Center en App Store Connect
-- **Qué:** 10 logros con insignias y 5 clasificaciones (`qw_*`), con `game-center.py` / `setup-game-center.py` como Quiet Sudoku. Solo con permiso del usuario.
+- **Qué:** 11 logros con insignias (`qw_in_the_red`, 2026-11-09, aún sin crear en App Store Connect) y 5 clasificaciones (`qw_*`), con `game-center.py` / `setup-game-center.py` como Quiet Sudoku. Solo con permiso del usuario.
 
 ### Web y privacidad
 - `../docs/quiet-words/{index,privacy,support}.html`.

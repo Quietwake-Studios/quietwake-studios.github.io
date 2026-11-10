@@ -44,4 +44,23 @@ import Testing
         other.add(["MAREA"], theme: "ocean", language: .es)
         #expect(album.merged(with: other).count(ocean, .es).found == 2)
     }
+
+    @Test func inTheRedIsHidden() {
+        var p = PlayerProgress()
+        #expect(p.record(.scoreChanged(0)).isEmpty)
+        #expect(p.record(.scoreChanged(-30)) == [.inTheRed])
+        #expect(p.record(.scoreChanged(-60)).isEmpty)
+        #expect(Achievement.inTheRed.isHidden && Achievement.bilingual.isHidden && !Achievement.habit.isHidden)
+    }
+
+    @Test func mostAdvancedTheme() {
+        var album = Album()
+        #expect(album.bestThemeFraction(in: .shared) == 0)
+        let ocean = ThemeLibrary.shared.theme("ocean")!
+        let all = ocean.words(.es)!.all.map(\.letters)
+        album.add(Array(all.prefix(all.count / 2)), theme: "ocean", language: .es)
+        album.add(["STAR"], theme: "space", language: .en)
+        let c = album.count(ocean, .es)
+        #expect(album.bestThemeFraction(in: .shared) == Double(c.found) / Double(c.total))
+    }
 }

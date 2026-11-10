@@ -18,11 +18,13 @@ enum PreferenceKey {
     static let marker = "marker"
     static let boardFont = "boardFont"
     static let appIcon = "appIcon"
+    /// "Cheaper hints" (the "In the Red" reward): on when earned, the player can turn it off.
+    static let cheapHints = "cheapHints"
     /// A reset made while signed out of Game Center: clear the cloud copy on the next sign-in.
     static let pendingCloudReset = "pendingCloudReset"
 
     /// Cosmetic choices, cleared by "Reset progress".
-    static let rewards = [palette, marker, boardFont, appIcon]
+    static let rewards = [palette, marker, boardFont, appIcon, cheapHints]
 }
 
 /// "Match system", or a fixed light or dark look (only for themes with both modes).

@@ -1,3 +1,4 @@
+import Foundation
 import QuietCore
 import QuietWordsCore
 import SwiftData
@@ -113,5 +114,34 @@ import Testing
         #expect(app.newAlbumWords == count)
         #expect(app.progress.wordsFound == count)
         #expect(app.unlockedThisGame.contains(.firstPuzzle))
+    }
+
+    /// "In the Red" (2026-11-09): a hint can take the score below zero; then hints cost 10 in
+    /// free play only (unless turned off in Rewards), never in a daily.
+    @Test func inTheRedMakesFreeHintsCheaper() async {
+        UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
+        defer { UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints) }
+        let app = makeApp()
+        await app.newFree(themeID: "ocean", level: .gentle)
+        #expect(app.activeGame!.session.scoring == .standard)
+        app.activeGame!.requestHint()
+        #expect(app.activeGame!.session.score == -30)
+        #expect(app.progress.unlocked.contains(.inTheRed))
+        #expect(app.freeScoring == .cheapHints)
+        // The game in progress keeps its price; the next one is cheaper.
+        app.activeGame!.requestHint()
+        #expect(app.activeGame!.session.score == -60)
+        await app.newFree(themeID: "ocean", level: .gentle)
+        app.activeGame!.requestHint()
+        #expect(app.activeGame!.session.score == -10)
+        // Dailies, today's or past, always cost the normal price.
+        await app.playDaily(today, language: .en)
+        app.activeGame!.requestHint()
+        #expect(app.activeGame!.session.scoring == .standard && app.activeGame!.session.score == -30)
+        await app.playDaily(DailyKey.dayKey(today, addingDays: -3)!, language: .es)
+        #expect(app.activeGame!.session.scoring == .standard)
+        // Turned off in Rewards.
+        UserDefaults.standard.set(false, forKey: PreferenceKey.cheapHints)
+        #expect(app.freeScoring == .standard)
     }
 }

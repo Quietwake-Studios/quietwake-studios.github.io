@@ -41,7 +41,7 @@ Gratis para siempre, todos los países. Sin compras dentro de la app.
 | Texto promocional, descripción, palabras clave, novedades | `fastlane/metadata/<idioma>/*.txt` |
 | URL de soporte | `https://tavoohoh.github.io/quiet-studios/quiet-words/support.html` |
 | URL de marketing | `https://tavoohoh.github.io/quiet-studios/quiet-words/` |
-| Game Center | 10 logros y 5 clasificaciones (`game-center.json`); activar Game Center en la versión y elegirlos |
+| Game Center | 11 logros (`qw_in_the_red` aún sin crear en App Store Connect, 2026-11-09) y 5 clasificaciones (`game-center.json`); activar Game Center en la versión y elegirlos |
 | Cifrado | No usa cifrado propio (`ITSAppUsesNonExemptEncryption = NO`) |
 | Publicación | Automática al aprobarse |
 

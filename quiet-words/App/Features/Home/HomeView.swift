@@ -11,6 +11,8 @@ struct HomeView: View {
         case daily
         case collection
         case album
+        /// Collection on its Achievements tab (DEBUG `-open achievements`).
+        case achievements
         case settings
         case leaderboards
         case tutorial
@@ -96,9 +98,11 @@ struct HomeView: View {
                         }
                     }
                 case .collection:
-                    CollectionView(startsOnAlbum: false)
+                    CollectionView(startsOn: .rewards)
                 case .album:
-                    CollectionView(startsOnAlbum: true)
+                    CollectionView(startsOn: .album)
+                case .achievements:
+                    CollectionView(startsOn: .achievements)
                 case .settings:
                     SettingsView { path.append(.tutorial) }
                 case .leaderboards:
@@ -177,7 +181,7 @@ struct HomeView: View {
     #if DEBUG
     /// `-startGame` opens a free game (`-seedKey <text>`, `-level gentle|medium|hard`,
     /// `-theme <id>`, `-words en|es`, `-nearlyWon` leaves one word, `-found <n>` finds n words,
-    /// `-hint` lights a hint, `-won` finds the last word); `-open <daily|leaderboards|collection|album|settings|tutorial|newGame>`.
+    /// `-hint` lights a hint, `-won` finds the last word); `-open <daily|leaderboards|collection|album|achievements|settings|tutorial|newGame>`.
     private func startDebugGameIfRequested() {
         let arguments = ProcessInfo.processInfo.arguments
         func value(after flag: String) -> String? {
@@ -185,7 +189,7 @@ struct HomeView: View {
             return arguments[i + 1]
         }
         if let name = value(after: "-open"), path.isEmpty {
-            let routes: [String: Route] = ["daily": .daily, "leaderboards": .leaderboards, "collection": .collection, "album": .album,
+            let routes: [String: Route] = ["daily": .daily, "leaderboards": .leaderboards, "collection": .collection, "album": .album, "achievements": .achievements,
                                            "settings": .settings, "tutorial": .tutorial, "newGame": .newGame]
             if let route = routes[name] { return path = [route] }
         }

@@ -87,6 +87,11 @@ BADGES = {
     # Two speech bubbles: both languages.
     "qw_bilingual": (CORAL, WHITE, [line("M28 32 H52 a4 4 0 0 1 4 4 V50 a4 4 0 0 1 -4 4 H40 L32 61 V54 H28 a4 4 0 0 1 -4 -4 V36 a4 4 0 0 1 4 -4 Z", WHITE),
                                      line("M62 44 H72 a4 4 0 0 1 4 4 V62 a4 4 0 0 1 -4 4 H70 V73 L62 66 H48 a4 4 0 0 1 -4 -4 V58", WHITE)]),
+    # The score line dropping under the dashed zero, and a minus: "In the Red" (hidden).
+    "qw_in_the_red": (CORAL, WHITE, [line("M22 44 H78", WHITE, 3, dash="4 5"),
+                                      line("M24 32 L40 38 L52 52 L72 66", WHITE),
+                                      line("M64 66 H72 V58", WHITE),
+                                      line("M30 66 H42", WHITE, 5)]),
 }
 
 

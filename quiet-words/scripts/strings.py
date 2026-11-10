@@ -219,6 +219,22 @@ ES = {
     "Look Up": "Definición",
     "Appearance": "Apariencia",
     "Match system": "Igual que el sistema",
+    # In the Red and the achievements tab (2026-11-09).
+    "In the Red": "Números rojos",
+    "Take your score below zero.": "Lleva tu puntaje por debajo de cero.",
+    "Cheaper hints in free play": "Pistas más baratas en juego libre",
+    "Hints": "Pistas",
+    "Cheaper hints": "Pistas más baratas",
+    "Free play: a hint costs 10 points instead of 30. Daily challenges always cost 30. From your next game.":
+        "Juego libre: una pista cuesta 10 puntos en vez de 30. En los retos diarios siempre cuesta 30. Desde tu próxima partida.",
+    "%lld earned": "%lld ganados",
+    "of %lld": "de %lld",
+    "Hidden achievement": "Logro oculto",
+    "Achievements": "Logros",
+    "Keep playing: it shows here once earned.": "Sigue jugando: aparece aquí cuando lo ganes.",
+    "%lld of %lld words": "%1$lld de %2$lld palabras",
+    "Best streak: %lld of %lld days": "Mejor racha: %1$lld de %2$lld días",
+    "Most advanced theme: %@": "Tema más avanzado: %@",
     "Light": "Claro",
     "Dark": "Oscuro",
     "Missing words show only their length. Tap a word with a book to see its definition.":
@@ -292,9 +308,16 @@ def extracted_keys():
     return keys
 
 
+def literal_keys():
+    """Keys written as literals in the app's code. The extraction misses some (e.g. the
+    `LocalizedStringResource?` of `Achievement.reward`), so they'd stay in English."""
+    code = "\n".join(f.read_text() for f in (ROOT / "App").rglob("*.swift"))
+    return {key for key in ES if '"' + key.replace('"', '\\"') + '"' in code}
+
+
 def main():
     strings = {}
-    used = extracted_keys()
+    used = extracted_keys() | literal_keys()
     # Only what the app uses (the extracted keys) plus the kit's texts: no stale entries.
     for key, es in ES.items():
         if key in used:

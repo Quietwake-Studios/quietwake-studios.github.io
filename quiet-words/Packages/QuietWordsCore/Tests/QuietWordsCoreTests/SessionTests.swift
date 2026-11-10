@@ -34,12 +34,12 @@ import Testing
         #expect(s.found.isEmpty)
     }
 
-    @Test func hintsCostButNeverGoBelowZero() {
+    @Test func hintsCostEvenBelowZero() {
         var s = session()
         guard case .hint(let index, let cell) = s.hint() else { Issue.record("no hint"); return }
         #expect(cell == s.board.placements[index].cells(side: s.board.side).first)
         #expect(s.hintCells == [cell])
-        #expect(s.score == 0)
+        #expect(s.score == -30)
         let (a, b) = ends(s, index)
         s.select(from: a, to: b)
         #expect(s.hintCells.isEmpty)
@@ -83,6 +83,19 @@ import Testing
         s.hint()
         let data = try JSONEncoder().encode(s)
         #expect(try JSONDecoder().decode(GameSession.self, from: data) == s)
+    }
+
+    /// "In the Red": a hint costs one letter (10) in a game started with `.cheapHints`; the
+    /// scoring travels with the saved game.
+    @Test func cheapHints() throws {
+        let base = session()
+        var s = GameSession(mode: .free, themeID: base.themeID, level: base.level, board: base.board, scoring: .cheapHints)
+        s.hint()
+        s.hint()
+        #expect(s.score == -20)
+        let decoded = try JSONDecoder().decode(GameSession.self, from: JSONEncoder().encode(s))
+        #expect(decoded.scoring == .cheapHints && decoded.score == -20)
+        #expect(Scoring.standard.hint == 30)
     }
 }
 

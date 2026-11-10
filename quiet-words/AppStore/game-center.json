@@ -239,9 +239,33 @@
         "es": "Completaste el reto del día en los dos idiomas."
       },
       "image": "AppStore/achievements/qw_bilingual.png"
+    },
+    {
+      "id": "qw_in_the_red",
+      "codeCase": "Achievement.inTheRed",
+      "points": 20,
+      "hidden": true,
+      "achievableMoreThanOnce": false,
+      "reward": {
+        "en": "Hidden: hints cost 10 instead of 30 in free play only (can be turned off in Rewards)",
+        "es": "Oculta: pistas a 10 en vez de 30 solo en juego libre (se apaga en Recompensas)"
+      },
+      "name": {
+        "en": "In the Red",
+        "es": "Números rojos"
+      },
+      "preEarnedDescription": {
+        "en": "Take your score below zero.",
+        "es": "Lleva tu puntaje por debajo de cero."
+      },
+      "earnedDescription": {
+        "en": "Your score went below zero. It happens.",
+        "es": "Tu puntaje bajó de cero. Pasa."
+      },
+      "image": "AppStore/achievements/qw_in_the_red.png"
     }
   ],
-  "totalPoints": 600,
+  "totalPoints": 620,
   "leaderboards": [
     {
       "id": "qw_daily_en",
@@ -259,7 +283,7 @@
       },
       "sortOrder": "High to Low",
       "scoreSubmission": "Most recent score",
-      "source": "Today's best daily result with English words, sent after every attempt (AppModel.pushToGameCenter); time in context"
+      "source": "Today's best daily result with English words, sent after every attempt, 0 or negative too (AppModel.pushToGameCenter); time in context"
     },
     {
       "id": "qw_daily_es",
@@ -277,7 +301,7 @@
       },
       "sortOrder": "High to Low",
       "scoreSubmission": "Most recent score",
-      "source": "Today's best daily result with Spanish words, sent after every attempt (AppModel.pushToGameCenter); time in context"
+      "source": "Today's best daily result with Spanish words, sent after every attempt, 0 or negative too (AppModel.pushToGameCenter); time in context"
     },
     {
       "id": "qw_best_hard_en",
