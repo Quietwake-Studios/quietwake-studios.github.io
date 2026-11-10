@@ -166,6 +166,44 @@ import Testing
         #expect(app.activeGame?.session.scoring == .standard)
     }
 
+    /// "In the Red" (2026-11-10): hints cost 3 in classic from the next game, unless turned off
+    /// in the Collection; a daily always charges 10.
+    @Test func inTheRedMakesClassicHintsCheaper() async throws {
+        UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
+        defer { UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints) }
+        /// What one hint takes off the active game (applied to a copy: no tone, nothing saved).
+        func hintCost(_ app: AppModel) throws -> Int {
+            var session = try #require(app.activeGame?.session)
+            let before = session.score
+            _ = session.apply(try #require(session.hint()))
+            return before - session.score
+        }
+        let app = makeApp()
+        await app.newClassic(.easy)
+        #expect(try hintCost(app) == 10)
+        app.record(.scoreChanged(-1))
+        #expect(app.progress.unlocked.contains(.inTheRed))
+        // On by default once earned, also for who earned it before the switch existed. The game
+        // in progress keeps its price; the next one is cheaper.
+        #expect(app.classicScoring == .cheapHints)
+        #expect(try hintCost(app) == 10)
+        await app.newClassic(.easy)
+        #expect(try hintCost(app) == 3)
+        // The daily, today's or past, always charges 10.
+        await app.playDaily(app.todayKey)
+        #expect(try hintCost(app) == 10)
+        let yesterday = try #require(DailyKey.dayKey(app.todayKey, addingDays: -1))
+        await app.playDaily(yesterday)
+        #expect(try hintCost(app) == 10)
+        // Turned off in the Collection: back to 10 from the next game.
+        UserDefaults.standard.set(false, forKey: PreferenceKey.cheapHints)
+        #expect(app.classicScoring == .standard)
+        await app.newClassic(.easy)
+        #expect(try hintCost(app) == 10)
+        // "Reset progress" clears the switch with the rest of the rewards.
+        #expect(PreferenceKey.rewards.contains(PreferenceKey.cheapHints))
+    }
+
     @Test func winningTheDailyKeepsItsTime() {
         let app = makeApp()
         let today = app.todayKey

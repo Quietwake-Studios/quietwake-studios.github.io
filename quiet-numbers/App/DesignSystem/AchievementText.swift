@@ -35,6 +35,10 @@ extension Achievement {
         }
     }
 
+    /// "In the Red" keeps its name and condition secret in Collection until earned
+    /// (2026-11-10, like Quiet Words and Quiet Solitaire).
+    var isHidden: Bool { self == .inTheRed }
+
     /// The badge from the design system (same art as Game Center's), from render-artwork.py.
     var badge: Image { Image("badge-\(gameCenterID)") }
 }

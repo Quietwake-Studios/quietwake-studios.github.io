@@ -64,6 +64,34 @@ final class GameplayUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
     }
 
+    /// "Cheaper hints" shows in the Collection only once "In the Red" is earned, starts on and
+    /// turns off; until earned, the achievement says only "Hidden achievement" (2026-11-10).
+    func testCheapHintsToggle() throws {
+        var app = launch(["-uiTesting", "-resetStore", "-open", "collection"])
+        let hidden = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
+        XCTAssertTrue(hidden.waitForExistence(timeout: 10))
+        XCTAssertTrue(hidden.label.contains("Hidden achievement"), hidden.label)
+        XCTAssertFalse(hidden.label.contains("below zero"), hidden.label)
+        XCTAssertFalse(app.descendants(matching: .any)["cheapHints"].exists)
+        app.terminate()
+
+        app = launch(["-uiTesting", "-resetStore", "-open", "collection", "-unlockAll"])
+        let toggle = app.descendants(matching: .any)["cheapHints"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        XCTAssertEqual(toggle.value as? String, "1")
+        toggle.tap()
+        XCTAssertEqual(toggle.value as? String, "0")
+        let earned = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
+        XCTAssertTrue(earned.label.contains("In the Red"), earned.label)
+        app.terminate()
+
+        // It stays off.
+        app = launch(["-uiTesting", "-open", "collection", "-unlockAll"])
+        let stillOff = app.descendants(matching: .any)["cheapHints"].firstMatch
+        XCTAssertTrue(stillOff.waitForExistence(timeout: 10))
+        XCTAssertEqual(stillOff.value as? String, "0")
+    }
+
     func testTutorialFromScratch() {
         let app = launch(["-uiTesting", "-resetStore", "-tutorial"])
         app.buttons["newGame"].tap()

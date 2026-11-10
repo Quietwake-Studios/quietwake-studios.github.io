@@ -137,6 +137,16 @@
         }
       }
     },
+    "A hint costs 3 points instead of 10, except in daily challenges, which always cost 10. From your next game.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una pista cuesta 3 puntos en vez de 10, salvo en los retos diarios, que siempre cuestan 10. Desde tu próxima partida."
+          }
+        }
+      }
+    },
     "Account": {
       "localizations": {
         "es": {
@@ -305,6 +315,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reto completado"
+          }
+        }
+      }
+    },
+    "Cheaper hints": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas"
           }
         }
       }
@@ -849,6 +869,16 @@
         }
       }
     },
+    "Hidden achievement": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logro oculto"
+          }
+        }
+      }
+    },
     "High contrast": {
       "localizations": {
         "es": {
@@ -925,6 +955,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Índigo y durazno"
+          }
+        }
+      }
+    },
+    "Keep playing: it shows here once earned.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue jugando: aparece aquí cuando lo ganes."
           }
         }
       }

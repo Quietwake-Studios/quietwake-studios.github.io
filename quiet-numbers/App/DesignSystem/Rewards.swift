@@ -200,9 +200,12 @@ enum PreferenceKey {
     static let largerNumbers = "largerNumbers"
     /// The tutorial was played or skipped. Cleared by a reset, like a fresh install.
     static let tutorialSeen = "tutorialSeen"
+    /// "Cheaper hints" (the "In the Red" reward, 2026-11-10): on by default, also for whoever
+    /// earned it before; the player can turn it off in Collection.
+    static let cheapHints = "cheapHints"
     /// Set by a reset until the iCloud copy and achievements are cleared too.
     static let pendingCloudReset = "pendingCloudReset"
 
     /// Cosmetic choices, cleared by a reset.
-    static let rewards = [theme, tileStyle, numberFont, clearEffect, soundPack, appIcon]
+    static let rewards = [theme, tileStyle, numberFont, clearEffect, soundPack, appIcon, cheapHints]
 }

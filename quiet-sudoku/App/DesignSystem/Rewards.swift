@@ -168,6 +168,9 @@ enum PreferenceKey {
     static let highlight = "highlight"
     static let victory = "victory"
     static let appIcon = "appIcon"
+    /// "Cheaper hints" (the "In the Red" reward, 2026-11-10): on when earned, the player can
+    /// turn it off in the Collection.
+    static let cheapHints = "cheapHints"
     static let soundEnabled = "soundEnabled"
     static let hapticsEnabled = "hapticsEnabled"
     static let showsMistakes = "showsMistakes"
@@ -183,7 +186,7 @@ enum PreferenceKey {
     static let pendingCloudReset = "pendingCloudReset"
 
     /// Cosmetic choices, cleared by a reset.
-    static let rewards = [board, digits, notes, highlight, victory, appIcon]
+    static let rewards = [board, digits, notes, highlight, victory, appIcon, cheapHints]
 }
 
 /// "Match system", or a fixed light or dark look (Settings › Appearance, 2026-11-08).

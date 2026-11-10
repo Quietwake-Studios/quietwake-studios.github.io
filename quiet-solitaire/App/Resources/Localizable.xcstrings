@@ -491,6 +491,16 @@
         }
       }
     },
+    "Cheaper hints": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas"
+          }
+        }
+      }
+    },
     "Check your connection and try again.": {
       "localizations": {
         "es": {
@@ -507,6 +517,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clásico"
+          }
+        }
+      }
+    },
+    "Classic: a hint costs 3 points instead of 10. Daily challenges always cost 10. From your next game.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clásico: una pista cuesta 3 puntos en vez de 10. En los retos diarios siempre cuesta 10. Desde tu próxima partida."
           }
         }
       }
@@ -1021,6 +1041,16 @@
         }
       }
     },
+    "Hidden achievement": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logro oculto"
+          }
+        }
+      }
+    },
     "High contrast": {
       "localizations": {
         "es": {
@@ -1137,6 +1167,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seguir jugando"
+          }
+        }
+      }
+    },
+    "Keep playing: it shows here once earned.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue jugando: aparece aquí cuando lo ganes."
           }
         }
       }

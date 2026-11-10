@@ -164,13 +164,16 @@ enum PreferenceKey {
     static let tapToMove = "tapToMove"
     static let winnableOnly = "winnableOnly"
     static let leftHanded = "leftHanded"
+    /// "Cheaper hints" (the "In the Red" reward, 2026-11-10): on when earned, also for whoever
+    /// earned it before the switch existed; the player can turn it off in Collection.
+    static let cheapHints = "cheapHints"
     /// The tutorial was played or skipped. Cleared by a reset, like a fresh install.
     static let tutorialSeen = "tutorialSeen"
     /// Set by a reset until the iCloud copy and achievements are cleared too.
     static let pendingCloudReset = "pendingCloudReset"
 
     /// Cosmetic choices, cleared by a reset.
-    static let rewards = [board, deck, back, victory, appIcon]
+    static let rewards = [board, deck, back, victory, appIcon, cheapHints]
 }
 
 /// "Match system", or a fixed light or dark look. Every theme has both (2026-11-08).

@@ -6,6 +6,10 @@
 Keys are the English strings in code. Run after adding text to views; it fails if a key
 the compiler extracted (build/dd, from `xcodebuild … -derivedDataPath build/dd`) has no
 Spanish here.
+
+Every key in ES is written, extracted or not, on purpose: Xcode doesn't extract some literals
+(e.g. a `LocalizedStringResource?` such as `Reward.note`), and Quiet Words lost those to English
+when its script kept only the extracted keys (fixed there 2026-11-09).
 """
 import json
 import pathlib
@@ -85,6 +89,12 @@ ES = {
     "High contrast": "Alto contraste",
     "Hint": "Pista",
     "Hints": "Pistas",
+    # Collection › Hints, the "In the Red" switch, and the hidden achievement (2026-11-10).
+    "Cheaper hints": "Pistas más baratas",
+    "Classic: a hint costs 3 points instead of 10. Daily challenges always cost 10. From your next game.":
+        "Clásico: una pista cuesta 3 puntos en vez de 10. En los retos diarios siempre cuesta 10. Desde tu próxima partida.",
+    "Hidden achievement": "Logro oculto",
+    "Keep playing: it shows here once earned.": "Sigue jugando: aparece aquí cuando lo ganes.",
     "Home": "Inicio",
     "How to play": "Cómo jugar",
     "Illustrated": "Ilustrado",

@@ -55,6 +55,61 @@ final class CollectionUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
     }
 
+    /// "Cheaper hints" shows in Collection only once "In the Red" is earned, starts on, and
+    /// turns off; until earned, the achievement reads "Hidden achievement" (2026-11-10).
+    @MainActor
+    func testCheapHintsToggle() {
+        var app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-AppleLanguages", "(es)", "-AppleLocale", "es_CO"]
+        app.launch()
+        app.buttons["collection"].tap()
+        XCTAssertTrue(app.buttons["Petróleo y coral"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.descendants(matching: .any)["cheapHints"].exists)
+        let hidden = inTheRedRow(app)
+        XCTAssertTrue(hidden.label.contains("Logro oculto"), hidden.label)
+        XCTAssertTrue(hidden.label.contains("Sigue jugando"), hidden.label)
+        XCTAssertFalse(hidden.label.contains("Números rojos"), hidden.label)
+        app.terminate()
+
+        app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-unlockAll", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        app.buttons["Collection"].tap()
+        let toggle = app.switches["cheapHints"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(toggle.value as? String, "1")
+        snapshot(app, "collection-cheap-hints")
+        toggle.tap()
+        XCTAssertEqual(toggle.value as? String, "0")
+        // Leave the simulator as it was.
+        toggle.tap()
+        XCTAssertEqual(toggle.value as? String, "1")
+        app.terminate()
+
+        // In Spanish, the section and the rewards read in Spanish.
+        app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-unlockAll", "-AppleLanguages", "(es)", "-AppleLocale", "es_CO"]
+        app.launch()
+        app.buttons["collection"].tap()
+        XCTAssertTrue(app.switches["cheapHints"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Pistas más baratas"].exists)
+        XCTAssertTrue(app.buttons["Petróleo y coral"].exists)
+        snapshot(app, "collection-cheap-hints-es")
+        let earned = inTheRedRow(app)
+        XCTAssertTrue(earned.label.contains("Números rojos"), earned.label)
+        XCTAssertFalse(earned.label.contains("Logro oculto"), earned.label)
+    }
+
+    /// "In the Red" in Collection's achievements, at the bottom of the list.
+    @MainActor
+    private func inTheRedRow(_ app: XCUIApplication) -> XCUIElement {
+        let row = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
+        for _ in 0..<8 where !row.isHittable { app.swipeUp() }
+        XCTAssertTrue(row.waitForExistence(timeout: 3))
+        snapshot(app, "collection-in-the-red")
+        return row
+    }
+
     /// Signed out of Game Center, leaderboards explain how to sign in instead of failing.
     @MainActor
     func testLeaderboardsSignedOut() {

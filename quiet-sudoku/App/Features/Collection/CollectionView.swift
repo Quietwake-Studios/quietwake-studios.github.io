@@ -14,10 +14,28 @@ struct CollectionView: View {
     @AppStorage(PreferenceKey.highlight) private var highlight = HighlightStyle.full
     @AppStorage(PreferenceKey.victory) private var victory = VictoryEffect.fireworks
     @AppStorage(PreferenceKey.appIcon) private var appIcon = AppIconChoice.standard
+    @AppStorage(PreferenceKey.cheapHints) private var cheapHints = true
 
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
+                // "In the Red" (hidden): the only reward that touches play, so it can be turned
+                // off (2026-11-10). It doesn't show until earned.
+                if app.progress.unlocked.contains(.inTheRed) {
+                    GroupSection("Hints") {
+                        Toggle(isOn: $cheapHints) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Cheaper hints").foregroundStyle(theme.ink)
+                                Text("Classic: a hint costs 3 points instead of 10. Daily challenges always cost 10. From your next game.")
+                                    .font(.subheadline)
+                                    .foregroundStyle(theme.muted)
+                            }
+                            .padding(.vertical, 8)
+                        }
+                        .toggleStyle(ThemedToggleStyle())
+                        .accessibilityIdentifier("cheapHints")
+                    }
+                }
                 RewardSection(title: "Digits", selection: $digits, progress: app.progress) { style in
                     Text(verbatim: "7")
                         .font(style.font(size: 26, weight: .medium))
@@ -166,18 +184,20 @@ private struct AchievementRow: View {
 
     var body: some View {
         let isUnlocked = progress >= 1
+        // A hidden achievement ("In the Red") says nothing until earned.
+        let secret = achievement.isHidden && !isUnlocked
         HStack(spacing: 14) {
-            Image(systemName: achievement.systemImage)
+            Image(systemName: secret ? "questionmark" : achievement.systemImage)
                 .font(.title3)
                 .foregroundStyle(isUnlocked ? theme.onPrimary : theme.muted)
                 .frame(width: 44, height: 44)
                 .background(isUnlocked ? theme.primary : theme.surface2, in: Circle())
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
-                Text(achievement.title)
+                Text(secret ? "Hidden achievement" : achievement.title)
                     .font(.headline)
                     .foregroundStyle(theme.ink)
-                Text(achievement.condition)
+                Text(secret ? "Keep playing: it shows here once earned." : achievement.condition)
                     .font(.subheadline)
                     .foregroundStyle(theme.muted)
                 if progress > 0, progress < 1, achievement.target > 1 {
@@ -194,5 +214,6 @@ private struct AchievementRow: View {
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
         .accessibilityValue(isUnlocked ? Text("Unlocked") : Text(progress, format: .percent.precision(.fractionLength(0))))
+        .accessibilityIdentifier("achievement-\(achievement.rawValue)")
     }
 }

@@ -184,6 +184,38 @@ import Testing
         #expect(app.activeGame?.session.scoring == .standard)
     }
 
+    /// "In the Red" (2026-11-10, like Quiet Words): hints cost 3 in classic from the next game,
+    /// unless "Cheaper hints" is off in Collection; a daily always costs 10.
+    @Test func inTheRedMakesClassicHintsCheaper() async throws {
+        UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
+        defer { UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints) }
+        let app = makeApp()
+        #expect(app.classicScoring == .standard)
+        await app.newClassic()
+        #expect(app.activeGame?.session.scoring == .standard)
+        app.record(.hintCharged(scoreAfter: -10))
+        #expect(app.progress.unlocked.contains(.inTheRed))
+        // On by default, also for whoever earned it before the switch existed.
+        #expect(app.classicScoring == .cheapHints)
+        #expect(app.classicScoring.hint == 3)
+        // The game in progress keeps its price; the next one is cheaper.
+        #expect(app.activeGame?.session.scoring == .standard)
+        await app.newClassic()
+        #expect(app.activeGame?.session.scoring.hint == 3)
+        // The daily, today's or past, always costs 10.
+        await app.playDaily(app.todayKey)
+        #expect(app.activeGame?.session.scoring.hint == 10)
+        await app.playDaily(try #require(DailyKey.dayKey(app.todayKey, addingDays: -2)))
+        #expect(app.activeGame?.session.scoring.hint == 10)
+        // Turned off in Collection: back to 10 from the next classic game.
+        UserDefaults.standard.set(false, forKey: PreferenceKey.cheapHints)
+        #expect(app.classicScoring == .standard)
+        await app.newClassic()
+        #expect(app.activeGame?.session.scoring.hint == 10)
+        // "Reset progress" clears the switch with the rewards.
+        #expect(PreferenceKey.rewards.contains(PreferenceKey.cheapHints))
+    }
+
     @Test func winningTheDailyKeepsItsTime() {
         let app = makeApp()
         let today = app.todayKey

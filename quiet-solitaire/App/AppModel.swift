@@ -80,6 +80,7 @@ final class AppModel {
         if ProcessInfo.processInfo.arguments.contains("-resetStore") {
             UserDefaults.standard.removeObject(forKey: PreferenceKey.tutorialSeen)
             UserDefaults.standard.removeObject(forKey: PreferenceKey.appearanceMode)
+            UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
         }
         if ProcessInfo.processInfo.arguments.contains("-unlockAll") {
             progress = PlayerProgress(unlocked: Set(Achievement.allCases))
@@ -229,7 +230,9 @@ final class AppModel {
     /// saved game (before, the first attempt could come back; 2026-11-02).
     func restart() {
         guard let game = activeGame, let kind = activeKind else { return }
-        let session = GameSession(mode: game.session.mode, seed: game.session.seed, scoring: game.session.scoring)
+        // Classic takes the current hint price; a daily always costs the normal one.
+        let scoring = kind == .classic ? classicScoring : .standard
+        let session = GameSession(mode: game.session.mode, seed: game.session.seed, scoring: scoring)
         switch kind {
         case .classic:
             persistence.saveGame(session, in: .classic)
@@ -257,10 +260,13 @@ final class AppModel {
         UserDefaults.standard.set(true, forKey: PreferenceKey.tutorialSeen)
     }
 
-    /// Classic only: "In the Red" makes hints cheaper (a hidden reward). Daily challenges,
-    /// any day and any attempt, always use `.standard` (2026-10-30, the family's daily rule).
+    /// Classic only: "In the Red" makes hints cheaper (a hidden reward) unless the player turned
+    /// it off in Collection › Hints (2026-11-10; on by default). Daily challenges, any day and
+    /// any attempt, always use `.standard` (2026-10-30, the family's daily rule). Each game
+    /// keeps the scoring it started with.
     var classicScoring: Scoring {
-        progress.unlocked.contains(.inTheRed) ? .cheapHints : .standard
+        let enabled = UserDefaults.standard.object(forKey: PreferenceKey.cheapHints) as? Bool ?? true
+        return progress.unlocked.contains(.inTheRed) && enabled ? .cheapHints : .standard
     }
 
     // MARK: Daily

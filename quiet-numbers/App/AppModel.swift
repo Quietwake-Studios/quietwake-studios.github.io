@@ -51,6 +51,7 @@ final class AppModel {
         if ProcessInfo.processInfo.arguments.contains("-resetStore") {
             UserDefaults.standard.removeObject(forKey: PreferenceKey.tutorialSeen)
             UserDefaults.standard.removeObject(forKey: PreferenceKey.appearanceMode)
+            UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
         }
         if ProcessInfo.processInfo.arguments.contains("-unlockAll") {
             progress = PlayerProgress(unlocked: Set(Achievement.allCases))
@@ -172,10 +173,13 @@ final class AppModel {
 
     var hasClassicInProgress: Bool { classicStage != nil }
 
-    /// Classic only: "In the Red" makes hints cheaper (a hidden reward). Daily challenges,
-    /// scored or replayed, always use `.standard` (2026-10-29: a replay is still a challenge).
+    /// Classic only: "In the Red" makes hints cheaper (a hidden reward), unless the player
+    /// turned it off in Collection (2026-11-10; on by default). Daily challenges, scored or
+    /// replayed, always use `.standard` (2026-10-29: a replay is still a challenge). Each game
+    /// keeps the scoring it started with.
     var classicScoring: Scoring {
-        progress.unlocked.contains(.inTheRed) ? .cheapHints : .standard
+        let enabled = UserDefaults.standard.object(forKey: PreferenceKey.cheapHints) as? Bool ?? true
+        return progress.unlocked.contains(.inTheRed) && enabled ? .cheapHints : .standard
     }
 
     /// First "New Game" of someone who never played: the tutorial comes first.

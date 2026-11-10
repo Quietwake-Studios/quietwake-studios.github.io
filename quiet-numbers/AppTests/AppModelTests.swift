@@ -132,6 +132,31 @@ import Testing
         #expect(try #require(app.activeGame).session.scoring.hintCost == 10)
     }
 
+    /// "Cheaper hints" (2026-11-10): on by default once "In the Red" is earned, classic only;
+    /// turned off in Collection, the next classic game is back to 10.
+    @Test func cheapHintsToggleControlsClassicScoring() throws {
+        UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints)
+        defer { UserDefaults.standard.removeObject(forKey: PreferenceKey.cheapHints) }
+        let app = AppModel(persistence: PersistenceService(store: .inMemory))
+        #expect(app.classicScoring == .standard)
+        app.record(.hintUsed(scoreAfter: -10))
+        #expect(app.progress.unlocked.contains(.inTheRed))
+        app.newClassic()
+        #expect(try #require(app.activeGame).session.scoring.hintCost == 3)
+        app.playDaily(app.todayKey)
+        #expect(try #require(app.activeGame).session.scoring.hintCost == 10)
+        UserDefaults.standard.set(false, forKey: PreferenceKey.cheapHints)
+        #expect(app.classicScoring == .standard)
+        app.newClassic()
+        #expect(try #require(app.activeGame).session.scoring.hintCost == 10)
+        UserDefaults.standard.set(true, forKey: PreferenceKey.cheapHints)
+        #expect(app.classicScoring == .cheapHints)
+        // A reset clears the choice with the achievement.
+        app.resetProgress()
+        #expect(UserDefaults.standard.object(forKey: PreferenceKey.cheapHints) == nil)
+        #expect(app.classicScoring == .standard)
+    }
+
     @Test func clearingAPastDayMarksAndFillsIt() {
         let app = AppModel(persistence: PersistenceService(store: .inMemory))
         let day = "2026-10-01"

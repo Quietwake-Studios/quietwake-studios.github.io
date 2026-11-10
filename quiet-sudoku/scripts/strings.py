@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Writes App/Resources/Localizable.xcstrings and InfoPlist.xcstrings (en source, es).
 
-    scripts/strings.py
+    scripts/strings.py [derived-data]
 
 Keys are the English strings in code. Run after adding text to views; it fails if a key
-the compiler extracted (build/dd, from `xcodebuild … -derivedDataPath build/dd`) has no
-Spanish here.
+the compiler extracted (build/dd by default, from `xcodebuild … -derivedDataPath build/dd`)
+has no Spanish here. Keys written as literals in App/ count too: the extraction misses some.
 """
 import json
 import pathlib
@@ -391,6 +391,12 @@ ES.update({
     "box %lld": "la caja %lld",
     "column %lld": "la columna %lld",
     "row %lld": "la fila %lld",
+    # "Cheaper hints" in the Collection and hidden achievements (2026-11-10).
+    "Cheaper hints": "Pistas más baratas",
+    "Classic: a hint costs 3 points instead of 10. Daily challenges always cost 10. From your next game.":
+        "Clásico: una pista cuesta 3 puntos en vez de 10. En los retos diarios siempre cuesta 10. Desde tu próxima partida.",
+    "Hidden achievement": "Logro oculto",
+    "Keep playing: it shows here once earned.": "Sigue jugando: aparece aquí cuando lo ganes.",
 })
 
 # QuietKit's texts (QuietUI looks them up in the app's catalog). The compiler doesn't
@@ -445,7 +451,8 @@ def plural(one, other):
 
 def extracted_keys():
     keys = set()
-    for f in (ROOT / "build/dd").rglob("*.stringsdata"):
+    derived = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "build/dd"
+    for f in derived.rglob("*.stringsdata"):
         if "QuietSudoku.build" not in str(f):
             continue
         data = json.loads(f.read_text())
@@ -454,9 +461,17 @@ def extracted_keys():
     return keys
 
 
+def literal_keys():
+    """Keys written as literals in the app's code (comments aside). The extraction misses some
+    (in Quiet Words, an optional `LocalizedStringResource?`), and those would stay in English."""
+    code = "\n".join(line for f in (ROOT / "App").rglob("*.swift")
+                     for line in f.read_text().splitlines() if not line.lstrip().startswith("//"))
+    return {key for key in ES if '"' + key.replace('"', '\\"') + '"' in code}
+
+
 def main():
     strings = {}
-    used = extracted_keys()
+    used = extracted_keys() | literal_keys()
     # Only what the app uses (the extracted keys) plus the kit's texts: no stale entries.
     for key, es in ES.items():
         if key in used:

@@ -14,10 +14,29 @@ struct CollectionView: View {
     @AppStorage(PreferenceKey.clearEffect) private var clearEffect = ClearEffect.outline
     @AppStorage(PreferenceKey.soundPack) private var soundPack = SoundPack.soft
     @AppStorage(PreferenceKey.appIcon) private var appIcon = AppIconChoice.standard
+    @AppStorage(PreferenceKey.cheapHints) private var cheapHints = true
 
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
+                // "In the Red" (hidden): the only reward that touches play, so it can be turned
+                // off (2026-11-10). It doesn't show until earned.
+                if app.progress.unlocked.contains(.inTheRed) {
+                    GroupSection("Hints") {
+                        Toggle(isOn: $cheapHints) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Cheaper hints")
+                                    .foregroundStyle(colors.ink)
+                                Text("A hint costs 3 points instead of 10, except in daily challenges, which always cost 10. From your next game.")
+                                    .font(.footnote)
+                                    .foregroundStyle(colors.muted)
+                            }
+                        }
+                        .toggleStyle(ThemedToggleStyle())
+                        .padding(.vertical, 8)
+                        .accessibilityIdentifier("cheapHints")
+                    }
+                }
                 RewardSection(title: "Theme", selection: $theme, progress: app.progress) { choice in
                     ThemePreview(palette: choice.palette)
                 }
@@ -186,19 +205,31 @@ private struct AchievementRow: View {
     @Environment(\.quietTheme) private var theme
 
     var body: some View {
+        // A hidden achievement keeps its secret until earned: "?" instead of the badge.
+        let secret = achievement.isHidden && progress < 1
         HStack(spacing: 14) {
-            // Locked badges are shown faded and without color.
-            achievement.badge
-                .resizable()
-                .frame(width: 44, height: 44)
-                .saturation(progress >= 1 ? 1 : 0)
-                .opacity(progress >= 1 ? 1 : 0.4)
-                .accessibilityHidden(true)
+            Group {
+                if secret {
+                    Image(systemName: "questionmark")
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(theme.muted)
+                        .frame(width: 44, height: 44)
+                        .background(theme.surface2, in: Circle())
+                } else {
+                    // Locked badges are shown faded and without color.
+                    achievement.badge
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                        .saturation(progress >= 1 ? 1 : 0)
+                        .opacity(progress >= 1 ? 1 : 0.4)
+                }
+            }
+            .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
-                Text(achievement.title)
+                Text(secret ? "Hidden achievement" : achievement.title)
                     .font(.headline)
                     .foregroundStyle(theme.ink)
-                Text(achievement.condition)
+                Text(secret ? "Keep playing: it shows here once earned." : achievement.condition)
                     .font(.subheadline)
                     .foregroundStyle(theme.muted)
                 if progress > 0, progress < 1, achievement.target > 1 {
@@ -214,6 +245,7 @@ private struct AchievementRow: View {
         }
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("achievement-\(achievement.rawValue)")
         .accessibilityValue(progress >= 1 ? Text("Unlocked") : Text(progress, format: .percent.precision(.fractionLength(0))))
     }
 }
