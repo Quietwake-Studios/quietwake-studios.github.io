@@ -32,6 +32,9 @@ GAMES = {
     "sudoku": dict(dir="quiet-sudoku", name="Quiet Sudoku",
                    labels={"01-classic": "Clásico", "02-daily": "Reto diario", "03-friends": "Amigos",
                            "04-rewards": "Recompensas", "05-win": "Victoria"}),
+    "words": dict(dir="quiet-words", name="Quiet Words",
+                  labels={"01-board": "Tablero", "02-daily": "Reto diario", "03-friends": "Amigos",
+                          "04-album": "Álbum", "05-hidden": "Palabra oculta"}),
 }
 CREATIVE = {"header": ("Header", 1280, 549), "search": ("Búsqueda", 1200, 800)}
 

@@ -113,6 +113,13 @@ struct DailyChallengeView: View {
     }
 
     private func loadFriends() async {
+        #if DEBUG
+        if DemoData.isActive {
+            friendsToday = DemoData.friendsEntries
+            friendsRank = DemoData.friendsEntries.first(where: \.isLocalPlayer)?.rank
+            return
+        }
+        #endif
         guard app.gameCenter.isAuthenticated else {
             friendsToday = nil
             friendsRank = nil

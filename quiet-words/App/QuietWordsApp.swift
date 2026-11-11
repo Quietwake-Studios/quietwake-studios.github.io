@@ -40,17 +40,17 @@ struct QuietWordsApp: App {
     private static var wantsSplash: Bool {
         #if DEBUG
         let arguments = ProcessInfo.processInfo.arguments
-        return !arguments.contains("-startGame") && !arguments.contains("-uiTesting") && !arguments.contains("-open")
+        return !arguments.contains("-startGame") && !arguments.contains("-uiTesting") && !arguments.contains("-open") && !arguments.contains("-demo")
         #else
         return true
         #endif
     }
 
-    /// `-startGame` keeps everything in memory; `-uiTesting` uses its own file (`-resetStore` wipes it).
+    /// `-startGame` and `-demo` keep everything in memory; `-uiTesting` uses its own file (`-resetStore` wipes it).
     private static var store: PersistenceService.Store {
         #if DEBUG
         let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("-startGame") { return .inMemory }
+        if arguments.contains("-startGame") || arguments.contains("-demo") { return .inMemory }
         if arguments.contains("-uiTesting") { return .named("UITests", reset: arguments.contains("-resetStore")) }
         #endif
         return .standard

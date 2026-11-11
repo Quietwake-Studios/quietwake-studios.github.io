@@ -15,7 +15,12 @@ struct FriendProfileScreen: View {
     }
 
     var body: some View {
-        FriendProfileView(entry: entry, gameCenter: app.gameCenter, boards: Self.boards(app.wordLanguage))
+        #if DEBUG
+        if DemoData.isActive {
+            return AnyView(FriendProfileView(name: entry.name, load: { DemoData.headToHead(with: entry.name) }))
+        }
+        #endif
+        return AnyView(FriendProfileView(entry: entry, gameCenter: app.gameCenter, boards: Self.boards(app.wordLanguage)))
     }
 }
 

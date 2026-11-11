@@ -3,13 +3,13 @@
 
     scripts/render-icon.py
 
-A 3×3 grid of letters with the selection stroke over the diagonal (S-O-L), in coral #FF9277
-on the vivid teal gradient #19BFCD → #0A8AA5 (palette A2, like the other Quiet icons). From
-the design canvas; the letters are an open decision until the store listing (2026-11-08).
+A 3×3 grid of letters (S E A / O K R / L I N) with two selection strokes that share the S:
+SEA across the top row and SOL down the first column, in coral #FF9277 on the vivid teal
+gradient #19BFCD → #0A8AA5 (palette A2, like the other Quiet icons). Option A, approved with
+the store listing (2026-11-11).
 SF Pro Rounded Heavy from the system fonts; drawn at 2× and scaled down.
 """
 import json
-import math
 import pathlib
 
 from PIL import Image, ImageDraw, ImageFont
@@ -17,7 +17,9 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "App/Resources/Assets.xcassets"
 FONT = "/System/Library/Fonts/SFNSRounded.ttf"
-LETTERS = ["S", "A", "N", "R", "O", "E", "M", "I", "L"]
+LETTERS = ["S", "E", "A", "O", "K", "R", "L", "I", "N"]
+# Cells under a stroke: SEA (row 0) and SOL (column 0).
+ON_STROKE = {(0, 0), (0, 1), (0, 2), (1, 0), (2, 0)}
 
 # name → (background top, bottom (None = transparent), letters, stroke, letters on the stroke)
 VARIANTS = {
@@ -50,15 +52,14 @@ def render(top, bottom, ink, stroke, on_stroke, size=1024):
         image = Image.new("RGBA", (S, S), (0, 0, 0, 0))
     cell = S * 0.24
     off = (S - cell * 3) / 2
-    # The stroke: a capsule from the first to the last diagonal cell.
+    # The strokes: a capsule over the top row and one down the first column, joined at the S.
     layer = Image.new("RGBA", (S, S), (0, 0, 0, 0))
     h = cell * 0.84
-    length = math.hypot(2 * cell, 2 * cell) + h
-    capsule = Image.new("RGBA", (int(length), int(h)), (0, 0, 0, 0))
-    ImageDraw.Draw(capsule).rounded_rectangle([0, 0, length - 1, h - 1], radius=h / 2, fill=rgb(stroke) + (255,))
-    capsule = capsule.rotate(-45, expand=True, resample=Image.BICUBIC)
-    center = off + 1.5 * cell
-    layer.paste(capsule, (int(center - capsule.width / 2), int(center - capsule.height / 2)), capsule)
+    inset = (cell - h) / 2
+    ink_stroke = rgb(stroke) + (255,)
+    draw = ImageDraw.Draw(layer)
+    draw.rounded_rectangle([off + inset, off + inset, off + 3 * cell - inset, off + cell - inset], radius=h / 2, fill=ink_stroke)
+    draw.rounded_rectangle([off + inset, off + inset, off + cell - inset, off + 3 * cell - inset], radius=h / 2, fill=ink_stroke)
     image = Image.alpha_composite(image, layer)
     font = ImageFont.truetype(FONT, int(cell * 0.62))
     try:
@@ -70,7 +71,7 @@ def render(top, bottom, ink, stroke, on_stroke, size=1024):
         r, c = divmod(i, 3)
         x = off + c * cell + cell / 2
         y = off + r * cell + cell / 2
-        draw.text((x, y), ch, font=font, fill=rgb(on_stroke if r == c else ink) + (255,), anchor="mm")
+        draw.text((x, y), ch, font=font, fill=rgb(on_stroke if (r, c) in ON_STROKE else ink) + (255,), anchor="mm")
     image = image.resize((size, size), Image.LANCZOS)
     return image if not top else image.convert("RGB")
 

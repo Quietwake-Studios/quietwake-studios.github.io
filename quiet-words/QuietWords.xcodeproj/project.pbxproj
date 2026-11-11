@@ -43,6 +43,7 @@
 		E4AC1C0E66863DE62C652AE7 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C784CCFE6A7CCD30E0E511 /* PersistenceService.swift */; };
 		E83B9F879EA6E974AF505B15 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 10B1DD40E61529F10167BEF9 /* PrivacyInfo.xcprivacy */; };
 		ECCDCECB941E03BBFECAA508 /* ReminderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C80372CAB4701DF76AAF2E /* ReminderTests.swift */; };
+		F41BE12D56581A75083CC863 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318C9F63B998889A70C69E8 /* DemoData.swift */; };
 		FA8B1F9118CE97F57E55709B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA32721FC0B06DA561C62260 /* HomeView.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 		584DDC48E1014CD0C01BA0E5 /* LanguagePill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePill.swift; sourceTree = "<group>"; };
 		59474F8170721513F832DD75 /* QuietWordsAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuietWordsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A52CF7180B6C67B2D422A1A /* DailyRuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRuleTests.swift; sourceTree = "<group>"; };
+		6318C9F63B998889A70C69E8 /* DemoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoData.swift; sourceTree = "<group>"; };
 		664E9C58B6AEE0FEF4C4DC2D /* LeaderboardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardsView.swift; sourceTree = "<group>"; };
 		6AEFE0FCC67B29DED6959CE6 /* QuietWordsCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = QuietWordsCore; path = Packages/QuietWordsCore; sourceTree = SOURCE_ROOT; };
 		7D01830A88F96A855BC98B23 /* QuietWords.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuietWords.entitlements; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				DF2EC7E23E37DD2F4732C4A3 /* QuietWords-Personal.entitlements */,
 				7D01830A88F96A855BC98B23 /* QuietWords.entitlements */,
 				DCD000C4A5D333FE894DE324 /* QuietWordsApp.swift */,
+				9A9827A062D31FE5C2E792B7 /* Debug */,
 				DB4AAD7615FED1318A2B94E4 /* DesignSystem */,
 				3CB63C70BBD99074073D00BF /* Features */,
 				4FC2D910F15FCF0A24123396 /* Resources */,
@@ -264,6 +267,14 @@
 				B722F35A9D4D5B6E33DA530E /* WordParts.swift */,
 			);
 			path = Game;
+			sourceTree = "<group>";
+		};
+		9A9827A062D31FE5C2E792B7 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				6318C9F63B998889A70C69E8 /* DemoData.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		B01F46DD197C4C93B5E3E11D /* Packages */ = {
@@ -457,6 +468,7 @@
 				CEC4AB5076F127648AE418D0 /* CollectionView.swift in Sources */,
 				AA47ECF65967B64D1832673E /* DailyChallengeView.swift in Sources */,
 				A4FC3F8D95630A074B8AB2C4 /* DayKeyFormat.swift in Sources */,
+				F41BE12D56581A75083CC863 /* DemoData.swift in Sources */,
 				A7782CCAFB60F79CE140FA96 /* FeedbackService.swift in Sources */,
 				678583DAE77FEB3F841BE7AF /* FriendProfileScreen.swift in Sources */,
 				C25084CC888001B93B215F6C /* GameModel.swift in Sources */,
@@ -536,7 +548,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -702,7 +714,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

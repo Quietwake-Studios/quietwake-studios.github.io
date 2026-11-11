@@ -89,9 +89,25 @@ struct LeaderboardsView: View {
         }
     }
 
-    private var isSignedIn: Bool { app.gameCenter.isAuthenticated }
+    private var isSignedIn: Bool {
+        #if DEBUG
+        if DemoData.isActive { return true }
+        #endif
+        return app.gameCenter.isAuthenticated
+    }
 
     private func load() async {
+        #if DEBUG
+        if DemoData.isActive {
+            let demo = DemoData.leaderboard(board)
+            let top = friendsOnly ? demo.top.filter { ["vale", "guss", "juanca", "cori16"].contains($0.name) } : demo.top
+            let ranked = top.enumerated().map { index, entry in
+                GameCenterService.Entry(id: entry.id, rank: index + 1, name: entry.name, score: entry.score,
+                                        isLocalPlayer: entry.isLocalPlayer, context: entry.context)
+            }
+            return state = .loaded(local: ranked.first(where: \.isLocalPlayer), top: ranked)
+        }
+        #endif
         guard app.gameCenter.isAuthenticated else { return }
         state = .loading
         do {

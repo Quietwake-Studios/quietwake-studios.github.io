@@ -97,6 +97,10 @@ final class AppModel {
         if let i = arguments.firstIndex(of: "-words"), i + 1 < arguments.count, let language = WordLanguage(rawValue: arguments[i + 1]) {
             wordLanguage = language
         }
+        if DemoData.isActive {
+            profile = DemoData.profile
+            DemoData.seed(persistence, language: wordLanguage)
+        }
         #endif
         freeInProgress = persistence.loadGame(.free).flatMap { $0.isWon ? nil : $0 }
         if let oldest = DailyKey.dayKey(todayKey, addingDays: -DailyKey.replayWindow) {
@@ -271,6 +275,7 @@ final class AppModel {
         #if DEBUG
         let arguments = ProcessInfo.processInfo.arguments
         if arguments.contains("-uiTesting"), !arguments.contains("-tutorial") { return false }
+        if DemoData.isActive { return false }
         #endif
         return !UserDefaults.standard.bool(forKey: PreferenceKey.tutorialSeen) || !hasChosenLanguage
     }

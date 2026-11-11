@@ -13,6 +13,8 @@ struct HomeView: View {
         case album
         /// Collection on its Achievements tab (DEBUG `-open achievements`).
         case achievements
+        /// One theme's album (DEBUG `-albumTheme <id>`).
+        case albumTheme(String)
         case settings
         case leaderboards
         case tutorial
@@ -103,6 +105,8 @@ struct HomeView: View {
                     CollectionView(startsOn: .album)
                 case .achievements:
                     CollectionView(startsOn: .achievements)
+                case .albumTheme(let id):
+                    AlbumThemeView(themeID: id, language: app.wordLanguage)
                 case .settings:
                     SettingsView { path.append(.tutorial) }
                 case .leaderboards:
@@ -181,7 +185,8 @@ struct HomeView: View {
     #if DEBUG
     /// `-startGame` opens a free game (`-seedKey <text>`, `-level gentle|medium|hard`,
     /// `-theme <id>`, `-words en|es`, `-nearlyWon` leaves one word, `-found <n>` finds n words,
-    /// `-hint` lights a hint, `-won` finds the last word); `-open <daily|leaderboards|collection|album|achievements|settings|tutorial|newGame>`.
+    /// `-hint` lights a hint, `-won` finds the last word); `-open <daily|leaderboards|collection|album|achievements|settings|tutorial|newGame>`;
+    /// `-albumTheme <id>` opens one theme's album; `-demo` (`DemoData`) and `-demoClock <seconds>`.
     private func startDebugGameIfRequested() {
         let arguments = ProcessInfo.processInfo.arguments
         func value(after flag: String) -> String? {
@@ -192,6 +197,9 @@ struct HomeView: View {
             let routes: [String: Route] = ["daily": .daily, "leaderboards": .leaderboards, "collection": .collection, "album": .album, "achievements": .achievements,
                                            "settings": .settings, "tutorial": .tutorial, "newGame": .newGame]
             if let route = routes[name] { return path = [route] }
+        }
+        if let id = value(after: "-albumTheme"), app.library.theme(id) != nil, path.isEmpty {
+            return path = [.collection, .albumTheme(id)]
         }
         guard arguments.contains("-startGame"), path.isEmpty else { return }
         let level = value(after: "-level").flatMap(Level.init) ?? .medium
@@ -205,7 +213,7 @@ struct HomeView: View {
         var found: [Int] = []
         if arguments.contains("-nearlyWon") { found = Array(board.placements.indices.dropLast()) }
         if let n = value(after: "-found").flatMap(Int.init) { found = Array(board.placements.indices.prefix(n)) }
-        let session = GameSession(mode: .free, themeID: themeID, level: level, board: board, found: found, elapsedSeconds: 134)
+        let session = GameSession(mode: .free, themeID: themeID, level: level, board: board, found: found, elapsedSeconds: DemoData.clock ?? 134)
         let model = GameModel(session: session)
         app.start(model, as: .free)
         if arguments.contains("-hint") { model.requestHint() }
