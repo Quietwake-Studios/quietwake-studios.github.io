@@ -201,9 +201,9 @@ Inglés (development language) y español con String Catalogs (`scripts/strings.
 5. **Álbum y recompensas.**
 6. **Pulido y lanzamiento:** 30 temas, capturas, ficha (con el esquema de `quiet-release`), web, TestFlight (con el usuario: Bundle ID y App Store Connect).
 
-## Estado (2026-11-08)
+## Estado (2026-11-11)
 
-Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos de la ficha subidos en en-US y es-MX. Falta para enviar a revisión: capturas, activar Game Center en la versión, subtítulo y la aprobación de las listas.
+**1.0 (4) enviada a revisión el 2026-11-11** con la ficha completa (textos, subtítulo, capturas, header y búsqueda), clasificación 4+ (Contests: Infrequent) y sin candado del reto (ver `BACKLOG.md`). TestFlight: grupo interno "Internal".
 
 | Fase | Estado |
 |---|---|
@@ -211,9 +211,9 @@ Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos d
 | 1. Motor | ✅ 21 tests del Core en release: referencias por fecha en/es, 10.000 tableros, un año de retos, candado, sesión, puntaje, progreso y álbum. 1–4 ms por tablero en Mac. |
 | 2. Jugable | ✅ en simulador: partida completa en "QW iPhone 17" y "QW iPad 13" (UI tests de arrastre y toque en los dos), adivinar, resumen, tutorial con el paso del idioma. Falta probar en iPhone real. |
 | 3. Persistencia y reto | ✅ en simulador: guardado por día e idioma, Continuar / Empezar de nuevo, racha única, días pasados, calendario, recordatorios; `DailyRuleTests` (7) y `ReminderTests` (2). |
-| 4. Game Center | 🟡 10 logros (con insignias, en/es) y 5 clasificaciones creados en App Store Connect (2026-11-08, `setup-game-center.py --apply`; reto diario desde 2026-11-09 05:00 UTC). Falta activarlos en la versión 1.0 y verificar envío y sincronización en el dispositivo. `qw_in_the_red` (2026-11-09) está en `game-center.json` con su insignia pero **no creado** en App Store Connect (lo hace quiet-studio con permiso del usuario). |
+| 4. Game Center | 🟡 11 logros (con insignias, en/es; `qw_in_the_red` desde el 2026-11-09) y 5 clasificaciones creados en App Store Connect (`setup-game-center.py --apply`; reto diario desde 2026-11-09 05:00 UTC). Falta verificar envío y sincronización en el dispositivo. |
 | 5. Álbum y recompensas | 🟡 Álbum por tema e idioma con insignias y definiciones del diccionario del sistema, recompensas seleccionables y bloqueadas con su condición, ícono dorado. Falta revisar en dispositivo (con diccionarios descargados). |
-| 6. Lanzamiento | ⬜ App Store pendiente hasta tener capturas reales (decisión 2026-11-08). |
+| 6. Lanzamiento | 🟡 1.0 (4) en revisión (2026-11-11). |
 
 ## Preguntas abiertas
 
