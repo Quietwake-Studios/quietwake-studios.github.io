@@ -2,8 +2,10 @@
 
 ## En curso
 
-### Candado del reto antes de tocar las listas (1.1)
+### Candado del reto antes de tocar listas o temas
 - **Qué:** la 1.0 (4) salió sin candado: el reto usa todas las palabras de cada lista con la rotación desde `unlockedEpoch` (2026-11-01). Antes de cambiar cualquier lista, correr `python3 scripts/lock-daily.py 2026-11-01` con las listas **tal como están en la 1.0**. La fecha es esa y no la de la 1.1, porque la rotación toma la fecha de la entrada como época. Así la 1.1 da los mismos tableros que la 1.0 en cada día. Después, las palabras nuevas van al final y entran con otra entrada, fechada cuando la 1.1 esté en los teléfonos.
+- **También al agregar temas:** la rotación sale de la lista de temas bilingües, así que un tema nuevo cambia qué tema toca cada día. En la versión que traiga temas nuevos: primero el candado 2026-11-01 con los 11 temas y las listas de la 1.0, después los temas nuevos con una segunda entrada fechada cuando esa versión ya esté en los teléfonos.
+- **Las palabras no se gastan:** cada tema recorre su lista en un orden fijo y vuelve a empezar; con ~200 por tema no hace falta agregar palabras pronto (usuario, 2026-11-11).
 - **Por qué:** el reto es el mismo para todos. Si dos versiones dan tableros distintos el mismo día, la clasificación diaria deja de ser pareja.
 
 ## Siguiente

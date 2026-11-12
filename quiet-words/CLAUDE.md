@@ -217,7 +217,7 @@ Inglés (development language) y español con String Catalogs (`scripts/strings.
 
 ## Preguntas abiertas
 
-- [x] Revisión de las 22 listas: superficial y aprobada (2026-11-11). Antes de cambiarlas en la 1.1, candado con fecha 2026-11-01 (`BACKLOG.md`).
+- [x] Revisión de las 22 listas: superficial y aprobada (2026-11-11). Antes de cambiarlas o de agregar temas, candado con fecha 2026-11-01 (`BACKLOG.md`).
 - [ ] Nombres de los dos temas de historia ("Renacimiento e industria", "Siglo XX y hoy").
 - [x] Subtítulo de la tienda y letras del ícono: decididos con la ficha (2026-11-11).
 - [ ] iPad en vertical: la lista debajo del tablero, para la 1.1 (`BACKLOG.md`).
