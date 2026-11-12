@@ -19,7 +19,7 @@ Todo lo necesario para crear y publicar la app. Textos en `fastlane/metadata/{en
 |---|---|
 | Subtítulo | Borrador en `subtitle.txt` ("Calm themed puzzles" / "Sopas con tema y reto diario"); se decide con la ficha |
 | Categoría | Juegos, subcategorías **Palabras** y **Puzle** (`upload-metadata.py` la pone) |
-| Clasificación por edad | Todas las preguntas en "Ninguno"/"No" → **4+** |
+| Clasificación por edad | Cuestionario: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+** |
 | Derechos de contenido | No contiene contenido de terceros (listas escritas por nosotros; definiciones del diccionario del sistema, que no viajan en la app) |
 | Copyright | © 2026 Quiet Studios |
 | Localizaciones | English (U.S.) y Spanish (Mexico) |

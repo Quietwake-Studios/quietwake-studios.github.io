@@ -19,7 +19,7 @@ Todo lo necesario para crear y publicar la app. Textos en `fastlane/metadata/{en
 |---|---|
 | Subtítulo | Ver `subtitle.txt` por idioma ("Classic sudoku with no ads" / "Sudoku clásico sin anuncios") |
 | Categoría | Juegos, subcategorías **Puzle** y Juegos de mesa (`upload-metadata.py` la pone) |
-| Clasificación por edad | Todas las preguntas en "Ninguno"/"No" → **4+** |
+| Clasificación por edad | Cuestionario: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+** |
 | Derechos de contenido | No contiene contenido de terceros (todos los tableros los genera el motor propio) |
 | Copyright | © 2026 Quiet Studios |
 | Localizaciones | English (U.S.) y Spanish (Mexico) |
@@ -67,7 +67,7 @@ Falta (preparado aquí, se sube cuando el usuario lo pida):
 - Notas para la revisión: la versión no tiene notas ni datos de contacto.
 
 Solo en la web de App Store Connect (lo hace el usuario):
-- **Clasificación por edad:** responder el cuestionario, todo "Ninguno"/"No" → 4+ (hoy está sin responder).
+- **Clasificación por edad:** todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+**.
 - **Precio y disponibilidad:** gratis, todos los países (hoy no hay precio ni disponibilidad).
 - **Derechos de contenido:** "No contiene contenido de terceros" (hoy sin responder).
 - **Privacidad de la app:** "Data Not Collected" (la API no lo deja leer: confirmarlo en App Privacy).

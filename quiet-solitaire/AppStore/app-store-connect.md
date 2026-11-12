@@ -19,7 +19,7 @@ Todo lo necesario para crear y publicar la app. App creada el 2026-10-28 (ID `68
 |---|---|
 | Subtítulo | Ver `subtitle.txt` por idioma |
 | Categoría | Juegos, subcategorías **Cartas** y Puzle (sin categoría secundaria) |
-| Clasificación por edad | Todas las preguntas en "Ninguno"/"No" → **4+**. Sin contenido generado por usuarios, sin navegador web, sin compras, sin juegos de azar con dinero (es solitario de un jugador, sin apuestas) |
+| Clasificación por edad | Cuestionario: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+**. Sin contenido generado por usuarios, sin navegador web, sin compras, sin juegos de azar con dinero (es solitario de un jugador, sin apuestas) |
 | Derechos de contenido | No contiene contenido de terceros (arte, figuras y palos dibujados para la app) |
 | Copyright | © 2026 Quiet Studios |
 | Localizaciones | English (U.S.) y Spanish (Mexico) |
@@ -89,7 +89,7 @@ Sin nombres ni estética de otras apps de solitario.
 
 La API no cubre bien estos pasos, o conviene revisarlos con calma:
 
-- Clasificación por edad (cuestionario: todo "No"/"Ninguno" → 4+).
+- Clasificación por edad: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+**.
 - Precio (gratis) y disponibilidad.
 - Privacidad de la app: "Data Not Collected".
 - En la versión 1.0: activar Game Center y elegir los logros y clasificaciones, elegir el build, las notas para la revisión (arriba) y la publicación automática.
