@@ -207,7 +207,7 @@ Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos d
 
 | Fase | Estado |
 |---|---|
-| 0. Contenido | 🟡 Validador, `new-theme.py`, `lock-daily.py`, bloqueo en/es y los 11 temas del lanzamiento con regionales (0 errores). **Falta la aprobación de las listas por el usuario.** |
+| 0. Contenido | 🟡 Validador, `new-theme.py`, `lock-daily.py`, bloqueo en/es y los 11 temas del lanzamiento con regionales (0 errores). Listas aprobadas por el usuario tras una revisión superficial (2026-11-11); salen así en la 1.0. |
 | 1. Motor | ✅ 21 tests del Core en release: referencias por fecha en/es, 10.000 tableros, un año de retos, candado, sesión, puntaje, progreso y álbum. 1–4 ms por tablero en Mac. |
 | 2. Jugable | ✅ en simulador: partida completa en "QW iPhone 17" y "QW iPad 13" (UI tests de arrastre y toque en los dos), adivinar, resumen, tutorial con el paso del idioma. Falta probar en iPhone real. |
 | 3. Persistencia y reto | ✅ en simulador: guardado por día e idioma, Continuar / Empezar de nuevo, racha única, días pasados, calendario, recordatorios; `DailyRuleTests` (7) y `ReminderTests` (2). |
@@ -217,7 +217,7 @@ Build **1.0 (1)** en TestFlight, grupo interno "Internal" (2026-11-08); textos d
 
 ## Preguntas abiertas
 
-- [ ] Revisión de las 22 listas (11 temas × 2 idiomas) por el usuario.
+- [x] Revisión de las 22 listas: superficial y aprobada (2026-11-11). Antes de cambiarlas en la 1.1, candado con fecha 2026-11-01 (`BACKLOG.md`).
 - [ ] Nombres de los dos temas de historia ("Renacimiento e industria", "Siglo XX y hoy").
 - [x] Subtítulo de la tienda y letras del ícono: decididos con la ficha (2026-11-11).
 - [ ] iPad en vertical: la lista debajo del tablero, para la 1.1 (`BACKLOG.md`).

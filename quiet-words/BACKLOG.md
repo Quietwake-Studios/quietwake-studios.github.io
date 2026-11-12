@@ -2,8 +2,9 @@
 
 ## En curso
 
-### Revisión del contenido (fase 0)
-- **Estado (2026-11-08):** los 11 temas del lanzamiento en/es listos para que el usuario tache lo que no le guste (`Packages/QuietWordsCore/Sources/QuietWordsCore/Resources/Themes/`). Después: `scripts/validate-words.py`.
+### Candado del reto antes de tocar las listas (1.1)
+- **Qué:** la 1.0 (4) salió sin candado: el reto usa todas las palabras de cada lista con la rotación desde `unlockedEpoch` (2026-11-01). Antes de cambiar cualquier lista, correr `python3 scripts/lock-daily.py 2026-11-01` con las listas **tal como están en la 1.0**. La fecha es esa y no la de la 1.1, porque la rotación toma la fecha de la entrada como época. Así la 1.1 da los mismos tableros que la 1.0 en cada día. Después, las palabras nuevas van al final y entran con otra entrada, fechada cuando la 1.1 esté en los teléfonos.
+- **Por qué:** el reto es el mismo para todos. Si dos versiones dan tableros distintos el mismo día, la clasificación diaria deja de ser pareja.
 
 ## Siguiente
 
@@ -11,7 +12,7 @@
 - **Qué:** la lista de la propuesta (Bosque, Aves, Clima y cielo, Minerales y gemas, Arquitectura, Pintura, Escritura y libros, Mitología griega, Navegación…), ~200 palabras por idioma y hasta 20 regionales, con la misma revisión.
 
 ### Ficha de la App Store (fase 6)
-- **Estado (2026-11-11):** ficha visual aprobada por el usuario: capturas, 5 imágenes, header y búsqueda ("Sopa de letras que no se repite." / "Word search that never repeats."), subtítulo ("Daily themed puzzles" / "Sopas con tema y reto diario") e ícono (opción A: SEA y SOL). Falta subirla a App Store Connect con un build 1.0 (4) que lleve el ícono nuevo; lo hace quiet-studio con permiso del usuario.
+- **Estado (2026-11-11):** ficha visual aprobada por el usuario: capturas, 5 imágenes, header y búsqueda ("Sopa de letras que no se repite." / "Word search that never repeats."), subtítulo ("Daily themed puzzles" / "Sopas con tema y reto diario") e ícono (opción A: SEA y SOL). Subida con el build 1.0 (4) y enviada a revisión el 2026-11-11 (Contests: Infrequent, 4+).
 
 ### iPad vertical: la lista debajo del tablero (1.1)
 - **Qué:** en iPad en vertical la partida deja mucho espacio arriba y abajo del tablero porque la lista y los controles van al lado (se ve en la imagen 1 de iPad). En vertical, poner la lista debajo del tablero como en iPhone (a 3–4 columnas) y dejar el lado a lado para horizontal. Volver a sacar las capturas de iPad (`scripts/screenshots.sh ipad`, `scripts/store-images.py`).
