@@ -9,7 +9,7 @@ Cada app documenta sus comandos exactos en su CLAUDE.md ("Comandos" y "Publicaci
 
 ## Credenciales (nunca en el repo)
 
-- Team ID solo en `quiet-<app>/Config/Local.xcconfig` (ignorado por git).
+- Team ID solo en `quiet-<app>/iOS/Config/Local.xcconfig` (ignorado por git).
 - Clave de la API de App Store Connect en `~/.appstoreconnect/` (JSON con Key ID e Issuer, y `private_keys/AuthKey_<id>.p8`). Nunca copiar la `.p8` ni pegar su contenido.
 - La clave no tiene permiso de firma en la nube: exportar y subir usa la cuenta de Xcode del usuario. Si falla con "Failed to Use Accounts", pedirle que renueve la sesión en Xcode › Settings › Accounts.
 - No tocar el equipo "Heal Room, inc".
@@ -18,7 +18,7 @@ Cada app documenta sus comandos exactos en su CLAUDE.md ("Comandos" y "Publicaci
 
 1. Versión: si la versión actual está en revisión o publicada, subir la siguiente (`MARKETING_VERSION` 1.0 → 1.1); el build (`CURRENT_PROJECT_VERSION`) siempre sube y nunca se repite. Cambiarlos en `project.yml`, `xcodegen generate`, commit "Quiet <App>: <versión> build <n>" y push (el usuario lo pide al pedir el build).
 2. Archivar desde una copia limpia de `main`: `git worktree add --detach <scratch>/<app>-release origin/main`, copiar `Config/Local.xcconfig`, `xcodegen generate`, `xcodebuild archive -configuration Release -destination 'generic/platform=iOS' -allowProvisioningUpdates`.
-3. `xcodebuild -exportArchive` con el `scripts/ExportOptions.plist` de la app (`method app-store-connect`, `destination upload`, firma automática; `quiet-words/scripts/ExportOptions.plist` sirve para cualquiera). Si el iPhone del usuario está bloqueado, solo afecta la instalación local, no la subida.
+3. `xcodebuild -exportArchive` con el `scripts/ExportOptions.plist` de la app (`method app-store-connect`, `destination upload`, firma automática; `quiet-words/iOS/scripts/ExportOptions.plist` sirve para cualquiera). Si el iPhone del usuario está bloqueado, solo afecta la instalación local, no la subida.
 4. Borrar la copia (`git worktree remove --force`). No quedarse esperando el procesamiento salvo que el usuario lo pida: tarda.
 5. Una versión nueva en la beta externa pasa por revisión de Apple; agregar el build al grupo externo solo si el usuario lo pide.
 
@@ -53,7 +53,7 @@ Cada app documenta sus comandos exactos en su CLAUDE.md ("Comandos" y "Publicaci
 
 Toda versión que se envía a revisión lleva en App Review Information › Notes las respuestas a lo que Apple pide en "Guideline 2.1 - Information Needed" (Quiet Numbers fue rechazada por eso el 2026-10-31), y un video como adjunto de esa misma sección:
 
-- **Notas** en `AppStore/app-review-notes.md` de la app, en inglés y numeradas como las pide Apple: 1) video (y que no hay cuentas, contenido de usuarios ni compras); 2) propósito y público; 3) cómo entrar a lo principal (sin login ni cuenta de prueba; dónde están el tutorial y el reto diario); 4) servicios externos (solo Game Center e iCloud del usuario); 5) sin diferencias por región; 6) sin industria regulada ni material de terceros. Plantilla: `quiet-numbers/AppStore/app-review-notes.md`.
+- **Notas** en `AppStore/app-review-notes.md` de la app, en inglés y numeradas como las pide Apple: 1) video (y que no hay cuentas, contenido de usuarios ni compras); 2) propósito y público; 3) cómo entrar a lo principal (sin login ni cuenta de prueba; dónde están el tutorial y el reto diario); 4) servicios externos (solo Game Center e iCloud del usuario); 5) sin diferencias por región; 6) sin industria regulada ni material de terceros. Plantilla: `quiet-numbers/iOS/AppStore/app-review-notes.md`.
 - **Video** grabado por el usuario en su iPhone, con el iOS más reciente y el build que se envía (instalación limpia desde TestFlight para que salga el tutorial; No molestar activado; Game Center con sesión). Empieza abriendo la app desde la pantalla de inicio y muestra en 2–3 min: tutorial, partida libre (jugadas, pista, deshacer), reto diario (salir y "Continuar / Empezar de nuevo", calendario), clasificaciones, Colección y Ajustes. Sin audio ni edición.
 - Revisar las notas cuando cambie algo que mencionan (servicios, notificaciones, funciones nuevas).
 
@@ -61,7 +61,7 @@ Toda versión que se envía a revisión lleva en App Review Information › Note
 
 Logros y clasificaciones se definen en `AppStore/game-center.json` y se crean con `scripts/setup-game-center.py` (muestra qué haría; `--apply` solo con permiso). Los IDs del código se verifican con `check-game-center.py` / `game-center.py`. Una clasificación publicada no cambia de formato: si hace falta otro criterio, es otra clasificación.
 
-- **Los ítems de Game Center se envían a revisión con la versión.** Crearlos no basta: quedan en "Prepare for Submission" y en producción las clasificaciones salen vacías (le pasó a Quiet Words 1.0, 2026-11-12). Los primeros de cada tipo deben ir en el mismo envío que una versión de la app (`FIRST_OF_TYPE_MUST_ATTACH_VERSION_FOR_REVIEW`). Enviar siempre con `python3 quiet-numbers/scripts/submit-with-game-center.py <sufijo del bundle> <build> [--apply]`: adjunta el build, agrega la versión y cada ítem pendiente al envío y lo manda.
+- **Los ítems de Game Center se envían a revisión con la versión.** Crearlos no basta: quedan en "Prepare for Submission" y en producción las clasificaciones salen vacías (le pasó a Quiet Words 1.0, 2026-11-12). Los primeros de cada tipo deben ir en el mismo envío que una versión de la app (`FIRST_OF_TYPE_MUST_ATTACH_VERSION_FOR_REVIEW`). Enviar siempre con `python3 quiet-numbers/iOS/scripts/submit-with-game-center.py <sufijo del bundle> <build> [--apply]`: adjunta el build, agrega la versión y cada ítem pendiente al envío y lo manda.
 - `setup-game-center.py` no edita ítems existentes: si cambia la descripción de un logro, actualizar su localización por la API (`PATCH /v2/gameCenterAchievementLocalizations/{id}`, ids en `/v2/gameCenterAchievementVersions/{id}/localizations`) mientras la versión del logro no esté publicada.
 - Retirar un envío (`PATCH /v1/reviewSubmissions/{id}` con `canceled: true`) deja la versión en `DEVELOPER_REJECTED`, editable, y se puede reenviar.
 

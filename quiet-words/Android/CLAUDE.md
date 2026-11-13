@@ -6,7 +6,7 @@ Proyecto Gradle de Quiet Words para Android. Cada app tiene su carpeta `Android/
 
 - **Kotlin + Jetpack Compose, nativo.** El motor de cada juego se porta de Swift a Kotlin; iOS no se toca. No se usa Kotlin Multiplatform ni Flutter.
 - **El mismo reto en las dos plataformas:** un mismo día da el mismo tablero en iOS y en Android. Se verifica con **fixtures generados desde Swift** (`fixtures/` de cada proyecto): vectores de FNV-1a, SplitMix64 y claves de día en `QuietKit/Android/fixtures/`; normalización, temas, retos y tableros libres en `fixtures/`. Si un test de fixtures falla, manda Swift y se corrige Kotlin.
-- **Una sola fuente de contenido:** los temas, la lista de bloqueo y `daily-lock.json` se leen de los recursos del paquete de iOS (`Packages/QuietWordsCore/Sources/QuietWordsCore/Resources/`; Gradle los toma como recursos, no se copian). La ruta está en un solo lugar: `quietWords.iosResources` en `gradle.properties`. El candado del reto aplica igual a las dos plataformas.
+- **Una sola fuente de contenido:** los temas, la lista de bloqueo y `daily-lock.json` se leen de los recursos del paquete de iOS (`iOS/Packages/QuietWordsCore/Sources/QuietWordsCore/Resources/`; Gradle los toma como recursos, no se copian). La ruta está en un solo lugar: `quietWords.iosResources` en `gradle.properties`. El candado del reto aplica igual a las dos plataformas.
 - **Clasificaciones y logros:** Google Play Games Services v2, con los mismos IDs de concepto que Game Center (`qw_daily_en`…); los jugadores de iOS y Android no se ven entre sí.
 - **Cuenta de Google Play personal** (la empresa no está registrada, así que no hay D-U-N-S). Las cuentas personales nuevas deben pasar una **prueba cerrada con al menos 12 testers durante 14 días seguidos** antes de pedir producción.
 - Paquete `com.tavoohoh.quietwords` (el mismo nombre del bundle de iOS).
@@ -35,10 +35,9 @@ Con `JAVA_HOME` en el JBR 17:
 
 - Tests: `./gradlew test` (desde esta carpeta; corre `quietkit-core` y `words-core`, ~40 s).
 - Regenerar fixtures desde Swift (solo cuando cambie a propósito el motor o el contenido de iOS; luego `./gradlew test` debe pasar; cada línea desde esta carpeta):
-  - `cd ../../QuietKit && QUIET_WRITE_FIXTURES=$PWD/Android/fixtures swift test --filter FixtureWriter`
-  - `cd ../Packages/QuietWordsCore && QUIET_WRITE_FIXTURES=$PWD/../../Android/fixtures swift test -c release --filter FixtureWriter`
+  - `cd ../../QuietKit/iOS && QUIET_WRITE_FIXTURES=$PWD/../Android/fixtures swift test --filter FixtureWriter`
+  - `cd ../iOS/Packages/QuietWordsCore && QUIET_WRITE_FIXTURES=$PWD/../../../Android/fixtures swift test -c release --filter FixtureWriter`
   - Sin la variable, el test `FixtureWriter` de Swift no hace nada.
-- Al mover los archivos de iOS a `iOS/`: cambiar solo `quietWords.iosResources` en `gradle.properties` y las rutas de arriba.
 
 ## Fases (no avanzar sin cumplir el criterio)
 

@@ -23,16 +23,16 @@ sys.path.insert(0, str(HERE))
 import store_style  # noqa: E402
 
 GAMES = {
-    "numbers": dict(dir="quiet-numbers", name="Quiet Numbers",
+    "numbers": dict(dir="quiet-numbers/iOS", name="Quiet Numbers",
                     labels={"01-pairs": "Parejas", "02-daily": "Reto diario", "03-friends": "Amigos",
                             "04-rewards": "Recompensas", "05-stages": "Etapas"}),
-    "solitaire": dict(dir="quiet-solitaire", name="Quiet Solitaire",
+    "solitaire": dict(dir="quiet-solitaire/iOS", name="Quiet Solitaire",
                       labels={"01-classic": "Clásico", "02-daily": "Reto diario", "03-friends": "Amigos",
                               "04-rewards": "Recompensas", "05-winnable": "Con solución"}),
-    "sudoku": dict(dir="quiet-sudoku", name="Quiet Sudoku",
+    "sudoku": dict(dir="quiet-sudoku/iOS", name="Quiet Sudoku",
                    labels={"01-classic": "Clásico", "02-daily": "Reto diario", "03-friends": "Amigos",
                            "04-rewards": "Recompensas", "05-win": "Victoria"}),
-    "words": dict(dir="quiet-words", name="Quiet Words",
+    "words": dict(dir="quiet-words/iOS", name="Quiet Words",
                   labels={"01-board": "Tablero", "02-daily": "Reto diario", "03-friends": "Amigos",
                           "04-album": "Álbum", "05-hidden": "Palabra oculta"}),
 }

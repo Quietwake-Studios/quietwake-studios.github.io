@@ -10,8 +10,9 @@ description: Estructura de proyecto, arquitectura y convenciones de código de l
 ```
 Quiet/                       repo público tavoohoh/quiet-studios
 ├── CLAUDE.md                filosofía de la familia, links a los sistemas de diseño
-├── QuietKit/                paquete Swift compartido (QuietCore + QuietUI)
-├── quiet-<app>/             una carpeta por app, con su CLAUDE.md
+├── QuietKit/iOS/            paquete Swift compartido (QuietCore + QuietUI)
+├── QuietKit/Android/        port en Kotlin (quietkit-core), con fixtures generados desde Swift
+├── quiet-<app>/             una carpeta por app: CLAUDE.md, BACKLOG.md, design/, iOS/ y Android/
 ├── docs/quiet-<app>/        web de cada app (GitHub Pages): index, privacy, support (en/es)
 └── .claude/skills/          estas skills
 ```
@@ -19,23 +20,26 @@ Quiet/                       repo público tavoohoh/quiet-studios
 ## Una app
 
 ```
-quiet-<app>/
-├── CLAUDE.md
-├── project.yml              XcodeGen: fuente de verdad del proyecto (nunca editar el .pbxproj)
-├── Config/                  Base.xcconfig + Local.xcconfig (Team ID, ignorado por git) + .example
-├── App/
-│   ├── Quiet<App>App.swift
-│   ├── AppModel.swift       estado de la app: partida activa, reto diario, progreso, Game Center
-│   ├── Features/<Pantalla>/ Home, Game, DailyChallenge, Leaderboards, Collection, Settings, Tutorial
-│   ├── Services/            Persistence (SwiftData), GameCenterService (extensión del kit), Feedback
-│   ├── DesignSystem/        solo lo propio de la app (recompensas, arte del juego); lo genérico en QuietUI
-│   ├── Debug/DemoData.swift estado fijo para capturas (-demo)
-│   └── Resources/           Assets, Localizable.xcstrings, InfoPlist.xcstrings, PrivacyInfo.xcprivacy
-├── Packages/Quiet<App>Core/ lógica pura: sin SwiftUI, SwiftData ni GameKit; depende de QuietCore
-├── AppTests/ UITests/ Screenshots/
-├── AppStore/                capturas, imágenes de tienda, game-center.{json,md}, insignias
-├── fastlane/metadata/       textos de la ficha por idioma (no se usa fastlane: lo sube scripts/)
-└── scripts/                 asc.py (API de App Store Connect), setup-game-center.py, screenshots.sh, store-images.py, render-*.py, validate-metadata.py
+quiet-<app>/                 (decisión 2026-11-13: cada plataforma en su carpeta)
+├── CLAUDE.md · BACKLOG.md   comunes al juego
+├── design/                  canvas-assets.tsv (rutas relativas a quiet-<app>/) y respaldos del canvas
+├── Android/                 proyecto Gradle (ver quiet-words/Android/CLAUDE.md)
+└── iOS/
+    ├── project.yml              XcodeGen: fuente de verdad del proyecto (nunca editar el .pbxproj)
+    ├── Config/                  Base.xcconfig + Local.xcconfig (Team ID, ignorado por git) + .example
+    ├── App/
+    │   ├── Quiet<App>App.swift
+    │   ├── AppModel.swift       estado de la app: partida activa, reto diario, progreso, Game Center
+    │   ├── Features/<Pantalla>/ Home, Game, DailyChallenge, Leaderboards, Collection, Settings, Tutorial
+    │   ├── Services/            Persistence (SwiftData), GameCenterService (extensión del kit), Feedback
+    │   ├── DesignSystem/        solo lo propio de la app (recompensas, arte del juego); lo genérico en QuietUI
+    │   ├── Debug/DemoData.swift estado fijo para capturas (-demo)
+    │   └── Resources/           Assets, Localizable.xcstrings, InfoPlist.xcstrings, PrivacyInfo.xcprivacy
+    ├── Packages/Quiet<App>Core/ lógica pura: sin SwiftUI, SwiftData ni GameKit; depende de QuietCore
+    ├── AppTests/ UITests/ Screenshots/
+    ├── AppStore/                capturas, imágenes de tienda, game-center.{json,md}, insignias
+    ├── fastlane/metadata/       textos de la ficha por idioma (no se usa fastlane: lo sube scripts/)
+    └── scripts/                 asc.py (API de App Store Connect), setup-game-center.py, screenshots.sh, store-images.py, render-*.py, validate-metadata.py
 ```
 
 ## Capas

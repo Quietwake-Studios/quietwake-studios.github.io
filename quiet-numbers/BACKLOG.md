@@ -40,7 +40,7 @@
   - **Activity "Partida clásica":** continuar o empezar una partida clásica; clasificación `best_score`; logros Tabla rasa, Sin ayuda, Etapa 5, Barrendero y Monótono.
   - **En la app (solo iOS 26 y con sesión):** botón "Retar a un amigo" en la tarjeta del Reto diario y en la hoja de resumen al completar el reto (`GKAccessPoint.shared.trigger(challengeDefinitionID:)`); marca "Reto con amigos" si `hasActiveChallenges`; `GKGameActivityListener` que lleva al reto o a la partida clásica, en arranque en frío o en caliente, después del tutorial si no se ha visto.
   - **QuietKit:** el listener, los disparadores y el chequeo de iOS 26 van en `GameCenterService` de QuietUI para que Quiet Solitaire lo adopte igual.
-  - **App Store Connect:** la API tiene `gameCenterChallenges` y `gameCenterActivities` (verificado el 2026-10-29: 0 de cada uno); crearlos con `scripts/setup-game-center.py` y `AppStore/game-center.json`, textos en/es. Configurar la versión mínima del challenge a la que traiga el código.
+  - **App Store Connect:** la API tiene `gameCenterChallenges` y `gameCenterActivities` (verificado el 2026-10-29: 0 de cada uno); crearlos con `iOS/scripts/setup-game-center.py` y `iOS/AppStore/game-center.json`, textos en/es. Configurar la versión mínima del challenge a la que traiga el código.
   - Privacidad sin cambios ("Data Not Collected"): todo pasa por Game Center.
 - **Decidido (2026-10-29):** se hace después de publicar la 1.1. Recomendación pendiente de confirmar: solo `daily_time` + "Reto del día" + las 2 activities.
 - **Abierto:** ¿agregar también el clásico semanal (abajo)?

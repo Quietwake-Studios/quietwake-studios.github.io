@@ -17,10 +17,10 @@ build/
 .swiftpm/
 
 # Local signing config (Team ID, personal bundle ID)
-quiet-numbers/Config/Local.xcconfig
-quiet-solitaire/Config/Local.xcconfig
-quiet-sudoku/Config/Local.xcconfig
-quiet-words/Config/Local.xcconfig
+quiet-numbers/iOS/Config/Local.xcconfig
+quiet-solitaire/iOS/Config/Local.xcconfig
+quiet-sudoku/iOS/Config/Local.xcconfig
+quiet-words/iOS/Config/Local.xcconfig
 
 # Signing and App Store Connect credentials: never commit
 *.p8

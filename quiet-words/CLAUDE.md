@@ -24,22 +24,22 @@ Los de la familia: sin anuncios, compras, suscripciones ni tip jar; sin backend,
 | Tests | Swift Testing (Core y app) y XCUITest (jugar con el dedo). |
 | Dependencias externas | Ninguna. |
 
-Un solo target iOS (iPhone y iPad), un bundle ID, proyecto con XcodeGen (`project.yml`), como Quiet Sudoku.
+Un solo target iOS (iPhone y iPad), un bundle ID, proyecto con XcodeGen (`iOS/project.yml`), como Quiet Sudoku.
 
 ## Comandos
 
 - `xcodegen generate` tras agregar o mover archivos. No editar el `.pbxproj`.
-- **Contenido:** `python3 scripts/validate-words.py [tema]` (0 errores para hacer build; dice qué arreglar y dónde), `python3 scripts/new-theme.py <id> "<Name>" "<Nombre>" <sf.symbol>` (tema vacío), `python3 scripts/lock-daily.py <yyyy-MM-dd>` (candado del reto al publicar una versión; `--show` lo muestra).
-- Tests del motor: `cd Packages/QuietWordsCore && swift test -c release` (21 tests, ~30 s; incluye 10.000 tableros y un año de retos con los 11 temas en los dos idiomas. En debug tardan mucho más y el límite de tiempo sube a 150 ms).
-- Tests de la app y UI: `xcodebuild test -project QuietWords.xcodeproj -scheme QuietWords -destination 'id=<udid>' -derivedDataPath build/dd` (11 de app: regla del reto, Números rojos, recordatorios, tutorial; 8 de UI: ganar arrastrando, tocar primera y última letra, adivinar, definición desde el resumen, Igual que el sistema, logros, pistas más baratas, tutorial).
+- **Contenido:** `python3 iOS/scripts/validate-words.py [tema]` (0 errores para hacer build; dice qué arreglar y dónde), `python3 iOS/scripts/new-theme.py <id> "<Name>" "<Nombre>" <sf.symbol>` (tema vacío), `python3 iOS/scripts/lock-daily.py <yyyy-MM-dd>` (candado del reto al publicar una versión; `--show` lo muestra).
+- Tests del motor: `cd iOS/Packages/QuietWordsCore && swift test -c release` (21 tests, ~30 s; incluye 10.000 tableros y un año de retos con los 11 temas en los dos idiomas. En debug tardan mucho más y el límite de tiempo sube a 150 ms).
+- Tests de la app y UI: `xcodebuild test -project iOS/QuietWords.xcodeproj -scheme QuietWords -destination 'id=<udid>' -derivedDataPath build/dd` (11 de app: regla del reto, Números rojos, recordatorios, tutorial; 8 de UI: ganar arrastrando, tocar primera y última letra, adivinar, definición desde el resumen, Igual que el sistema, logros, pistas más baratas, tutorial).
 - Simuladores propios de esta app, **uno a la vez**: "QW iPhone 17" y "QW iPad 13". Apagar por udid (`xcrun simctl shutdown <udid>`), nunca `shutdown all`.
-- Textos: `python3 scripts/strings.py` después de compilar con `-derivedDataPath build/dd` (falla si una clave extraída no tiene español).
-- Ícono: `python3 scripts/render-icon.py` (estándar y Gold, claro/oscuro/tinted, y el ícono de Inicio). Letras aprobadas el 2026-11-11 (opción A): S E A / O K R / L I N con dos trazos que comparten la S, SEA en la fila y SOL en la columna; el favicon de `../docs/quiet-words/` es la misma figura en SVG.
-- **Publicación** (`AppStore/app-store-connect.md`: campos para crear la app, privacidad, versión y TestFlight). **Nada se sube ni se registra sin permiso explícito del usuario.**
-  - Textos: `fastlane/metadata/{en-US,es-MX}` (solo la estructura de carpetas; no se usa la gema), validar con `python3 scripts/validate-metadata.py`, subir con `scripts/upload-metadata.py [--apply]` (textos, categoría Palabras + Puzle, copyright). Cliente `scripts/asc.py`, credenciales fuera del repo en `~/.appstoreconnect` (las de Quiet Numbers). Subtítulo (aprobado 2026-11-11): "Daily themed puzzles" / "Sopas con tema y reto diario".
-  - Game Center: `AppStore/game-center.json` (11 logros, 620 puntos, y 5 clasificaciones; IDs verificados contra el código), `scripts/setup-game-center.py [--apply]` los crea con las 11 insignias de `AppStore/achievements/` (1024 sin alfa, `python3 scripts/achievement-badges.py`, con `scripts/render-svg.swift`).
-  - TestFlight: "What to Test" en `AppStore/testflight.md`; `scripts/ExportOptions.plist` (app-store-connect, upload, firma automática, sin Team ID). Notas para Apple y guion del video en `AppStore/app-review-notes.md`.
-  - **Ficha visual (2026-11-11, esquema de la familia copiado de Quiet Sudoku):** capturas reales con `scripts/screenshots.sh [iphone|ipad]` (estado `-demo` de `App/Debug/DemoData.swift`; crea su propio simulador "QW Shots …" y lo borra por udid al terminar; sonido apagado en ese simulador porque los tonos necesitan el audio del Mac) → `AppStore/screenshots/<iphone-6.9|ipad-13>/<en|es>/<light|dark>/`. Imágenes: `python3 scripts/store-images.py` → `AppStore/store-images/<iphone-6.9|iphone-6.3|ipad-13>/<en|es>/01-board … 05-hidden` (1 sopa con temas, 2 reto diario, 3 amigos, 4 recompensas con el álbum, 5 palabra oculta). Header y búsqueda ("Sopa de letras / que no se repite." · "Cada partida, un tablero nuevo. En español y en inglés."; en inglés "Word search / that never repeats."; la tarjeta de la búsqueda es el reto de las capturas, miércoles 11 · Botánica): HTML estático en `AppStore/creative/` (el teléfono de la búsqueda es `phone.<lang>.png`, la captura 01 en claro a 780 px) → `python3 scripts/creative-assets.py` → `AppStore/creative-assets/<en|es>/{header,search}.png`. Estilo en `AppStore/store-style.json` (editor: `python3 ../studio/store-editor/build.py words <carpeta>`). Nada subido a App Store Connect.
+- Textos: `python3 iOS/scripts/strings.py` después de compilar con `-derivedDataPath build/dd` (falla si una clave extraída no tiene español).
+- Ícono: `python3 iOS/scripts/render-icon.py` (estándar y Gold, claro/oscuro/tinted, y el ícono de Inicio). Letras aprobadas el 2026-11-11 (opción A): S E A / O K R / L I N con dos trazos que comparten la S, SEA en la fila y SOL en la columna; el favicon de `../docs/quiet-words/` es la misma figura en SVG.
+- **Publicación** (`iOS/AppStore/app-store-connect.md`: campos para crear la app, privacidad, versión y TestFlight). **Nada se sube ni se registra sin permiso explícito del usuario.**
+  - Textos: `iOS/fastlane/metadata/{en-US,es-MX}` (solo la estructura de carpetas; no se usa la gema), validar con `python3 iOS/scripts/validate-metadata.py`, subir con `iOS/scripts/upload-metadata.py [--apply]` (textos, categoría Palabras + Puzle, copyright). Cliente `iOS/scripts/asc.py`, credenciales fuera del repo en `~/.appstoreconnect` (las de Quiet Numbers). Subtítulo (aprobado 2026-11-11): "Daily themed puzzles" / "Sopas con tema y reto diario".
+  - Game Center: `iOS/AppStore/game-center.json` (11 logros, 620 puntos, y 5 clasificaciones; IDs verificados contra el código), `iOS/scripts/setup-game-center.py [--apply]` los crea con las 11 insignias de `iOS/AppStore/achievements/` (1024 sin alfa, `python3 iOS/scripts/achievement-badges.py`, con `iOS/scripts/render-svg.swift`).
+  - TestFlight: "What to Test" en `iOS/AppStore/testflight.md`; `iOS/scripts/ExportOptions.plist` (app-store-connect, upload, firma automática, sin Team ID). Notas para Apple y guion del video en `iOS/AppStore/app-review-notes.md`.
+  - **Ficha visual (2026-11-11, esquema de la familia copiado de Quiet Sudoku):** capturas reales con `iOS/scripts/screenshots.sh [iphone|ipad]` (estado `-demo` de `iOS/App/Debug/DemoData.swift`; crea su propio simulador "QW Shots …" y lo borra por udid al terminar; sonido apagado en ese simulador porque los tonos necesitan el audio del Mac) → `iOS/AppStore/screenshots/<iphone-6.9|ipad-13>/<en|es>/<light|dark>/`. Imágenes: `python3 iOS/scripts/store-images.py` → `iOS/AppStore/store-images/<iphone-6.9|iphone-6.3|ipad-13>/<en|es>/01-board … 05-hidden` (1 sopa con temas, 2 reto diario, 3 amigos, 4 recompensas con el álbum, 5 palabra oculta). Header y búsqueda ("Sopa de letras / que no se repite." · "Cada partida, un tablero nuevo. En español y en inglés."; en inglés "Word search / that never repeats."; la tarjeta de la búsqueda es el reto de las capturas, miércoles 11 · Botánica): HTML estático en `iOS/AppStore/creative/` (el teléfono de la búsqueda es `phone.<lang>.png`, la captura 01 en claro a 780 px) → `python3 iOS/scripts/creative-assets.py` → `iOS/AppStore/creative-assets/<en|es>/{header,search}.png`. Estilo en `iOS/AppStore/store-style.json` (editor: `python3 ../studio/store-editor/build.py words <carpeta>`). Nada subido a App Store Connect.
   - Web: `../docs/quiet-words/{index,privacy,support}.html` (GitHub Pages desde `/docs`, se publica con el push a main).
 - **Argumentos DEBUG:** `-startGame` abre una partida libre (`-seedKey <texto>`, `-level gentle|medium|hard`, `-theme <id>`, `-words en|es`, `-found <n>`, `-nearlyWon`, `-won` encuentra la última, `-hint`); `-open <daily|leaderboards|collection|album|achievements|settings|tutorial|newGame>`; `-uiTesting` (almacén propio; las celdas marcan "start"/"end" de la siguiente palabra y la palabra oculta se lee en `hiddenWord`), `-resetStore`, `-tutorial`, `-unlockAll`, `-date <ISO8601>`, `-forceLookUp` (muestra la acción del diccionario aunque el simulador no tenga diccionarios). `-demo` (estado fijo para la tienda, en memoria; `-completeToday`, `-demoClock <segundos>`), `-albumTheme <id>` (abre el álbum de un tema) y `-wordLanguageSheet` (con `-open settings`, abre la hoja del idioma de las palabras).
 
@@ -51,15 +51,15 @@ Usa `SeededRandom`, `FNV1a`, `DailyKey`, `Streaks`, `Palette`, `DailyReminderPla
 
 ```
 quiet-words/
-├── project.yml · Config/ (Base.xcconfig; Local.xcconfig con el Team ID, ignorado por git)
-├── App/
+├── iOS/project.yml · iOS/Config/ (Base.xcconfig; Local.xcconfig con el Team ID, ignorado por git)
+├── iOS/App/
 │   ├── QuietWordsApp.swift · AppModel.swift · Preferences.swift
 │   ├── Features/   Home, NewGame, Game (GameModel, BoardView, WordParts, GameView, SummarySheet),
 │   │               DailyChallenge (+ CalendarView), Leaderboards, Collection (álbum, recompensas y logros), Settings, Tutorial
 │   ├── Services/   PersistenceService (SwiftData), FeedbackService, Reminders, AppClock
 │   ├── DesignSystem/ Appearance (marcador, letra, Letras más grandes), LanguagePill, Rewards, DayKeyFormat
 │   └── Resources/  Assets, Localizable.xcstrings, InfoPlist.xcstrings, PrivacyInfo.xcprivacy
-├── Packages/QuietWordsCore/
+├── iOS/Packages/QuietWordsCore/
 │   ├── Sources/QuietWordsCore/
 │   │   ├── Words.swift          WordLanguage, normalización, Word, WordGroup
 │   │   ├── Themes.swift         WordTheme (un JSON = un tema), ThemeLibrary (temas, bloqueo, candado)
@@ -70,12 +70,12 @@ quiet-words/
 │   │   ├── Progress.swift       Achievement, PlayerProgress, Album
 │   │   └── Resources/Themes/*.json, Resources/Blocklist/{en,es}.txt
 │   └── Tests/
-├── AppTests/ UITests/ scripts/
+├── iOS/AppTests/ iOS/UITests/ iOS/scripts/
 ```
 
 ## Contenido: temas (lo central)
 
-**Un tema = un archivo JSON** en `Packages/QuietWordsCore/Sources/QuietWordsCore/Resources/Themes/` (decisión 2026-11-08): la app carga toda la carpeta, sin registro, sin código y sin IDs. El nombre del archivo es el id.
+**Un tema = un archivo JSON** en `iOS/Packages/QuietWordsCore/Sources/QuietWordsCore/Resources/Themes/` (decisión 2026-11-08): la app carga toda la carpeta, sin registro, sin código y sin IDs. El nombre del archivo es el id.
 
 ```json
 {
@@ -179,13 +179,13 @@ Sigue el canvas. Lo propio:
 - Colores por rol (en cualquier tema y modo): trazo `primary` 30 % + borde; encontradas con el marcador (Resaltador `primary` 18 %, 24 % en oscuro); destello `accent`; pista: anillo punteado `accent`; letras que sobran: `accent`. Encontradas en la lista: tachadas y `muted` (no solo color).
 - Hápticos y tonos: un tic y una nota más alta por cada letra que crece el trazo; `.success` al encontrar; `.invalid` al fallar la oculta (con sacudida). Un trazo que no es palabra se recoge sin castigo.
 - Reduce Motion: sin vuelo de letras ni fuegos; fundidos cortos. Fuegos solo al completar un reto.
-- **Definiciones (2026-11-08):** como "Look Up" de Libros, `UIReferenceLibraryViewController(term:)`: la hoja del diccionario del sistema, local, sin red y sin datos ("Buscar en la web" lo abre el jugador). Aparece solo si `dictionaryHasDefinition(forTerm:)` da true (depende de los diccionarios que el jugador tenga descargados): un libro junto a la palabra encontrada en el **álbum de un tema** y en las **palabras del Resumen**; la palabra va como se muestra, con tildes (`App/DesignSystem/LookUp.swift`). El simulador no trae diccionarios: la acción no aparece y nada falla (verificado); `-forceLookUp` la muestra para el UI test.
+- **Definiciones (2026-11-08):** como "Look Up" de Libros, `UIReferenceLibraryViewController(term:)`: la hoja del diccionario del sistema, local, sin red y sin datos ("Buscar en la web" lo abre el jugador). Aparece solo si `dictionaryHasDefinition(forTerm:)` da true (depende de los diccionarios que el jugador tenga descargados): un libro junto a la palabra encontrada en el **álbum de un tema** y en las **palabras del Resumen**; la palabra va como se muestra, con tildes (`iOS/App/DesignSystem/LookUp.swift`). El simulador no trae diccionarios: la acción no aparece y nada falla (verificado); `-forceLookUp` la muestra para el UI test.
 - **Apariencia (decisión 2026-11-08):** todos los temas tienen versión clara y oscura (variantes nuevas en `QuietCore/Palette.swift`: oscuras para Salvia y arena, Salvia y coral y Alto contraste; clara para Índigo y durazno; `PaletteTests` revisa AA en los dos modos). Se probó primero en Words y el usuario lo aprobó para toda la familia el mismo día: `Theme(palette, colorScheme:)`, con `nil` sigue al sistema. Ajustes › Apariencia: "Igual que el sistema" (encendido por defecto); al apagarlo aparece Claro · Oscuro, preseleccionado en el contrario del modo actual para que el cambio se vea al instante (`@AppStorage("appearanceMode")`: system/light/dark, `AppearanceRoot`). Las tarjetas de temas en Recompensas muestran el tema en claro y en oscuro. UI test `testMatchSystemToggle`.
 - **Accesibilidad:** cada letra es un elemento ("S, fila 3, columna 5"), dos toques marca primera y última (el mismo flujo del toque); la lista se lee "encontrada / por encontrar"; Dynamic Type en todo menos el tablero.
 
 ## Localización
 
-Inglés (development language) y español con String Catalogs (`scripts/strings.py`). "English words" y "Palabras en español" van siempre en su propio idioma.
+Inglés (development language) y español con String Catalogs (`iOS/scripts/strings.py`). "English words" y "Palabras en español" van siempre en su propio idioma.
 
 ## Privacidad
 

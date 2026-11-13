@@ -1,0 +1,117 @@
+name: QuietNumbers
+options:
+  bundleIdPrefix: com.tavoohoh
+  developmentLanguage: en
+  deploymentTarget:
+    iOS: "18.0"
+packages:
+  QuietNumbersCore:
+    path: Packages/QuietNumbersCore
+  QuietKit:
+    path: ../../QuietKit/iOS
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "1.3"
+    CURRENT_PROJECT_VERSION: "14"
+targets:
+  QuietNumbers:
+    type: application
+    # iPhone and iPad; Apple silicon Macs run the iPad app ("Designed for iPad").
+    supportedDestinations: [iOS]
+    sources: [App]
+    dependencies:
+      - package: QuietNumbersCore
+      - package: QuietKit
+        product: QuietCore
+      - package: QuietKit
+        product: QuietUI
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # Daily reminder: the friends refresh (DailyReminders.friendsTaskID).
+        BGTaskSchedulerPermittedIdentifiers: [com.tavoohoh.quietnumbers.friends]
+        UIBackgroundModes: [fetch]
+        # Same background and lockup as SplashView, in light and dark.
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: SplashLockup
+          UIImageRespectsSafeAreaInsets: false
+    configFiles:
+      Debug: Config/Base.xcconfig
+      Release: Config/Base.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(QN_BUNDLE_ID)
+        CODE_SIGN_ENTITLEMENTS: $(QN_ENTITLEMENTS)
+        PRODUCT_NAME: Quiet Numbers
+        TARGETED_DEVICE_FAMILY: "1,2"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Quiet Numbers
+        INFOPLIST_KEY_NSGKFriendListUsageDescription: Show your Game Center friends on Quiet Numbers leaderboards.
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.puzzle-games
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Gold
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: NO
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: YES
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+        CODE_SIGN_STYLE: Automatic
+  QuietNumbersTests:
+    type: bundle.unit-test
+    supportedDestinations: [iOS]
+    sources: [AppTests]
+    dependencies:
+      - target: QuietNumbers
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.tavoohoh.quietnumbers.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Quiet Numbers.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Quiet Numbers"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+  QuietNumbersUITests:
+    type: bundle.ui-testing
+    supportedDestinations: [iOS]
+    sources: [UITests]
+    dependencies:
+      - target: QuietNumbers
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.tavoohoh.quietnumbers.uitests
+  QuietNumbersScreenshots:
+    type: bundle.ui-testing
+    supportedDestinations: [iOS]
+    sources: [Screenshots]
+    dependencies:
+      - target: QuietNumbers
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.tavoohoh.quietnumbers.screenshots
+schemes:
+  Screenshots:
+    build:
+      targets:
+        QuietNumbers: all
+    test:
+      targets:
+        - QuietNumbersScreenshots
+  QuietNumbers:
+    build:
+      targets:
+        QuietNumbers: all
+    test:
+      targets:
+        - package: QuietNumbersCore/QuietNumbersCoreTests
+        - QuietNumbersTests
+        - QuietNumbersUITests

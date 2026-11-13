@@ -5,7 +5,7 @@ description: Componentes, pantallas que se repiten y patrones de interacción de
 
 # UI de la familia
 
-Fuente: el sistema de diseño de Quiet Studios (link en `CLAUDE.md` de la raíz; leer su `README.md`, `pantallas.md` y la tarjeta del componente) y el código de `QuietKit/Sources/QuietUI/`. Si no coinciden, manda el código y se corrige el sistema de diseño.
+Fuente: el sistema de diseño de Quiet Studios (link en `CLAUDE.md` de la raíz; leer su `README.md`, `pantallas.md` y la tarjeta del componente) y el código de `QuietKit/iOS/Sources/QuietUI/`. Si no coinciden, manda el código y se corrige el sistema de diseño.
 
 ## Componentes (QuietUI)
 
@@ -41,7 +41,7 @@ Inicio, Juego, Resumen de partida, Reto diario, Clasificaciones, Colección, Aju
 - Fin de partida: hoja de resumen con estadísticas; fuegos solo al completar/ganar; logros de la partida en una tarjeta, sin avisos encima.
 - Textos: verbo que dice lo que pasa, en String Catalog con español; plurales del catálogo; números con `FormatStyle` y `.monospacedDigit()`.
 - Accesibilidad: `accessibilityLabel` en todo lo que es solo ícono, etiquetas útiles por celda o carta, objetivos ≥ 44 pt, Dynamic Type salvo el tablero (que tiene su opción de tamaño).
-- Textos de QuietUI: `Text("…", bundle: .main)`; cada app los pone en su catálogo (el compilador no los extrae de la app: listarlos a mano, como `KIT` en `quiet-solitaire/scripts/strings.py`). Los textos de las notificaciones los arma cada app.
+- Textos de QuietUI: `Text("…", bundle: .main)`; cada app los pone en su catálogo (el compilador no los extrae de la app: listarlos a mano, como `KIT` en `quiet-solitaire/iOS/scripts/strings.py`). Los textos de las notificaciones los arma cada app.
 - Notificaciones: permiso solo en contexto (al volver de un primer reto completado, `.dailyReminderOffer`), nunca al abrir la app; máximo 2 al día; nada de Game Center se guarda.
 - iPad: mismo layout centrado con anchos máximos; atajos de teclado (⌘Z deshacer, H pista).
 

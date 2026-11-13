@@ -30,23 +30,23 @@ Los mismos de Quiet Numbers y Quiet Solitaire:
 | Tests | Swift Testing para el motor (`QuietSudokuCore`). |
 | Dependencias externas | Ninguna. |
 
-Un solo target iOS (iPhone y iPad), un bundle ID. Proyecto generado con XcodeGen (`project.yml`), como Quiet Solitaire.
+Un solo target iOS (iPhone y iPad), un bundle ID. Proyecto generado con XcodeGen (`iOS/project.yml`), como Quiet Solitaire.
 
 ## Comandos
 
 - `xcodegen generate` tras agregar o mover archivos. No editar el `.pbxproj` a mano.
-- Tests del motor: `cd Packages/QuietSudokuCore && swift test -c release` (49 tests, ~15 s; incluye un año de retos. En debug tardan mucho más).
-- Canvas: `scripts/design-screens.sh` captura las 8 pantallas en claro y oscuro (iPhone 17, inglés; un solo simulador, lo apaga) → `AppStore/design-screens/iphone/en/`; ids de las imágenes subidas en `design/canvas-assets.tsv`.
-- Ícono: `scripts/render-icon.py` (caja de 3×3 con una casilla en coral #FF9277 sobre el degradado teal #19BFCD → #0A8AA5, paleta A2 de Quiet Numbers desde 2026-11-02; estándar y Gold, claro/oscuro/tinted, con `scripts/render-svg.swift`).
+- Tests del motor: `cd iOS/Packages/QuietSudokuCore && swift test -c release` (49 tests, ~15 s; incluye un año de retos. En debug tardan mucho más).
+- Canvas: `iOS/scripts/design-screens.sh` captura las 8 pantallas en claro y oscuro (iPhone 17, inglés; un solo simulador, lo apaga) → `iOS/AppStore/design-screens/iphone/en/`; ids de las imágenes subidas en `design/canvas-assets.tsv`.
+- Ícono: `iOS/scripts/render-icon.py` (caja de 3×3 con una casilla en coral #FF9277 sobre el degradado teal #19BFCD → #0A8AA5, paleta A2 de Quiet Numbers desde 2026-11-02; estándar y Gold, claro/oscuro/tinted, con `iOS/scripts/render-svg.swift`).
 - Argumentos DEBUG: `-startGame` abre una partida (`-seedKey <texto>` determinista, `-level <0-3>` el nivel, `-nearlyWon` deja una casilla, `-filled <n>` pone n números del jugador y notas en tres casillas, `-hint` aplica una pista, `-autoNotes` llena las notas); `-open <daily|leaderboards|collection|settings|techniques|tutorial>` abre esa pantalla; `-uiTesting`, `-resetStore`, `-tutorial`, `-unlockAll`, `-demo`, `-demoClock`, `-showReminders`, `-refreshFriends` y `-completeToday` como en Quiet Solitaire.
-- Todos los tests: `xcodebuild test -project QuietSudoku.xcodeproj -scheme QuietSudoku -destination 'platform=iOS Simulator,name=iPhone 17' -derivedDataPath build/dd`.
-- Textos: `scripts/strings.py [derived-data]` (como Quiet Solitaire; por defecto lee `build/dd`).
-- Tienda: `scripts/screenshots.sh [iphone|ipad]` captura 6 pantallas en iPhone 6.9" y iPad 13", en/es, claro/oscuro (simuladores "QSu iPhone 6.9" y "QSu iPad 13", uno a la vez; no correrlo mientras otra app captura) → `AppStore/screenshots/`; `scripts/store-images.py` las enmarca con el titular → `AppStore/store-images/` (iPhone 6.9" y 6.3", iPad 13").
+- Todos los tests: `xcodebuild test -project iOS/QuietSudoku.xcodeproj -scheme QuietSudoku -destination 'platform=iOS Simulator,name=iPhone 17' -derivedDataPath build/dd`.
+- Textos: `iOS/scripts/strings.py [derived-data]` (como Quiet Solitaire; por defecto lee `build/dd`).
+- Tienda: `iOS/scripts/screenshots.sh [iphone|ipad]` captura 6 pantallas en iPhone 6.9" y iPad 13", en/es, claro/oscuro (simuladores "QSu iPhone 6.9" y "QSu iPad 13", uno a la vez; no correrlo mientras otra app captura) → `iOS/AppStore/screenshots/`; `iOS/scripts/store-images.py` las enmarca con el titular → `iOS/AppStore/store-images/` (iPhone 6.9" y 6.3", iPad 13").
 - Simulador: uno solo ("iPhone 17"), apagarlo por udid al terminar.
-- **Publicación** (`AppStore/app-store-connect.md`: campos de la app, lo que falta a mano y notas para la revisión):
-  - Textos: `fastlane/metadata/{en-US,es-MX}` (solo la estructura de carpetas; no se usa la gema), validar con `scripts/validate-metadata.py`, subir con `scripts/upload-metadata.py [--apply]` (textos, categoría Puzle + Juegos de mesa, copyright; imágenes cuando existan en `AppStore/store-images/`). Cliente `scripts/asc.py`, credenciales en `~/.appstoreconnect` (las de Quiet Numbers).
-  - Game Center: `scripts/game-center.py` escribe `AppStore/game-center.{md,json}` y las 12 insignias (`AppStore/achievements/<id>.png`, 1024 sin alfa) y verifica los IDs contra el código; `scripts/setup-game-center.py [--apply]` los crea (no duplica ni borra).
-  - Build a TestFlight: como Quiet Solitaire (`git worktree add --detach` de `main` en el scratchpad, copiar `Config/Local.xcconfig`, `xcodegen generate`, `xcodebuild archive … -configuration Release -destination 'generic/platform=iOS' -allowProvisioningUpdates`, `xcodebuild -exportArchive` con `method app-store-connect`, `destination upload`, `teamID` y firma automática). Si falla con "Failed to Use Accounts", renovar la sesión en Xcode › Settings › Accounts.
+- **Publicación** (`iOS/AppStore/app-store-connect.md`: campos de la app, lo que falta a mano y notas para la revisión):
+  - Textos: `iOS/fastlane/metadata/{en-US,es-MX}` (solo la estructura de carpetas; no se usa la gema), validar con `iOS/scripts/validate-metadata.py`, subir con `iOS/scripts/upload-metadata.py [--apply]` (textos, categoría Puzle + Juegos de mesa, copyright; imágenes cuando existan en `iOS/AppStore/store-images/`). Cliente `iOS/scripts/asc.py`, credenciales en `~/.appstoreconnect` (las de Quiet Numbers).
+  - Game Center: `iOS/scripts/game-center.py` escribe `iOS/AppStore/game-center.{md,json}` y las 12 insignias (`iOS/AppStore/achievements/<id>.png`, 1024 sin alfa) y verifica los IDs contra el código; `iOS/scripts/setup-game-center.py [--apply]` los crea (no duplica ni borra).
+  - Build a TestFlight: como Quiet Solitaire (`git worktree add --detach` de `main` en el scratchpad, copiar `iOS/Config/Local.xcconfig`, `xcodegen generate`, `xcodebuild archive … -configuration Release -destination 'generic/platform=iOS' -allowProvisioningUpdates`, `xcodebuild -exportArchive` con `method app-store-connect`, `destination upload`, `teamID` y firma automática). Si falla con "Failed to Use Accounts", renovar la sesión en Xcode › Settings › Accounts.
   - Web: `../docs/quiet-sudoku/{index,privacy,support}.html` (GitHub Pages desde `/docs`, se publica con el push a main).
 
 ## QuietKit
@@ -57,13 +57,13 @@ Usa `QuietCore` (`SeededRandom`, `FNV1a`, `DailyKey`, `Streaks`, `Palette`, `Dai
 
 ```
 quiet-sudoku/
-├── project.yml
-├── App/                        # misma estructura que Quiet Solitaire (copiada y adaptada 2026-10-30)
+├── iOS/project.yml
+├── iOS/App/                        # misma estructura que Quiet Solitaire (copiada y adaptada 2026-10-30)
 │   ├── Features/               # Home, Game, DailyChallenge, Leaderboards, Collection, Settings, Tutorial
 │   ├── Services/
 │   ├── DesignSystem/           # números, celdas, recompensas propias
 │   └── Resources/
-└── Packages/
+└── iOS/Packages/
     └── QuietSudokuCore/
         ├── Sources/QuietSudokuCore/
         │   ├── Grid.swift           # 81 celdas, unidades (filas, columnas, cajas), vecinos
@@ -184,9 +184,9 @@ Recompensas cosméticas: tableros (los temas de QuietKit), estilo de los número
 
 Siempre disponibles, sin logro: tema **Alto contraste** y **Números grandes** (accesibilidad).
 
-**Colección y Números rojos (2026-11-10, como Quiet Words):** con el logro ganado, Colección muestra arriba de las recompensas la sección **Pistas** con el interruptor **"Pistas más baratas"** y la nota "Clásico: una pista cuesta 3 puntos en vez de 10. En los retos diarios siempre cuesta 10. Desde tu próxima partida." Sin el logro, la sección no aparece. Encendido por defecto, también para quien lo ganó antes (`@AppStorage("cheapHints")`, ausente = encendido); está en `PreferenceKey.rewards`, así que "Restablecer progreso" lo borra. Cada partida guarda su `Scoring`: `AppModel.classicScoring` respeta el interruptor al empezar una partida clásica o reiniciarla; los retos siempre usan `.standard`. En la lista de logros de Colección, Números rojos sin ganar dice solo "Logro oculto · Sigue jugando: aparece aquí cuando lo ganes." (ícono de interrogación); ganado muestra su nombre y condición. Tests: `inTheRedMakesClassicHintsCheaper` (AppTests) y `testCheapHintsToggle` (UI). `scripts/strings.py` también cuenta las claves de `ES` escritas como literales en `App/` (además de las extraídas) y acepta la carpeta de derived data como argumento.
+**Colección y Números rojos (2026-11-10, como Quiet Words):** con el logro ganado, Colección muestra arriba de las recompensas la sección **Pistas** con el interruptor **"Pistas más baratas"** y la nota "Clásico: una pista cuesta 3 puntos en vez de 10. En los retos diarios siempre cuesta 10. Desde tu próxima partida." Sin el logro, la sección no aparece. Encendido por defecto, también para quien lo ganó antes (`@AppStorage("cheapHints")`, ausente = encendido); está en `PreferenceKey.rewards`, así que "Restablecer progreso" lo borra. Cada partida guarda su `Scoring`: `AppModel.classicScoring` respeta el interruptor al empezar una partida clásica o reiniciarla; los retos siempre usan `.standard`. En la lista de logros de Colección, Números rojos sin ganar dice solo "Logro oculto · Sigue jugando: aparece aquí cuando lo ganes." (ícono de interrogación); ganado muestra su nombre y condición. Tests: `inTheRedMakesClassicHintsCheaper` (AppTests) y `testCheapHintsToggle` (UI). `iOS/scripts/strings.py` también cuenta las claves de `ES` escritas como literales en `iOS/App/` (además de las extraídas) y acepta la carpeta de derived data como argumento.
 
-**Apariencia (decisión 2026-11-08, como Quiet Words):** todos los temas tienen versión clara y oscura (`QuietCore/Palette.swift`; ya no hay temas de un solo modo). El modo se elige en **Ajustes › Apariencia**: "Igual que el sistema" (encendido por defecto); al apagarlo aparece Claro · Oscuro, preseleccionado en el contrario del modo actual para que el cambio se vea al instante (`@AppStorage("appearanceMode")`: system/light/dark, en `AppearanceRoot` con `Theme(palette, colorScheme:)`; es una opción, no una recompensa: reiniciar el progreso no la borra). **Petróleo y coral claro y oscuro dejaron de ser temas aparte:** `AppearanceMode.migrate` (al abrir la app) pasa `board = tealCoralLight/tealCoralDark` a `tealCoral` con `appearanceMode = light/dark` (si no había un modo elegido). Eran gratis y ningún logro los daba, y iCloud guarda logros, no elecciones: nadie pierde nada y cada logro sigue con su recompensa. Las tarjetas de tableros en Colección muestran cada tema en claro y en oscuro. El tablero usa solo roles (`separator`, `ink`, `primary`, `accent`, `muted`, `surface2`), así que sirve igual en los dos modos. Tests: `AppTests/AppearanceTests.swift` (migración) y el UI test `testMatchSystemToggle`.
+**Apariencia (decisión 2026-11-08, como Quiet Words):** todos los temas tienen versión clara y oscura (`QuietCore/Palette.swift`; ya no hay temas de un solo modo). El modo se elige en **Ajustes › Apariencia**: "Igual que el sistema" (encendido por defecto); al apagarlo aparece Claro · Oscuro, preseleccionado en el contrario del modo actual para que el cambio se vea al instante (`@AppStorage("appearanceMode")`: system/light/dark, en `AppearanceRoot` con `Theme(palette, colorScheme:)`; es una opción, no una recompensa: reiniciar el progreso no la borra). **Petróleo y coral claro y oscuro dejaron de ser temas aparte:** `AppearanceMode.migrate` (al abrir la app) pasa `board = tealCoralLight/tealCoralDark` a `tealCoral` con `appearanceMode = light/dark` (si no había un modo elegido). Eran gratis y ningún logro los daba, y iCloud guarda logros, no elecciones: nadie pierde nada y cada logro sigue con su recompensa. Las tarjetas de tableros en Colección muestran cada tema en claro y en oscuro. El tablero usa solo roles (`separator`, `ink`, `primary`, `accent`, `muted`, `surface2`), así que sirve igual en los dos modos. Tests: `iOS/AppTests/AppearanceTests.swift` (migración) y el UI test `testMatchSystemToggle`.
 
 **Colección en dos pestañas (2026-11-13, como Quiet Words):** arriba, `Segments` **Recompensas · Logros** (Words además tiene Álbum). Recompensas: las categorías de siempre y, con Números rojos, la sección Pistas. Logros: "N ganados de M" y una fila por logro con nombre, condición, progreso cuando cuenta algo (racha y sudokus resueltos), sello si está ganado y la recompensa (`Achievement.reward`, que `AchievementRewardTests` compara con el `unlockedBy` de cada recompensa). Números rojos sin ganar: "Logro oculto · Sigue jugando…", sin condición ni recompensa. UI tests `testAchievementsTab` y `testCollectionTabsDemo` (capturas de las dos pestañas con `-demo`; `TEST_RUNNER_COLLECTION_LANGUAGE=es` para español).
 
@@ -233,8 +233,8 @@ Cada fase termina con su criterio de aceptación cumplido antes de pasar a la si
 2. **Juego jugable.** Tablero, teclado, notas, pistas con explicación, deshacer, victoria, tutorial.
    Acepta: una partida completa de cada nivel en el simulador de iPhone y en iPad.
 3. **Persistencia y reto diario.** SwiftData, continuar, regla de la familia completa, calendario, notificaciones.
-   Notificaciones del reto con `DailyReminders` de QuietKit: 19:00 si el reto de hoy no está resuelto y "racha en riesgo" a las 21:00 con racha ≥ 3; permiso ofrecido al volver del primer reto completado; tarea de amigos en segundo plano (`com.tavoohoh.quietsudoku.friends`); textos propios del juego en `App/Services/Reminders.swift`, como Quiet Solitaire.
-   Acepta: tests de la regla del reto como `AppTests/DailyRuleTests.swift` de Quiet Solitaire, y `ReminderTests` (19:00 y 21:00, resolver el reto las pasa a mañana).
+   Notificaciones del reto con `DailyReminders` de QuietKit: 19:00 si el reto de hoy no está resuelto y "racha en riesgo" a las 21:00 con racha ≥ 3; permiso ofrecido al volver del primer reto completado; tarea de amigos en segundo plano (`com.tavoohoh.quietsudoku.friends`); textos propios del juego en `iOS/App/Services/Reminders.swift`, como Quiet Solitaire.
+   Acepta: tests de la regla del reto como `iOS/AppTests/DailyRuleTests.swift` de Quiet Solitaire, y `ReminderTests` (19:00 y 21:00, resolver el reto las pasa a mañana).
 4. **Game Center.** Logros, 3 clasificaciones, partidas guardadas, y amigos con `FriendsTodayCard` (en Reto diario) y `FriendProfileView` (Clasificaciones › Amigos, en `Features/Leaderboards/FriendProfileScreen.swift`), con los textos del juego.
    Acepta: todo funciona en modo avión y sincroniza al reconectar.
 5. **Recompensas y colección.**
@@ -250,7 +250,7 @@ Cada fase termina con su criterio de aceptación cumplido antes de pasar a la si
 | 3. Persistencia y reto diario | 🟡 Heredado de Quiet Solitaire y adaptado (regla de la familia, calendario, recordatorios); `DailyRuleTests`, `ReminderTests` y `ReminderUITests` pasan. Falta verificar en dispositivo. |
 | 4. Game Center | 🟡 12 logros (con insignias, en/es) y 3 clasificaciones creados en App Store Connect (2026-10-30, `setup-game-center.py --apply`). Falta activarlos en la versión 1.0 y verificar envío y sincronización en el dispositivo. |
 | 5. Recompensas y colección | 🟡 Implementado (números, notas, resaltado, tableros, ola, ícono dorado); falta revisión en dispositivo. |
-| 6. Pulido y lanzamiento | 🟡 App creada en App Store Connect (2026-10-30). Ficha en/es subida (textos, categoría, copyright). Build **1.0 (1)** subido a TestFlight el 2026-10-30. Web en `docs/quiet-sudoku/` (se publica con el push). Falta: capturas, header y búsqueda; clasificación por edad, precio, privacidad y lo demás de "Qué falta hacer a mano" en `AppStore/app-store-connect.md`; auditoría de VoiceOver. |
+| 6. Pulido y lanzamiento | 🟡 App creada en App Store Connect (2026-10-30). Ficha en/es subida (textos, categoría, copyright). Build **1.0 (1)** subido a TestFlight el 2026-10-30. Web en `docs/quiet-sudoku/` (se publica con el push). Falta: capturas, header y búsqueda; clasificación por edad, precio, privacidad y lo demás de "Qué falta hacer a mano" en `iOS/AppStore/app-store-connect.md`; auditoría de VoiceOver. |
 
 ## Preguntas abiertas
 
