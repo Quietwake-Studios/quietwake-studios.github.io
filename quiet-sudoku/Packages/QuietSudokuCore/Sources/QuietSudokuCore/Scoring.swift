@@ -22,13 +22,14 @@ public struct Scoring: Hashable, Codable, Sendable {
         }
     }
 
-    /// Up to this time the win earns ×2; it falls to ×1 at three times as long.
+    /// Up to this time the win earns ×2; it falls to ×1 at three times as long. Scale of
+    /// 2026-11-13: hard is the old medium (10 min), expert the old hard and expert together.
     public func targetSeconds(_ difficulty: Difficulty) -> Int {
         switch difficulty {
         case .easy: 300
-        case .medium: 600
-        case .hard: 900
-        case .expert: 1_500
+        case .medium: 480
+        case .hard: 600
+        case .expert: 1_200
         }
     }
 

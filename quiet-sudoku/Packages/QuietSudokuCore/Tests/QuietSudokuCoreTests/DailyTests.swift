@@ -4,12 +4,14 @@ import QuietCore
 
 @Suite struct DailyTests {
     /// Reference boards: the same date gives the same puzzle on every device and version.
-    /// Changing the generator, the solver or the technique order changes them: only on purpose.
+    /// Changing the generator, the solver or the technique order changes them: only on purpose
+    /// (last time 2026-11-13, the easier scale, before the 1.0 was published).
     static let reference: [(day: String, givens: String)] = [
-        ("2026-11-02", "2...9.....1.67.2.3.47..36.5.361..7.9.7.....3.1.2..746.7.12..38.3.4.69.2.....1...7"),
-        ("2026-11-04", "....7...937..46..5.96.1..8.......27.6.......1.34.......4..2.85.2..39..178...5...."),
-        ("2026-11-07", "...57...2..9..6.....5..3..1..4....6.26.4.1.53.8....1..6..8..9.....6..4..4...37..."),
-        ("2026-11-08", "...........46.7.3..5..428..7.....6.85......411.8.....7..34...5..6.1..4.....9....."),
+        ("2026-11-02", "2...9.....1867.2.3.47..36.5.361..7.9.7.....3.1.2..746.7.12..38.3.4.6952.....1...7"), // easy
+        ("2026-11-04", "...2..874.4187.5..8...4...6..849......6...3......529..2...1...3..9.3426.365..8..."), // medium
+        ("2026-11-06", "2.4...1..5......47.....95.8..832......59.47......876..8.91.....41......5..6...2.9"), // hard
+        ("2026-11-07", "..2.6.9.3..6..2....3.....5...947.3.5.1.....6.8.7.531...9.....2....3..7..2.8.1.5.."), // hard
+        ("2026-11-08", ".....5.....46.7.3..5..428..7.....6.852.....411.8.....7..347..5..6.1..4.....9....."), // expert
     ]
 
     @Test func sameDateSamePuzzle() {
@@ -20,7 +22,7 @@ import QuietCore
 
     @Test func difficultyByWeekday() {
         // 2026-11-02 is a Monday.
-        let expected: [Difficulty] = [.easy, .easy, .medium, .medium, .medium, .hard, .expert]
+        let expected: [Difficulty] = [.easy, .easy, .medium, .medium, .hard, .hard, .expert]
         for (offset, difficulty) in expected.enumerated() {
             #expect(DailyChallenge.difficulty(forDayKey: DailyKey.dayKey("2026-11-02", addingDays: offset)!) == difficulty)
         }

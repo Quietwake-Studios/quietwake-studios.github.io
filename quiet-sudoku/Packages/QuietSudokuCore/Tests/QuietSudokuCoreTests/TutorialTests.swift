@@ -47,7 +47,7 @@ import Testing
         for cell in Grid.units[box] where cell != lesson.target && solver.values[cell] == 0 {
             #expect(lesson.clues.contains { Grid.sees($0, cell) && solver.values[$0] == lesson.digit })
         }
-        #expect(LogicSolver.solve(lesson.puzzle.givens, upTo: .easy).solved)
+        #expect(LogicSolver.solve(lesson.puzzle.givens, upTo: .medium).solved)
     }
 
     @Test func onlyOneDigitFits() {
@@ -83,8 +83,10 @@ import Testing
     }
 
     @Test func basePuzzleIsFixed() {
-        // Changing the generator changes the tutorial: update this on purpose.
+        // The tutorial's board is fixed (since 2026-11-13): change it only on purpose.
         #expect(Tutorial.base.givens.string == TutorialTests.baseGivens)
+        #expect(Tutorial.base.givens.string == Tutorial.baseGivens)
+        #expect(LogicSolver.solve(Tutorial.base.givens, upTo: .medium).solved)
     }
 
     static let baseGivens = ".4.279.8.8...1..2.25....67..6.395...9.4...2.3...427.1..19....38.3..8...2.2.753.9."

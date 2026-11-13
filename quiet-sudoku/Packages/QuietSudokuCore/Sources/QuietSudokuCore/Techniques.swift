@@ -4,12 +4,13 @@ public enum Difficulty: Int, CaseIterable, Codable, Sendable, Comparable {
 
     public static func < (a: Self, b: Self) -> Bool { a.rawValue < b.rawValue }
 
-    /// Monday and Tuesday easy, Wednesday–Friday medium, Saturday hard, Sunday expert.
+    /// Monday and Tuesday easy, Wednesday and Thursday medium, Friday and Saturday hard,
+    /// Sunday expert (scale of 2026-11-13).
     public static func forWeekday(_ weekday: Int) -> Difficulty {
         switch weekday {
         case 1, 2: .easy
-        case 3, 4, 5: .medium
-        case 6: .hard
+        case 3, 4: .medium
+        case 5, 6: .hard
         default: .expert
         }
     }
@@ -20,8 +21,11 @@ public enum Difficulty: Int, CaseIterable, Codable, Sendable, Comparable {
 public enum Technique: String, CaseIterable, Codable, Sendable, Comparable {
     /// The last empty cell of a row, column or box.
     case fullHouse
-    /// A digit fits in only one cell of a row, column or box.
-    case hiddenSingle
+    /// A digit fits in only one cell of a box (Sudoku Explainer rates it 1.2).
+    case hiddenSingleBox
+    /// A digit fits in only one cell of a row or column: harder to spot than in a box
+    /// (Sudoku Explainer 1.5).
+    case hiddenSingleLine
     /// A cell where only one digit fits.
     case nakedSingle
     /// In a box, a digit's cells all lie on one row or column: not elsewhere on that line.
@@ -45,14 +49,20 @@ public enum Technique: String, CaseIterable, Codable, Sendable, Comparable {
     /// spots, each seen by one of them: one of the two cells is y.
     case wWing
 
+    /// The level that introduces it (scale of 2026-11-13). Easy puzzles may still need a
+    /// medium single now and then, when nothing else is left: `Generator` measures that.
     public var difficulty: Difficulty {
         switch self {
-        case .fullHouse, .hiddenSingle, .nakedSingle: .easy
-        case .pointing, .claiming, .nakedPair, .hiddenPair: .medium
-        case .nakedTriple, .hiddenTriple, .xWing, .xyWing: .hard
-        case .skyscraper, .twoStringKite, .swordfish, .xyzWing, .wWing: .expert
+        case .fullHouse, .hiddenSingleBox: .easy
+        case .hiddenSingleLine, .nakedSingle: .medium
+        case .pointing, .claiming, .nakedPair, .hiddenPair: .hard
+        case .nakedTriple, .hiddenTriple, .xWing, .xyWing,
+             .skyscraper, .twoStringKite, .swordfish, .xyzWing, .wWing: .expert
         }
     }
+
+    /// Places a digit by looking at the values alone, no candidates needed.
+    public var isSingle: Bool { self <= .nakedSingle }
 
     private var order: Int { Technique.allCases.firstIndex(of: self)! }
 

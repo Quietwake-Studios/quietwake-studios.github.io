@@ -100,7 +100,7 @@ public struct PlayerProgress: Codable, Hashable, Sendable {
             hits.append(.firstWin)
             if summary.mistakes == 0 { hits.append(.noMistakes) }
             if summary.hintsUsed == 0 { hits.append(.noHints) }
-            if !summary.usedNotes, summary.difficulty >= .medium { hits.append(.noNotes) }
+            if !summary.usedNotes, summary.difficulty >= .hard { hits.append(.noNotes) }
             if summary.difficulty == .expert { hits.append(.expert) }
             if summary.difficulty == .easy, summary.seconds < Achievement.quickSeconds { hits.append(.quick) }
             if isClassic { bestScore = max(bestScore, summary.score) }

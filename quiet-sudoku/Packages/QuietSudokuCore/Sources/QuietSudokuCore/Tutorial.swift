@@ -35,8 +35,15 @@ public enum Tutorial {
         public let clues: [Int]
     }
 
-    /// The easy puzzle every lesson comes from.
-    public static let base: Puzzle = Generator.attempt(seed: FNV1a.hash("quiet-sudoku-tutorial"), difficulty: .easy)!
+    /// The puzzle every lesson comes from: fixed, so changing the generator doesn't change the
+    /// tutorial. It was the easy puzzle of seed "quiet-sudoku-tutorial" before the scale of
+    /// 2026-11-13; it solves with singles.
+    public static let base: Puzzle = {
+        let givens = Grid(baseGivens)!
+        return Puzzle(givens: givens, solution: DancingLinks.solutions(of: givens).first!, difficulty: .easy)
+    }()
+
+    static let baseGivens = ".4.279.8.8...1..2.25....67..6.395...9.4...2.3...427.1..19....38.3..8...2.2.753.9."
 
     public static let lessons: [Lesson] = [
         lastInHouse(.row, unit: { Grid.row(of: $0) }),
@@ -79,7 +86,7 @@ public enum Tutorial {
     private static var positions: [LogicSolver] {
         var solver = LogicSolver(base.givens)
         var result = [solver]
-        while let step = solver.nextStep(upTo: .easy) {
+        while let step = solver.nextStep(upTo: .medium) {
             solver.apply(step)
             result.append(solver)
         }

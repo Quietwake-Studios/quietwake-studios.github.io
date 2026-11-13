@@ -12,6 +12,8 @@ struct HomeView: View {
         case settings
         case leaderboards
         case tutorial
+        /// Settings › Techniques, straight (`-open techniques`, design captures).
+        case techniques
     }
 
     @Environment(AppModel.self) private var app
@@ -107,6 +109,8 @@ struct HomeView: View {
                     CollectionView()
                 case .settings:
                     SettingsView()
+                case .techniques:
+                    TechniquesView()
                 case .leaderboards:
                     LeaderboardsView()
                 case .tutorial:
@@ -146,17 +150,17 @@ struct HomeView: View {
     #if DEBUG
     /// UI tests: `-startGame` opens a game right away; `-seedKey <text>` makes its puzzle
     /// deterministic; `-level <0-3>` picks the level; `-nearlyWon` leaves one empty cell;
-    /// `-hint` applies a hint.
+    /// `-hint` applies a hint; `-autoNotes` fills the notes.
     private func startDebugGameIfRequested() {
         let arguments = ProcessInfo.processInfo.arguments
         func value(after flag: String) -> String? {
             guard let i = arguments.firstIndex(of: flag), i + 1 < arguments.count else { return nil }
             return arguments[i + 1]
         }
-        // `-open <daily|leaderboards|collection|settings|tutorial>`: straight there (design captures).
+        // `-open <daily|leaderboards|collection|settings|techniques|tutorial>`: straight there (design captures).
         if let name = value(after: "-open"), path.isEmpty {
             let routes: [String: Route] = ["daily": .daily, "leaderboards": .leaderboards, "collection": .collection,
-                                           "settings": .settings, "tutorial": .tutorial]
+                                           "settings": .settings, "techniques": .techniques, "tutorial": .tutorial]
             if let route = routes[name] { return path = [route] }
         }
         guard arguments.contains("-startGame"), path.isEmpty else { return }
@@ -185,6 +189,8 @@ struct HomeView: View {
         app.start(model, as: .classic)
         // `-hint`: opens with a hint applied (design captures).
         if arguments.contains("-hint") { model.requestHint() }
+        // `-autoNotes`: opens with auto notes filled in (design captures).
+        if arguments.contains("-autoNotes") { model.fillNotes() }
         path = [.game]
     }
     #endif

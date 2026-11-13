@@ -2,7 +2,7 @@ import QuietSudokuCore
 import QuietUI
 import SwiftUI
 
-/// A game: score on top, the board, Undo / Erase / Notes / Hint, and the keypad.
+/// A game: score on top, the board, Undo / Erase / Notes / Auto Notes / Hint, and the keypad.
 struct GameView: View {
     let model: GameModel
     let kind: GameKind
@@ -149,11 +149,17 @@ struct GameView: View {
                 .accessibilityValue(model.isNoting ? Text("On") : Text("Off"))
                 .accessibilityIdentifier("notes")
             Spacer()
+            BarButton(title: "Auto Notes", systemImage: "wand.and.stars") { model.fillNotes() }
+                .disabled(!model.session.canFillNotes || model.isTutorial)
+                .accessibilityLabel(Text("Auto Notes"))
+                .accessibilityHint(Text("Fills every empty cell without notes with the digits that fit. Free, and undo takes it back."))
+                .accessibilityIdentifier("autoNotes")
+            Spacer()
             BarButton(title: "Hint", systemImage: "lightbulb") { model.requestHint() }
                 .disabled(model.session.isWon)
                 .accessibilityIdentifier("hint")
         }
-        .padding(.horizontal, 28)
+        .padding(.horizontal, 20)
         .padding(.bottom, 10)
         .padding(.top, 4)
         .frame(maxWidth: Layout.buttons(sizeClass) + 60)
@@ -200,7 +206,7 @@ struct GameView: View {
     }
 }
 
-/// Keyboard (iPad, Mac): digits, arrows, N notes, ⌫ erase, ⌘Z undo, H hint.
+/// Keyboard (iPad, Mac): digits, arrows, N notes, ⇧N auto notes, ⌫ erase, ⌘Z undo, H hint.
 private struct KeyboardShortcuts: View {
     let model: GameModel
 
@@ -213,6 +219,7 @@ private struct KeyboardShortcuts: View {
             Button("Undo") { model.undo() }.keyboardShortcut("z", modifiers: .command)
             Button("Hint") { model.requestHint() }.keyboardShortcut("h", modifiers: [])
             Button("Notes") { model.isNoting.toggle() }.keyboardShortcut("n", modifiers: [])
+            Button("Auto Notes") { model.fillNotes() }.keyboardShortcut("n", modifiers: .shift)
             Button("Erase") { model.erase() }.keyboardShortcut(.delete, modifiers: [])
             arrow(.upArrow, rows: -1, columns: 0)
             arrow(.downArrow, rows: 1, columns: 0)
@@ -323,12 +330,12 @@ extension GameSession.Hint {
             var text = switch step.technique {
             case .fullHouse:
                 String(localized: "It's the last empty cell of \(unitName(step.units[0])): the \(digit) goes here.")
-            case .hiddenSingle:
+            case .hiddenSingleBox, .hiddenSingleLine:
                 String(localized: "In \(unitName(step.units[0])), the \(digit) fits only here.")
             default:
                 String(localized: "Only the \(digit) fits here: its row, column and box hold the other eight.")
             }
-            if hardest.difficulty > .easy {
+            if !hardest.isSingle {
                 text += " " + String(localized: "To see it, first rule out candidates with \(String(localized: hardest.title)). See Settings › Techniques.")
             }
             return text

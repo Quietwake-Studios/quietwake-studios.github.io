@@ -255,7 +255,7 @@ struct TechniquesView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
-                Text("Every Quiet Sudoku can be solved with these, without guessing. A puzzle's level is the hardest one it needs. A house is a row, a column or a box.")
+                Text("Every Quiet Sudoku can be solved with these, without guessing. A puzzle's level is the hardest one it needs (an easy one may need a Medium single once, when nothing else is left). A house is a row, a column or a box.")
                     .font(.subheadline)
                     .foregroundStyle(theme.muted)
                     .frame(maxWidth: .infinity, alignment: .leading)

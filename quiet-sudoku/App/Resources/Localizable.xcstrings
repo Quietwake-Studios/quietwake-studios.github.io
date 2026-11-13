@@ -67,6 +67,16 @@
         }
       }
     },
+    "%lld earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ganados"
+          }
+        }
+      }
+    },
     "%lld friends already played; %@ leads with %@.": {
       "localizations": {
         "es": {
@@ -113,6 +123,16 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%lld of %lld sudokus": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld sudokus"
           }
         }
       }
@@ -384,6 +404,16 @@
         }
       }
     },
+    "Auto Notes": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autonotas"
+          }
+        }
+      }
+    },
     "Back": {
       "localizations": {
         "es": {
@@ -410,6 +440,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mejor racha"
+          }
+        }
+      }
+    },
+    "Best streak: %lld of %lld days": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor racha: %1$lld de %2$lld días"
           }
         }
       }
@@ -474,6 +514,16 @@
         }
       }
     },
+    "Cheaper hints in classic": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas en clásico"
+          }
+        }
+      }
+    },
     "Check your connection and try again.": {
       "localizations": {
         "es": {
@@ -500,6 +550,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clásico"
+          }
+        }
+      }
+    },
+    "Classic digits": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números Clásicos"
           }
         }
       }
@@ -754,6 +814,16 @@
         }
       }
     },
+    "Earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganado"
+          }
+        }
+      }
+    },
     "Easy": {
       "localizations": {
         "es": {
@@ -784,12 +854,12 @@
         }
       }
     },
-    "Every Quiet Sudoku can be solved with these, without guessing. A puzzle's level is the hardest one it needs. A house is a row, a column or a box.": {
+    "Every Quiet Sudoku can be solved with these, without guessing. A puzzle's level is the hardest one it needs (an easy one may need a Medium single once, when nothing else is left). A house is a row, a column or a box.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Todo Quiet Sudoku se resuelve con estas técnicas, sin adivinar. El nivel de un sudoku es la más difícil que necesita. Un grupo es una fila, una columna o una caja."
+            "value": "Todo Quiet Sudoku se resuelve con estas técnicas, sin adivinar. El nivel de un sudoku es la más difícil que necesita (uno Fácil puede necesitar una vez una de Media, cuando no queda otra jugada). Un grupo es una fila, una columna o una caja."
           }
         }
       }
@@ -840,6 +910,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Llena la cuadrícula para que cada fila, cada columna y cada caja de 3×3 tenga los números del 1 al 9 una vez cada uno."
+          }
+        }
+      }
+    },
+    "Fills every empty cell without notes with the digits that fit. Free, and undo takes it back.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Llena cada casilla vacía sin notas con los números que caben. Es gratis y se puede deshacer."
           }
         }
       }
@@ -940,6 +1020,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dorado"
+          }
+        }
+      }
+    },
+    "Gold icon": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ícono dorado"
           }
         }
       }
@@ -1084,22 +1174,22 @@
         }
       }
     },
+    "In a box, a digit fits in only one cell because its other copies rule out the rest.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En una caja, un número cabe en una sola casilla porque sus otras copias descartan las demás."
+          }
+        }
+      }
+    },
     "In a box, a digit's only cells lie on one line. It must be there, so it's not elsewhere on that line.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "En una caja, los únicos lugares de un número están en una misma línea. Tiene que ir ahí, así que no va en el resto de esa línea."
-          }
-        }
-      }
-    },
-    "In a row, column or box, a digit fits in only one cell because its other copies rule out the rest.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En una fila, columna o caja, un número cabe en una sola casilla porque sus otras copias descartan las demás."
           }
         }
       }
@@ -1140,6 +1230,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Índigo y durazno"
+          }
+        }
+      }
+    },
+    "Indigo & Peach board": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablero Índigo y durazno"
           }
         }
       }
@@ -1484,6 +1584,16 @@
         }
       }
     },
+    "Notes in color": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notas en color"
+          }
+        }
+      }
+    },
     "Notifications are off for this app. Turn them on in Settings.": {
       "localizations": {
         "es": {
@@ -1584,6 +1694,26 @@
         }
       }
     },
+    "Only place in a box": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Único lugar en la caja"
+          }
+        }
+      }
+    },
+    "Only place in a line": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Único lugar en la línea"
+          }
+        }
+      }
+    },
     "Only the %lld fits here: its row, column and box hold the other eight.": {
       "localizations": {
         "es": {
@@ -1630,6 +1760,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pluma"
+          }
+        }
+      }
+    },
+    "Pen digits": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números Pluma"
           }
         }
       }
@@ -1804,6 +1944,16 @@
         }
       }
     },
+    "Rewards": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recompensas"
+          }
+        }
+      }
+    },
     "Rounded": {
       "localizations": {
         "es": {
@@ -1884,12 +2034,32 @@
         }
       }
     },
+    "Sage & Coral board": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablero Salvia y coral"
+          }
+        }
+      }
+    },
     "Sage & Sand": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Salvia y arena"
+          }
+        }
+      }
+    },
+    "Sage & Sand board": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablero Salvia y arena"
           }
         }
       }
@@ -1994,6 +2164,16 @@
         }
       }
     },
+    "Soft highlight": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resaltado suave"
+          }
+        }
+      }
+    },
     "Solve 10 sudokus.": {
       "localizations": {
         "es": {
@@ -2024,12 +2204,12 @@
         }
       }
     },
-    "Solve a medium or harder sudoku without notes.": {
+    "Solve a hard or expert sudoku without notes.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resuelve un sudoku de nivel Media o más sin notas."
+            "value": "Resuelve un sudoku Difícil o Experto sin notas."
           }
         }
       }
@@ -2224,6 +2404,16 @@
         }
       }
     },
+    "The same on a row or column: a digit fits in only one of its cells. Harder to spot than in a box.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo mismo en una fila o columna: un número cabe en una sola de sus casillas. Cuesta más verlo que en una caja."
+          }
+        }
+      }
+    },
     "This cell's row, column and box already hold eight different digits. Which one is left?": {
       "localizations": {
         "es": {
@@ -2414,22 +2604,22 @@
         }
       }
     },
+    "Typewriter digits": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números Máquina"
+          }
+        }
+      }
+    },
     "Undo": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Deshacer"
-          }
-        }
-      }
-    },
-    "Unlocked": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloqueado"
           }
         }
       }
@@ -2480,6 +2670,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ola y fuegos artificiales"
+          }
+        }
+      }
+    },
+    "Wave victory": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victoria con ola"
           }
         }
       }
@@ -2670,6 +2870,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "la columna %lld"
+          }
+        }
+      }
+    },
+    "of %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de %lld"
           }
         }
       }

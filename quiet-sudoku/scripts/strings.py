@@ -241,6 +241,24 @@ ES = {
     "Your %lld-day streak ends at midnight.": "Tu racha de %lld días termina a medianoche.",
     "Your streak": "Tu racha",
     "Opens their profile": "Abre su perfil",
+    # Collection › Rewards · Achievements (2026-11-13, like Quiet Words).
+    "Rewards": "Recompensas",
+    "%lld earned": "%lld ganados",
+    "of %lld": "de %lld",
+    "Earned": "Ganado",
+    "Best streak: %lld of %lld days": "Mejor racha: %1$lld de %2$lld días",
+    "%lld of %lld sudokus": "%1$lld de %2$lld sudokus",
+    "Classic digits": "Números Clásicos",
+    "Sage & Sand board": "Tablero Salvia y arena",
+    "Typewriter digits": "Números Máquina",
+    "Notes in color": "Notas en color",
+    "Indigo & Peach board": "Tablero Índigo y durazno",
+    "Wave victory": "Victoria con ola",
+    "Pen digits": "Números Pluma",
+    "Soft highlight": "Resaltado suave",
+    "Sage & Coral board": "Tablero Salvia y coral",
+    "Gold icon": "Ícono dorado",
+    "Cheaper hints in classic": "Pistas más baratas en clásico",
 }
 
 # Quiet Sudoku (2026-10-30).
@@ -281,8 +299,8 @@ ES.update({
     "Easy needs only the basics. Each level up needs one more kind of reasoning.":
         "Fácil solo pide lo básico. Cada nivel más pide un tipo de razonamiento más.",
     "Erase": "Borrar",
-    "Every Quiet Sudoku can be solved with these, without guessing. A puzzle's level is the hardest one it needs. A house is a row, a column or a box.":
-        "Todo Quiet Sudoku se resuelve con estas técnicas, sin adivinar. El nivel de un sudoku es la más difícil que necesita. Un grupo es una fila, una columna o una caja.",
+    "Every Quiet Sudoku can be solved with these, without guessing. A puzzle's level is the hardest one it needs (an easy one may need a Medium single once, when nothing else is left). A house is a row, a column or a box.":
+        "Todo Quiet Sudoku se resuelve con estas técnicas, sin adivinar. El nivel de un sudoku es la más difícil que necesita (uno Fácil puede necesitar una vez una de Media, cuando no queda otra jugada). Un grupo es una fila, una columna o una caja.",
     "Every column also needs 1 to 9 once. Which digit is missing from this column?":
         "Cada columna también lleva del 1 al 9 una vez. ¿Qué número le falta a esta columna?",
     "Every row needs the digits 1 to 9, once each. This row is missing one: tap it on the keypad.":
@@ -302,8 +320,10 @@ ES.update({
     "In %@, the %lld fits only here.": "En %1$@, el %2$lld solo cabe aquí.",
     "In a box, a digit's only cells lie on one line. It must be there, so it's not elsewhere on that line.":
         "En una caja, los únicos lugares de un número están en una misma línea. Tiene que ir ahí, así que no va en el resto de esa línea.",
-    "In a row, column or box, a digit fits in only one cell because its other copies rule out the rest.":
-        "En una fila, columna o caja, un número cabe en una sola casilla porque sus otras copias descartan las demás.",
+    "In a box, a digit fits in only one cell because its other copies rule out the rest.":
+        "En una caja, un número cabe en una sola casilla porque sus otras copias descartan las demás.",
+    "The same on a row or column: a digit fits in only one of its cells. Harder to spot than in a box.":
+        "Lo mismo en una fila o columna: un número cabe en una sola de sus casillas. Cuesta más verlo que en una caja.",
     "In color": "En color",
     "It's the last empty cell of %@: the %lld goes here.": "Es la última casilla vacía de %1$@: aquí va el %2$lld.",
     "Large digits": "Números grandes",
@@ -320,6 +340,9 @@ ES.update({
         "¿Todavía no sabes? Toma notas. Con Notas activado, toca %@: los números que todavía pueden ir aquí.",
     "Note %lld": "Nota %lld",
     "Notes": "Notas",
+    "Auto Notes": "Autonotas",
+    "Fills every empty cell without notes with the digits that fit. Free, and undo takes it back.":
+        "Llena cada casilla vacía sin notas con los números que caben. Es gratis y se puede deshacer.",
     "Off": "Desactivado",
     "Off: they're checked when the board is full. Each mistake costs the same either way.":
         "Apagado: se revisan al llenar el tablero. Cada error cuesta lo mismo de las dos formas.",
@@ -331,6 +354,8 @@ ES.update({
         "Un sudoku para todos cada día, con una sola solución y sin adivinar. Fácil el lunes, experto el domingo.",
     "Only digit": "Único posible",
     "Only place": "Único lugar",
+    "Only place in a box": "Único lugar en la caja",
+    "Only place in a line": "Único lugar en la línea",
     "Only the %lld fits here: its row, column and box hold the other eight.":
         "Aquí solo cabe el %lld: su fila, su columna y su caja tienen los otros ocho.",
     "Pen": "Pluma",
@@ -350,7 +375,7 @@ ES.update({
     "Solve 10 sudokus.": "Resuelve 10 sudokus.",
     "Solve 100 sudokus.": "Resuelve 100 sudokus.",
     "Solve a daily challenge between midnight and 4 a.m.": "Resuelve un reto diario entre la medianoche y las 4 a. m.",
-    "Solve a medium or harder sudoku without notes.": "Resuelve un sudoku de nivel Media o más sin notas.",
+    "Solve a hard or expert sudoku without notes.": "Resuelve un sudoku Difícil o Experto sin notas.",
     "Solve a sudoku without hints.": "Resuelve un sudoku sin pistas.",
     "Solve a sudoku without mistakes.": "Resuelve un sudoku sin errores.",
     "Solve an easy sudoku in under 4 minutes.": "Resuelve un sudoku Fácil en menos de 4 minutos.",

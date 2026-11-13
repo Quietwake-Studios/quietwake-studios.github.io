@@ -52,6 +52,49 @@ import Testing
         #expect(game.score == -30)
     }
 
+    @Test func autoNotesFillTheCandidatesAndKeepThePlayersNotes() {
+        var game = GameSession(puzzle: puzzle)
+        let mine = empty[0]
+        game.toggleNote(9, at: mine)
+        let wrongCell = empty[1]
+        let wrong = wrongDigit(at: wrongCell)
+        game.place(wrong, at: wrongCell)
+        #expect(game.canFillNotes)
+        // A cell the wrong digit leaves with no digit at all stays empty.
+        let fits = empty.dropFirst(2).filter { cell in !Set(Grid.peers[cell].map { game.values[$0] }).isSuperset(of: 1...9) }
+        let filled = game.fillNotes()
+        #expect(filled == fits.count && filled >= empty.count - 3)
+        #expect(game.usedNotes)
+        #expect(game.score == -20)
+        // The player's notes stay.
+        #expect(game.notes[mine] == Digits.bit(9))
+        for cell in empty.dropFirst(2) {
+            // The cell's own digit is always there (unless a wrong digit it sees hides it),
+            // and nothing a placed digit rules out.
+            let seen = Set(Grid.peers[cell].map { game.values[$0] })
+            #expect(Digits.list(game.notes[cell]) == (1...9).filter { !seen.contains($0) })
+            if !Grid.sees(cell, wrongCell) || wrong != puzzle.solution[cell] {
+                #expect(game.notes[cell] & Digits.bit(puzzle.solution[cell]) != 0)
+            }
+        }
+        #expect(!game.canFillNotes)
+        #expect(game.fillNotes() == 0)
+        // One undo takes them all back.
+        game.undo()
+        #expect(empty.dropFirst(2).allSatisfy { game.notes[$0] == 0 })
+        #expect(game.notes[mine] == Digits.bit(9))
+        #expect(game.values[wrongCell] == wrong)
+    }
+
+    @Test func autoNotesCountAsNotes() {
+        var game = GameSession(puzzle: puzzle)
+        game.fillNotes()
+        for cell in empty { game.place(puzzle.solution[cell], at: cell) }
+        #expect(game.isWon)
+        #expect(game.usedNotes)
+        #expect(!game.canFillNotes)
+    }
+
     @Test func notesToggleAndClearFromPeers() {
         var game = GameSession(puzzle: puzzle)
         let cell = empty[0]
@@ -163,7 +206,10 @@ import Testing
         #expect(scoring.timeMultiplierTenths(forSeconds: 600, difficulty: .easy) == 15)
         #expect(scoring.timeMultiplierTenths(forSeconds: 900, difficulty: .easy) == 10)
         #expect(scoring.timeMultiplierTenths(forSeconds: 5_000, difficulty: .easy) == 10)
-        #expect(scoring.timeMultiplierTenths(forSeconds: 1_500, difficulty: .expert) == 20)
+        #expect(scoring.timeMultiplierTenths(forSeconds: 480, difficulty: .medium) == 20)
+        #expect(scoring.timeMultiplierTenths(forSeconds: 600, difficulty: .hard) == 20)
+        #expect(scoring.timeMultiplierTenths(forSeconds: 1_200, difficulty: .expert) == 20)
+        #expect(scoring.timeMultiplierTenths(forSeconds: 1_500, difficulty: .expert) < 20)
     }
 
     @Test func savesAndLoads() throws {
@@ -199,10 +245,12 @@ import Foundation
         #expect(hits == [.noMistakes])
         hits = progress.record(.won(summary(hints: 0), isClassic: true))
         #expect(hits == [.noHints])
-        // Without notes only counts from medium up.
+        // Without notes only counts from hard up (medium is singles-only since 2026-11-13).
         hits = progress.record(.won(summary(notes: false), isClassic: true))
         #expect(hits == [])
         hits = progress.record(.won(summary(difficulty: .medium, notes: false), isClassic: true))
+        #expect(!hits.contains(.noNotes))
+        hits = progress.record(.won(summary(difficulty: .hard, notes: false), isClassic: true))
         #expect(hits == [.noNotes])
         hits = progress.record(.won(summary(difficulty: .expert), isClassic: true))
         #expect(hits == [.expert])

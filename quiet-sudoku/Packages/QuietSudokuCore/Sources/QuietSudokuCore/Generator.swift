@@ -21,26 +21,67 @@ public struct Puzzle: Hashable, Codable, Sendable {
 /// Seed → puzzle, the same on every device: only `SeededRandom`, never the system generator,
 /// `shuffled()` or `Hasher`, and budgets counted in attempts rather than time.
 public enum Generator {
-    /// Removal stops at this many clues, so easy puzzles stay quick to scan.
+    /// Removal stops at this many clues (scale of 2026-11-13).
     static func clueFloor(_ difficulty: Difficulty) -> Int {
         switch difficulty {
-        case .easy: 36
-        case .medium: 28
-        case .hard, .expert: 17
+        case .easy: 38
+        case .medium: 31
+        case .hard: 28
+        case .expert: 22
         }
     }
 
-    /// One try from `seed`: a random full grid, then clues removed in symmetric pairs (in a
-    /// random order) while the puzzle stays solvable by logic up to `difficulty`. Logic only
-    /// ever deduces, so a grid it completes has a single solution; Dancing Links confirms it.
-    /// Returns nil when the result isn't exactly `difficulty`.
-    public static func attempt(seed: UInt64, difficulty: Difficulty) -> Puzzle? {
-        let puzzle = build(seed: seed, upTo: difficulty)
-        return puzzle?.difficulty == difficulty ? puzzle : nil
+    /// Easy and medium are played with singles only. While more than 10 cells are empty, a
+    /// player always has at least this many to choose from (counted by `LogicSolver.playSingles`).
+    static func fewestMoves(_ difficulty: Difficulty) -> Int {
+        switch difficulty {
+        case .easy: 4
+        case .medium: 2
+        case .hard, .expert: 0
+        }
     }
 
-    /// The puzzle a seed makes, removing clues while logic up to `level` still solves it.
-    public static func build(seed: UInt64, upTo difficulty: Difficulty) -> Puzzle? {
+    /// An easy puzzle may need a single outside a box (on a line, or a naked single) only
+    /// when nothing else is left, at most this many times.
+    static let easyMediumSteps = 1
+
+    /// Whether logic up to `difficulty` still solves `givens` within the level's limits: the
+    /// rule clues are removed by.
+    static func stillSolves(_ givens: Grid, _ difficulty: Difficulty) -> Bool {
+        switch difficulty {
+        case .easy, .medium:
+            let play = LogicSolver.playSingles(givens)
+            return play.solved && play.fewestMoves >= fewestMoves(difficulty)
+                && (difficulty != .easy || play.mediumSteps <= easyMediumSteps)
+        case .hard, .expert:
+            return LogicSolver.solve(givens, upTo: difficulty).solved
+        }
+    }
+
+    /// Whether `givens` is a puzzle of exactly `difficulty`: solvable within its limits and
+    /// needing something of the level (medium: a single outside a box; hard and expert: one of
+    /// their techniques). Uniqueness follows (logic only deduces); `attempt` confirms it.
+    public static func fits(_ givens: Grid, _ difficulty: Difficulty) -> Bool {
+        guard givens.filledCount >= clueFloor(difficulty), stillSolves(givens, difficulty) else { return false }
+        switch difficulty {
+        case .easy: return true
+        case .medium: return LogicSolver.playSingles(givens).mediumSteps > 0
+        case .hard, .expert: return LogicSolver.grade(givens) == difficulty
+        }
+    }
+
+    /// One try from `seed`: a puzzle of exactly `difficulty`, or nil.
+    public static func attempt(seed: UInt64, difficulty: Difficulty) -> Puzzle? {
+        let (givens, solution) = carve(seed: seed, difficulty: difficulty)
+        guard fits(givens, difficulty), DancingLinks.hasUniqueSolution(givens) else { return nil }
+        return Puzzle(givens: givens, solution: solution, difficulty: difficulty, seed: seed)
+    }
+
+    /// A random full grid from `seed`, then clues removed in symmetric pairs (in a random
+    /// order) while `stillSolves` holds. Logic only ever deduces, so a grid it completes has a
+    /// single solution. Expert puzzles rarely appear with pairs alone: then the symmetry
+    /// breaks, one cell at a time.
+    public static func carve(seed: UInt64, difficulty: Difficulty) -> (givens: Grid, solution: Grid) {
         var random = SeededRandom(seed: seed)
         let solution = DancingLinks.randomSolution(using: &random)
         var order = Array(0...40)
@@ -54,23 +95,21 @@ public enum Generator {
             guard givens.filledCount - pair.count >= floor else { continue }
             var candidate = givens
             for c in pair { candidate[c] = 0 }
-            if LogicSolver.solve(candidate, upTo: difficulty).solved {
+            if stillSolves(candidate, difficulty) {
                 givens = candidate
             }
         }
-        if difficulty >= .hard, LogicSolver.grade(givens) != difficulty {
-            // Hard levels rarely appear with pairs alone: break the symmetry one cell at a time.
+        if difficulty == .expert, LogicSolver.grade(givens) != difficulty {
             for cell in order.flatMap({ $0 == 40 ? [40] : [$0, 80 - $0] }) where givens[cell] != 0 && givens.filledCount > floor {
                 var candidate = givens
                 candidate[cell] = 0
-                if LogicSolver.solve(candidate, upTo: difficulty).solved {
+                if stillSolves(candidate, difficulty) {
                     givens = candidate
                     if LogicSolver.grade(givens) == difficulty { break }
                 }
             }
         }
-        guard let grade = LogicSolver.grade(givens), DancingLinks.hasUniqueSolution(givens) else { return nil }
-        return Puzzle(givens: givens, solution: solution, difficulty: grade, seed: seed)
+        return (givens, solution)
     }
 
     /// Tries `"<key>#0"`, `"<key>#1"`… and keeps the first puzzle of the wanted level. If

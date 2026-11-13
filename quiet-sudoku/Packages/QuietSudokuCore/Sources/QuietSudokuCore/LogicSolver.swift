@@ -51,6 +51,57 @@ public struct LogicSolver: Hashable, Sendable {
         solve(grid).difficulty
     }
 
+    /// A game played with singles only, easiest first, as a person without notes would.
+    public struct SinglesPlay: Hashable, Sendable {
+        public let solved: Bool
+        /// Cells a single could fill at the start.
+        public let startMoves: Int
+        /// The fewest cells a single could fill at any step while more than `busy` cells were
+        /// empty (the end of a game is allowed to narrow down).
+        public let fewestMoves: Int
+        /// Steps that needed a single outside a box (a hidden single on a line or a naked
+        /// single): there was no last cell nor box single anywhere.
+        public let mediumSteps: Int
+    }
+
+    /// Replays `grid` with singles only (the solver's own order) and counts, at each step,
+    /// how many empty cells a single could fill: the moves a player has to choose from.
+    public static func playSingles(_ grid: Grid, busy: Int = 10) -> SinglesPlay {
+        var solver = LogicSolver(grid)
+        var start = -1, fewest = 81, medium = 0
+        var empty = grid.cells.count { $0 == 0 }
+        while empty > 0 {
+            if start < 0 || empty > busy {
+                let moves = solver.singleMoves()
+                if start < 0 { start = moves }
+                if empty > busy { fewest = min(fewest, moves) }
+            }
+            guard let step = solver.nextStep(upTo: .medium) else { break }
+            if step.technique.difficulty == .medium { medium += 1 }
+            solver.apply(step)
+            empty -= 1
+        }
+        return SinglesPlay(solved: empty == 0, startMoves: max(start, 0), fewestMoves: fewest, mediumSteps: medium)
+    }
+
+    /// Empty cells some single can fill now (naked, or the only spot of a digit in a house).
+    func singleMoves() -> Int {
+        var cells: Set<Int> = []
+        for cell in 0..<81 where values[cell] == 0 && candidates[cell].nonzeroBitCount == 1 { cells.insert(cell) }
+        for unit in 0..<27 {
+            var once: UInt16 = 0, twice: UInt16 = 0
+            for cell in Grid.units[unit] {
+                let c = candidates[cell]
+                twice |= once & c
+                once |= c
+            }
+            let lone = once & ~twice
+            guard lone != 0 else { continue }
+            for cell in Grid.units[unit] where candidates[cell] & lone != 0 { cells.insert(cell) }
+        }
+        return cells.count
+    }
+
     public mutating func apply(_ step: Step) {
         if let placement = step.placement { place(placement.digit, at: placement.cell) }
         for elimination in step.eliminations {
@@ -77,7 +128,8 @@ public struct LogicSolver: Hashable, Sendable {
     public func find(_ technique: Technique) -> Step? {
         switch technique {
         case .fullHouse: fullHouse()
-        case .hiddenSingle: hiddenSingle()
+        case .hiddenSingleBox: hiddenSingle(in: 18..<27, .hiddenSingleBox)
+        case .hiddenSingleLine: hiddenSingle(in: 0..<18, .hiddenSingleLine)
         case .nakedSingle: nakedSingle()
         case .pointing: pointing()
         case .claiming: claiming()
@@ -107,9 +159,9 @@ public struct LogicSolver: Hashable, Sendable {
         return nil
     }
 
-    /// Boxes first: that's where people look for them.
-    private func hiddenSingle() -> Step? {
-        for unit in Array(18..<27) + Array(0..<18) {
+    /// Boxes (18–26) and lines (0–17) are separate techniques: people find them in boxes first.
+    private func hiddenSingle(in units: Range<Int>, _ technique: Technique) -> Step? {
+        for unit in units {
             for digit in 1...9 {
                 let bit = Digits.bit(digit)
                 let spots = Grid.units[unit].filter { candidates[$0] & bit != 0 }
@@ -118,7 +170,7 @@ public struct LogicSolver: Hashable, Sendable {
                 let blockers = Grid.units[unit].flatMap { cell in
                     values[cell] == 0 && cell != spots[0] ? Grid.peers[cell].filter { values[$0] == digit } : []
                 }
-                return Step(technique: .hiddenSingle, placement: Placement(cell: spots[0], digit: digit), cells: Array(Set(blockers)).sorted(), digits: [digit], units: [unit])
+                return Step(technique: technique, placement: Placement(cell: spots[0], digit: digit), cells: Array(Set(blockers)).sorted(), digits: [digit], units: [unit])
             }
         }
         return nil

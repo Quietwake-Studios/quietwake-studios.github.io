@@ -87,12 +87,12 @@
         "es": "De memoria"
       },
       "preEarnedDescription": {
-        "en": "Solve a medium or harder sudoku without notes.",
-        "es": "Resuelve un sudoku de nivel Media o más sin notas."
+        "en": "Solve a hard or expert sudoku without notes.",
+        "es": "Resuelve un sudoku Difícil o Experto sin notas."
       },
       "earnedDescription": {
-        "en": "You solved a medium or harder sudoku without notes.",
-        "es": "Resolviste un sudoku de nivel Media o más sin notas."
+        "en": "You solved a hard or expert sudoku without notes.",
+        "es": "Resolviste un sudoku Difícil o Experto sin notas."
       },
       "image": "AppStore/achievements/qsu_no_notes.png"
     },

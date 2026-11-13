@@ -11,6 +11,10 @@
 - **Cuándo:** antes de mandar la 1.0 a revisión.
 - **Qué:** `scripts/screenshots.sh` y `store-images.py` (como Quiet Solitaire): 5 imágenes por iPhone 6.9" e iPad 13" en en/es, header 21:9 y búsqueda 3:2 (iOS 27+). Subirlas a la página App Store del canvas y correr el QA.
 
+### Texto de "De memoria" en Game Center
+- **Cuándo:** antes de reenviar la 1.0 a revisión.
+- **Qué:** con la escala de 2026-11-13, `qsu_no_notes` pasó a "Difícil o Experto sin notas". El código, `scripts/game-center.py` y `AppStore/game-center.{md,json}` ya lo dicen; falta cambiar la descripción (antes/después, en/es) en App Store Connect (`setup-game-center.py` no actualiza los que ya existen: a mano o con la API).
+
 ### Challenges y activities de Game Center (iOS 26+)
 - **Cuándo:** cuando Quiet Numbers los tenga (se construyen en QuietKit y se adoptan aquí).
 - **Qué:** ver `quiet-numbers/BACKLOG.md`.
@@ -19,7 +23,6 @@
 
 - **Revisar colores y contraste de las imágenes de la tienda** (header, búsqueda y capturas sobre el teal vivo; el usuario notó un contraste raro, 2026-11-05). Para la siguiente iteración de la ficha, igual en los tres juegos.
 
-- Auto-notas: llenar todos los candidatos con un toque (gratis en clásico; en el reto, ¿con costo?).
 - Opción de clásico "Revisar al final" en vez de marcar los errores al instante.
 - Más técnicas (cadenas, coloreo) para un nivel "Maestro".
 - Variantes (diagonal, killer) como modos aparte, si un día se quiere crecer.

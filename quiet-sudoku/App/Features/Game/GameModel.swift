@@ -155,6 +155,20 @@ final class GameModel {
         changed()
     }
 
+    /// Auto notes: free, in classic and in the challenge, and undone in one step. It counts
+    /// as using notes ("From Memory").
+    func fillNotes() {
+        guard guide == nil, !session.isWon else { return }
+        var filled = 0
+        withAnimation(.quiet) {
+            filled = session.fillNotes()
+            if filled > 0 { hint = nil }
+        }
+        guard filled > 0 else { return FeedbackService.shared.play(.invalid) }
+        FeedbackService.shared.play(.place)
+        changed()
+    }
+
     func dismissHint() {
         withAnimation(.quiet) { hint = nil }
     }

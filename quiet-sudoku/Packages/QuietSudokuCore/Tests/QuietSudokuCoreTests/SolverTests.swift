@@ -80,10 +80,10 @@ enum Known {
 
 @Suite struct LogicSolverTests {
     @Test func solvesEasyWithSingles() {
-        let result = LogicSolver.solve(Grid(Known.easy)!, upTo: .easy)
+        let result = LogicSolver.solve(Grid(Known.easy)!, upTo: .medium)
         #expect(result.solved)
         #expect(result.grid.string == Known.easySolution)
-        #expect(result.difficulty == .easy)
+        #expect(result.steps.allSatisfy { $0.technique.isSingle })
     }
 
     @Test func stopsWhenTechniquesRunOut() {

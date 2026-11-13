@@ -135,6 +135,34 @@ public struct GameSession: Codable, Hashable, Sendable {
         return true
     }
 
+    /// Auto notes: every empty cell without notes gets the digits its row, column and box
+    /// still allow, judged by the digits on the board as the player sees them (a wrong digit
+    /// counts too, so it gives nothing away). The player's own notes stay as they are. One
+    /// action, undone in one step; it counts as using notes. Returns how many cells it filled.
+    @discardableResult
+    public mutating func fillNotes() -> Int {
+        guard !isWon else { return 0 }
+        let filled = autoNotes
+        guard !filled.isEmpty else { return 0 }
+        record(filled.map(\.cell))
+        for (cell, mask) in filled { notes[cell] = mask }
+        usedNotes = true
+        actions += 1
+        return filled.count
+    }
+
+    /// Whether auto notes would fill anything.
+    public var canFillNotes: Bool { !isWon && !autoNotes.isEmpty }
+
+    /// Empty cells without notes and the digits that fit them.
+    private var autoNotes: [(cell: Int, mask: UInt16)] {
+        (0..<81).compactMap { cell in
+            guard values[cell] == 0, notes[cell] == 0 else { return nil }
+            let mask = Grid.peers[cell].reduce(Digits.all) { values[$1] == 0 ? $0 : $0 & ~Digits.bit(values[$1]) }
+            return mask == 0 ? nil : (cell, mask)
+        }
+    }
+
     /// Clears a wrong digit or the notes of a cell.
     @discardableResult
     public mutating func erase(_ cell: Int) -> Bool {

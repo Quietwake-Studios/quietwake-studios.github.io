@@ -35,10 +35,10 @@ Un solo target iOS (iPhone y iPad), un bundle ID. Proyecto generado con XcodeGen
 ## Comandos
 
 - `xcodegen generate` tras agregar o mover archivos. No editar el `.pbxproj` a mano.
-- Tests del motor: `cd Packages/QuietSudokuCore && swift test -c release` (47 tests, ~45 s; incluye un año de retos. En debug tardan mucho más).
+- Tests del motor: `cd Packages/QuietSudokuCore && swift test -c release` (49 tests, ~15 s; incluye un año de retos. En debug tardan mucho más).
 - Canvas: `scripts/design-screens.sh` captura las 8 pantallas en claro y oscuro (iPhone 17, inglés; un solo simulador, lo apaga) → `AppStore/design-screens/iphone/en/`; ids de las imágenes subidas en `design/canvas-assets.tsv`.
 - Ícono: `scripts/render-icon.py` (caja de 3×3 con una casilla en coral #FF9277 sobre el degradado teal #19BFCD → #0A8AA5, paleta A2 de Quiet Numbers desde 2026-11-02; estándar y Gold, claro/oscuro/tinted, con `scripts/render-svg.swift`).
-- Argumentos DEBUG: `-startGame` abre una partida (`-seedKey <texto>` determinista, `-level <0-3>` el nivel, `-nearlyWon` deja una casilla, `-filled <n>` pone n números del jugador y notas en tres casillas, `-hint` aplica una pista); `-open <daily|leaderboards|collection|settings|tutorial>` abre esa pantalla; `-uiTesting`, `-resetStore`, `-tutorial`, `-unlockAll`, `-demo`, `-demoClock`, `-showReminders`, `-refreshFriends` y `-completeToday` como en Quiet Solitaire.
+- Argumentos DEBUG: `-startGame` abre una partida (`-seedKey <texto>` determinista, `-level <0-3>` el nivel, `-nearlyWon` deja una casilla, `-filled <n>` pone n números del jugador y notas en tres casillas, `-hint` aplica una pista, `-autoNotes` llena las notas); `-open <daily|leaderboards|collection|settings|techniques|tutorial>` abre esa pantalla; `-uiTesting`, `-resetStore`, `-tutorial`, `-unlockAll`, `-demo`, `-demoClock`, `-showReminders`, `-refreshFriends` y `-completeToday` como en Quiet Solitaire.
 - Todos los tests: `xcodebuild test -project QuietSudoku.xcodeproj -scheme QuietSudoku -destination 'platform=iOS Simulator,name=iPhone 17' -derivedDataPath build/dd`.
 - Textos: `scripts/strings.py [derived-data]` (como Quiet Solitaire; por defecto lee `build/dd`).
 - Tienda: `scripts/screenshots.sh [iphone|ipad]` captura 6 pantallas en iPhone 6.9" y iPad 13", en/es, claro/oscuro (simuladores "QSu iPhone 6.9" y "QSu iPad 13", uno a la vez; no correrlo mientras otra app captura) → `AppStore/screenshots/`; `scripts/store-images.py` las enmarca con el titular → `AppStore/store-images/` (iPhone 6.9" y 6.3", iPad 13").
@@ -88,24 +88,39 @@ Lo que hace bueno a un sudoku: **una sola solución** y **una dificultad honesta
 
 **Solución única: Dancing Links (Knuth, "Dancing Links", 2000).** El sudoku es un problema de cobertura exacta: 324 restricciones (cada celda tiene un número; cada fila, columna y caja tiene cada número una vez) y 729 candidatos (celda × número), cada uno cubre 4 restricciones. Algorithm X con enlaces dobles elige siempre la restricción con menos opciones y cuenta soluciones hasta 2: si encuentra la segunda, el tablero no sirve. Un segundo resolvedor independiente (backtracking con máscaras de bits) cruza los resultados en los tests: los dos tienen que estar de acuerdo en cada tablero.
 
-**Dificultad por técnicas, no por cantidad de pistas.** Un resolvedor lógico aplica siempre la técnica más simple que avance (como Sudoku Explainer y HoDoKu); la dificultad del tablero es la técnica más difícil que necesitó:
+**Dificultad por técnicas, no por cantidad de pistas.** Un resolvedor lógico aplica siempre la técnica más simple que avance (como Sudoku Explainer y HoDoKu); la dificultad del tablero es la técnica más difícil que necesitó. El único lugar (hidden single) son dos técnicas: **en caja** y **en línea** (fila o columna), como en Sudoku Explainer (1.2 contra 1.5): en una caja se ve mucho antes.
 
-| Nivel | Técnicas que puede necesitar | Pistas dadas (medido) |
-|---|---|---|
-| Fácil | Última casilla (full house), único lugar (hidden single), único posible (naked single) | 36 (piso) |
-| Media | + candidatos bloqueados (pointing, claiming), pares desnudos y ocultos | ~28 (piso 28) |
-| Difícil | + tríos desnudos y ocultos, X-Wing, XY-Wing | ~26 |
-| Experta | + Skyscraper, 2-String Kite, Swordfish, XYZ-Wing, W-Wing | ~26 |
+**Escala (decisión 2026-11-13, un escalón más fácil):**
 
-**Ajuste medido (2026-10-30):** con la tabla de la propuesta, Difícil salía en 1 de cada 100 intentos: el XY-Wing aparece 19 veces más que el X-Wing y los tríos, así que pasó a Difícil (como en HoDoKu). Para Experta se agregaron tres técnicas estándar de un dígito (Skyscraper, 2-String Kite, W-Wing). Los cuartetos (naked/hidden quad) se quitaron: en 3.000 tableros nunca hicieron falta, y un tablero que los necesite el generador lo descarta. Aciertos por intento, en release en una Mac: Media 11 %, Difícil 11,5 %, Experta 19,5 %, a 5–37 ms por intento; un tablero tarda ~0,05–0,2 s (en Debug, 1–2 s: la app prepara el siguiente de cada nivel en segundo plano). **No hace falta el plan B.**
+| Nivel | Técnicas que puede necesitar | Pistas | Además |
+|---|---|---|---|
+| Fácil | Última casilla (full house) y único lugar en caja. Único lugar en fila/columna o único posible solo cuando no queda otra jugada, como mucho una vez (2 % de los tableros) | 38–39 (piso 38) | Mientras queden más de 10 vacías, siempre **4 o más jugadas** simples a la vista |
+| Media | Solo singles: + único lugar en fila/columna y único posible (naked single) | 31–32 (piso 31) | Siempre **2 o más jugadas**; al menos un paso que no se resuelve en una caja (en promedio 2,5) |
+| Difícil | + candidatos bloqueados (pointing, claiming), pares desnudos y ocultos (la Media anterior) | 28–31 (piso 28) | — |
+| Experta | + tríos, X-Wing, XY-Wing, Skyscraper, 2-String Kite, Swordfish, XYZ-Wing, W-Wing (la Difícil y la Experta anteriores) | 23–31, mediana 26 (piso 22) | — |
+
+**Por qué (2026-11-13):** los testers decían que era muy difícil, incluso en Fácil. Medido contra las apps populares, nuestra Media equivalía a su "Difícil" y el reto diario era Media o más 5 días de 7. Fácil tenía 36 pistas y a veces una sola jugada posible; ahora tiene 38 y siempre varias. "Jugadas disponibles" = casillas que un single puede llenar en ese momento, contadas repitiendo la partida solo con singles (`LogicSolver.playSingles`). Sudoku todavía no estaba publicado (la 1.0 se retiró de revisión), así que cambiar los tableros de cada fecha era aceptable.
+
+**Medido (2026-11-13, 100 tableros por nivel, release en una Mac; script en el scratchpad de la sesión):**
+
+| Nivel | Pistas | Jugadas al empezar (media / mín.) | Menos jugadas en la partida | Paso fuera de caja | Intentos por tablero (media / máx.) | Tiempo (media / p90 / máx.) |
+|---|---|---|---|---|---|---|
+| Fácil | 38–39 | 18 / 11 | 4 (mediana 8) | 2 % de los tableros | 1 / 1 | 2 / 2 / 3 ms |
+| Media | 31–32 | 10,7 / 4 | 2 (mediana 3) | 100 % (2,5 pasos) | 2,8 / 11 | 9 / 20 / 34 ms |
+| Difícil | 28–31 | 6,7 / 3 | — | — | 10,4 / 46 | 50 / 119 / 208 ms |
+| Experta | 23–31 | 6,1 / 1 | — | — | 3,3 / 16 | 92 / 249 / 495 ms |
+
+Cuellos de botella por tablero (pasos que no son singles): Difícil pointing 1,9, claiming 0,4, par desnudo 0,2, par oculto 0,1; Experta pointing 2,2, claiming 0,65, par desnudo 0,7, XY-Wing 0,6, Skyscraper 0,5, 2-String Kite 0,2, W-Wing 0,2, X-Wing 0,1, XYZ-Wing 0,1, trío desnudo 0,1. Los tiempos son como los de antes (0,05–0,2 s en promedio); el peor caso de Experta, ~0,5 s en una Mac, corre en segundo plano (la app prepara el siguiente tablero de cada nivel y el reto se genera fuera del hilo principal).
+
+**Ajuste medido (2026-10-30, escala anterior):** con la tabla de la propuesta, Difícil salía en 1 de cada 100 intentos: el XY-Wing aparece 19 veces más que el X-Wing y los tríos, así que pasó a Difícil (como en HoDoKu). Para Experta se agregaron tres técnicas estándar de un dígito (Skyscraper, 2-String Kite, W-Wing). Los cuartetos (naked/hidden quad) se quitaron: en 3.000 tableros nunca hicieron falta, y un tablero que los necesite el generador lo descarta. **No hace falta el plan B.**
 
 - Nunca se entrega un tablero que el resolvedor lógico no pueda terminar con estas técnicas: **todo tablero se resuelve sin adivinar** y la pista siempre tiene un paso lógico que mostrar.
-- Test de la dificultad: con las técnicas de su nivel el resolvedor lo termina, y con las del nivel anterior se atasca.
+- Test de la dificultad (`GradingTests.check`): con lo de su nivel el resolvedor lo termina, y **exige al menos una técnica o paso del nivel**: Media, un paso fuera de caja (con solo lo de Fácil se atasca); Difícil y Experta, una técnica de su nivel (con el nivel anterior se atasca). Fácil y Media se comprueban además con sus pistas y sus jugadas disponibles.
 
 **Generador** (determinista, solo `SeededRandom`, nunca `shuffled()` ni `Hasher`):
 1. Semilla → solución completa al azar (Algorithm X con el orden de candidatos barajado).
-2. Quitar pistas por parejas simétricas (simetría central, la clásica), en orden aleatorio, mientras el resolvedor lógico limitado al nivel lo siga resolviendo (como sus pasos son deducciones, eso ya implica solución única); parar en el piso de pistas del nivel (Fácil 36, Media 28). En Difícil y Experta, si no llegó al nivel, se rompe la simetría quitando casillas sueltas hasta llegar.
-3. Graduar y confirmar con Dancing Links: si el nivel no es el pedido, se prueba la clave siguiente (`"<día>#0"`, `"<día>#1"`…, hasta 400; como el reparto diario de Quiet Solitaire). Si ninguna da el nivel, el más cercano por debajo (nunca uno más difícil); el test del año comprueba que no pasa.
+2. Quitar pistas por parejas simétricas (simetría central, la clásica), en orden aleatorio, mientras el resolvedor lógico limitado al nivel lo siga resolviendo (como sus pasos son deducciones, eso ya implica solución única) y, en Fácil y Media, se cumplan las jugadas disponibles (`Generator.stillSolves`); parar en el piso de pistas del nivel (Fácil 38, Media 31, Difícil 28, Experta 22). En Experta, si no llegó al nivel, se rompe la simetría quitando casillas sueltas hasta llegar.
+3. Comprobar el nivel (`Generator.fits`) y confirmar con Dancing Links: si no es el pedido, se prueba la clave siguiente (`"<día>#0"`, `"<día>#1"`…, hasta 400; como el reparto diario de Quiet Solitaire). Si ninguna da el nivel, el más cercano por debajo (nunca uno más difícil); el test del año comprueba que no pasa.
 - Presupuesto por intentos, no por tiempo: mismo resultado en cualquier dispositivo. Medir en un iPhone viejo: si Experta tarda más de ~1 s, **plan B**: un script precalcula los tableros diarios de varios años (81 caracteres por día, ~150 KB para 5 años) y la app los trae; el modo libre usa una reserva precalculada por nivel.
 
 ## Reglas del juego
@@ -115,6 +130,7 @@ Lo que hace bueno a un sudoku: **una sola solución** y **una dificultad honesta
 - **"Marcar errores al instante"** (Ajustes, activado por defecto; revisión de quiet-studio 2026-10-30): activado, el error se pone en rojo apenas se escribe. Apagado, nada se marca durante la partida y se revisa al llenar las 81 celdas: si hay errores, el tablero no se da por resuelto, los números equivocados se marcan en rojo (y siguen marcados hasta corregirlos), sale "3 números no van. Corrígelos." y la partida sigue hasta que todo esté bien.
 - **Cobro del error, igual en los dos modos** (para que apagar la revisión no ayude en la clasificación): cada número equivocado que se escribe cuesta −20 en el momento de escribirlo, se vea o no; borrarlo o deshacer no lo devuelve. Con la revisión apagada, durante la partida el puntaje y el contador no muestran los errores (si no, delatarían cuál está mal); el cobro aparece en la hoja de resumen ("Errores 3 × −20"). La opción vale también en el reto: es solo una forma de ver, no cambia lo que se cobra.
 - **Notas (lápiz):** botón "Notas" para escribir candidatos chicos en una celda. Al poner un número, se borra ese candidato de las notas de su fila, columna y caja.
+- **Autonotas (2026-11-13):** botón "Autonotas" (varita) en la barra, entre Notas y Pista (⇧N con teclado). Llena **cada casilla vacía sin notas** con los números que caben según los números del tablero tal como el jugador los ve (un número equivocado también cuenta, así no delata nada). **Las notas que ya puso el jugador no se tocan:** pueden tener descartes que costaron trabajo, y borrarlas sería peor que dejarlas; si quiere empezar de cero en una casilla, la borra y vuelve a tocar Autonotas. Gratis, en clásico y en el reto (no cambia el puntaje y es igual para todos). Una sola acción: un Deshacer la quita entera. Cuenta como usar notas ("De memoria"). Se desactiva cuando no queda nada que llenar y en el tutorial. Tests: `autoNotesFillTheCandidatesAndKeepThePlayersNotes`, `autoNotesCountAsNotes` (Core) y `testAutoNotesFillAndUndo` (UI).
 - **Ayudas visuales:** se resaltan la fila, la columna y la caja de la celda elegida y todas las celdas con el mismo número.
 - **Deshacer:** ilimitado (hasta 200 pasos), también las notas. **Borrar** quita el número o las notas de una celda que no sea pista.
 - **Pista:** muestra el siguiente paso del resolvedor lógico con su técnica explicada ("En esta caja, el 7 solo cabe aquí"), resalta las celdas que lo justifican y pone el número. Cuesta 10 puntos (−3 con "Números rojos", solo en clásico).
@@ -124,7 +140,7 @@ Lo que hace bueno a un sudoku: **una sola solución** y **una dificultad honesta
 
 - Cada número correcto puesto por el jugador: +10 Fácil, +15 Media, +20 Difícil, +30 Experta. Un número puesto por la pista no suma.
 - Error: −20. Pista: −10.
-- Victoria: bono de 500 × multiplicador de tiempo: ×2,0 hasta el tiempo objetivo del nivel (Fácil 5 min, Media 10, Difícil 15, Experta 25), baja lineal hasta ×1,0 al triple, en pasos de 0,1. Se multiplica lo ganado (números + bono); errores y pistas quedan fuera, como en Quiet Solitaire.
+- Victoria: bono de 500 × multiplicador de tiempo: ×2,0 hasta el tiempo objetivo del nivel (Fácil 5 min, Media 8, Difícil 10, Experta 20; con la escala de 2026-11-13: Difícil es la Media anterior, que tenía 10, y Experta junta la Difícil (15) y la Experta (25) anteriores; Fácil, más fácil que antes, se queda en 5), baja lineal hasta ×1,0 al triple, en pasos de 0,1. Se multiplica lo ganado (números + bono); errores y pistas quedan fuera, como en Quiet Solitaire.
 - El puntaje puede quedar negativo (logro oculto "Números rojos").
 
 ## Reto diario
@@ -134,7 +150,7 @@ Regla de la familia (sección "Reto diario" del `CLAUDE.md` de la raíz), sin ex
 **Intentos sin límite (2026-11-02, cambio de la regla de la familia):** un solo `GameKind.daily(dayKey:isReplay:)` para hoy y los días pasados, y un guardado por día (`daily-<día>`) que siempre es el intento en curso: reiniciar o "Empezar de nuevo" lo reemplaza. Cada victoria guarda el mejor del día (más puntaje, luego menos tiempo; `PersistenceService.recordWin`); la primera de cada día cuenta para racha y logros. La clasificación diaria es de tipo "Most recent score" y la app le envía el mejor de hoy después de cada intento, así que queda el mejor. Un intento después del primero dice "Repetición" (`StoredDaily.attempts`); la palabra "práctica" ya no aparece. Bug de Quiet Numbers (al volver salía el primer intento) **pasaba en Sudoku solo con el reto de hoy** (el intento puntuable vivía en `daily` y el reinicio en `practice-<día>`); lo reproducen `todayResumesTheLatestAttempt` y `aPastDayResumesTheLatestAttempt`. Los guardados de TestFlight 1.0 (1) se migran: cada día se queda con el más reciente.
 
 Lo propio del sudoku:
-- **Dificultad por día de la semana** (como Quiet Solitaire): lunes y martes Fácil, miércoles a viernes Media, sábado Difícil, domingo Experta.
+- **Dificultad por día de la semana:** lunes y martes Fácil, miércoles y jueves Media, viernes y sábado Difícil, domingo Experta (escala de 2026-11-13; antes era miércoles a viernes Media y solo el sábado Difícil).
 - "Completar" = resolver el tablero. Clasificación `qsu_daily_challenge`, recurrente cada 24 h desde las 05:00 UTC.
 - **Tests obligatorios:** la misma fecha da siempre el mismo tablero (valores de referencia fijos de varias fechas), y los tableros de un año completo tienen solución única y la dificultad de su día.
 
@@ -156,12 +172,12 @@ Recompensas cosméticas: tableros (los temas de QuietKit), estilo de los número
 | `qsu_first_win` | Primer sudoku / First Sudoku | Resolver el primero | Números Redondos y Petróleo y coral (por defecto) |
 | `qsu_no_mistakes` | Sin tachones / Clean Sheet | Resolver sin errores | Números Clásicos (New York) |
 | `qsu_no_hints` | Por tu cuenta / On Your Own | Resolver sin pistas | Tablero Salvia y arena |
-| `qsu_no_notes` | De memoria / From Memory | Resolver uno de nivel Media o más sin notas | Números Máquina (SF Mono) |
+| `qsu_no_notes` | De memoria / From Memory | Resolver uno Difícil o Experto sin notas (antes "Media o más": con la escala de 2026-11-13 la Media es solo singles y se resuelve sin notas; Autonotas cuenta como notas) | Números Máquina (SF Mono) |
 | `qsu_ten_wins` | Diez sudokus / Ten Sudokus | Resolver 10 | Notas en color (candidatos con el acento) |
 | `qsu_consistency` | Constancia / Consistency | Racha de 7 retos | Tablero Índigo y durazno |
 | `qsu_habit` | Hábito / Habit | Racha de 30 retos | Efecto de victoria: ola (las celdas se encienden en onda antes de los fuegos) |
-| `qsu_expert` | Experto / Expert | Resolver uno de nivel Experta | Números Pluma (Noteworthy, fuente del sistema) |
-| `qsu_quick` | Rápido / Quick | Resolver un Fácil en menos de 4 min | Resaltado suave (solo el número elegido, sin fila ni columna) |
+| `qsu_expert` | Experto / Expert | Resolver uno de nivel Experta (desde 2026-11-13 incluye la Difícil anterior; el texto sigue valiendo) | Números Pluma (Noteworthy, fuente del sistema) |
+| `qsu_quick` | Rápido / Quick | Resolver un Fácil en menos de 4 min (se mantiene con la escala de 2026-11-13: el Fácil nuevo es más rápido, pero 4 min sigue siendo un reto para quien aprende) | Resaltado suave (solo el número elegido, sin fila ni columna) |
 | `qsu_night_owl` | Noctámbulo / Night Owl | Resolver un reto entre 00:00 y 04:00 | Tablero Salvia y coral |
 | `qsu_centennial` | Centenario / Centennial | Resolver 100 | Ícono dorado |
 | `qsu_in_the_red` | Números rojos / In the Red | Puntaje bajo cero (oculto) | Pistas a 3 solo en clásico, con interruptor "Pistas más baratas" (2026-11-10) |
@@ -171,6 +187,8 @@ Siempre disponibles, sin logro: tema **Alto contraste** y **Números grandes** (
 **Colección y Números rojos (2026-11-10, como Quiet Words):** con el logro ganado, Colección muestra arriba de las recompensas la sección **Pistas** con el interruptor **"Pistas más baratas"** y la nota "Clásico: una pista cuesta 3 puntos en vez de 10. En los retos diarios siempre cuesta 10. Desde tu próxima partida." Sin el logro, la sección no aparece. Encendido por defecto, también para quien lo ganó antes (`@AppStorage("cheapHints")`, ausente = encendido); está en `PreferenceKey.rewards`, así que "Restablecer progreso" lo borra. Cada partida guarda su `Scoring`: `AppModel.classicScoring` respeta el interruptor al empezar una partida clásica o reiniciarla; los retos siempre usan `.standard`. En la lista de logros de Colección, Números rojos sin ganar dice solo "Logro oculto · Sigue jugando: aparece aquí cuando lo ganes." (ícono de interrogación); ganado muestra su nombre y condición. Tests: `inTheRedMakesClassicHintsCheaper` (AppTests) y `testCheapHintsToggle` (UI). `scripts/strings.py` también cuenta las claves de `ES` escritas como literales en `App/` (además de las extraídas) y acepta la carpeta de derived data como argumento.
 
 **Apariencia (decisión 2026-11-08, como Quiet Words):** todos los temas tienen versión clara y oscura (`QuietCore/Palette.swift`; ya no hay temas de un solo modo). El modo se elige en **Ajustes › Apariencia**: "Igual que el sistema" (encendido por defecto); al apagarlo aparece Claro · Oscuro, preseleccionado en el contrario del modo actual para que el cambio se vea al instante (`@AppStorage("appearanceMode")`: system/light/dark, en `AppearanceRoot` con `Theme(palette, colorScheme:)`; es una opción, no una recompensa: reiniciar el progreso no la borra). **Petróleo y coral claro y oscuro dejaron de ser temas aparte:** `AppearanceMode.migrate` (al abrir la app) pasa `board = tealCoralLight/tealCoralDark` a `tealCoral` con `appearanceMode = light/dark` (si no había un modo elegido). Eran gratis y ningún logro los daba, y iCloud guarda logros, no elecciones: nadie pierde nada y cada logro sigue con su recompensa. Las tarjetas de tableros en Colección muestran cada tema en claro y en oscuro. El tablero usa solo roles (`separator`, `ink`, `primary`, `accent`, `muted`, `surface2`), así que sirve igual en los dos modos. Tests: `AppTests/AppearanceTests.swift` (migración) y el UI test `testMatchSystemToggle`.
+
+**Colección en dos pestañas (2026-11-13, como Quiet Words):** arriba, `Segments` **Recompensas · Logros** (Words además tiene Álbum). Recompensas: las categorías de siempre y, con Números rojos, la sección Pistas. Logros: "N ganados de M" y una fila por logro con nombre, condición, progreso cuando cuenta algo (racha y sudokus resueltos), sello si está ganado y la recompensa (`Achievement.reward`, que `AchievementRewardTests` compara con el `unlockedBy` de cada recompensa). Números rojos sin ganar: "Logro oculto · Sigue jugando…", sin condición ni recompensa. UI tests `testAchievementsTab` y `testCollectionTabsDemo` (capturas de las dos pestañas con `-demo`; `TEST_RUNNER_COLLECTION_LANGUAGE=es` para español).
 
 ## Tutorial (propuesta)
 
@@ -184,21 +202,21 @@ Para quien nunca jugó. Interactivo, sobre tableros reales del motor, en el que 
 6. **Notas:** activar Notas y escribir los candidatos de una celda.
 7. **Errores y pistas:** qué pasa con un número equivocado (rojo, −20) y cómo pedir una pista (−10).
 
-Tests: cada paso tiene **una sola** respuesta válida, que se deduce **solo** con lo que enseñan ese paso y los anteriores (lo comprueba el resolvedor lógico limitado a esas técnicas), y el tablero del tutorial es consistente con una solución única. Al terminar: "Ya sabes jugar. Empieza con un Fácil." Ajustes › Reglas resume todo, y Ajustes › Técnicas explica cada técnica que puede mostrar una pista.
+Tablero fijo desde 2026-11-13 (`Tutorial.baseGivens`, el Fácil de antes): cambiar el generador ya no cambia el tutorial. Tests: cada paso tiene **una sola** respuesta válida, que se deduce **solo** con lo que enseñan ese paso y los anteriores (lo comprueba el resolvedor lógico limitado a esas técnicas), y el tablero del tutorial es consistente con una solución única. Al terminar: "Ya sabes jugar. Empieza con un Fácil." Ajustes › Reglas resume todo, y Ajustes › Técnicas explica cada técnica que puede mostrar una pista.
 
 ## Estética y UX
 
 - Misma UI que la familia vía QuietKit: Inicio, Juego, Resumen, Reto diario, Clasificaciones, Colección, Ajustes, Tutorial y Splash; colores solo por rol.
 - **Tablero:** cuadrado, ancho completo menos 16 pt de margen (iPad hasta 760 pt). Líneas finas (`separator`) entre celdas y gruesas (`ink`) entre cajas. Pistas en `ink`, números del jugador en `primary`, errores en `accent` con fondo suave y subrayados (no solo color, regla del sistema de diseño), notas en `muted` en una mini grilla de 3×3. Selección: `primary` suave; mismo número: `surface2`.
-- **Pantalla de juego:** volver y menú arriba; puntaje grande; debajo Tiempo · Errores · Nivel (Reto + nivel en el diario); tablero; barra Deshacer · Borrar · Notas · Pista; teclado de 9 números.
+- **Pantalla de juego:** volver y menú arriba; puntaje grande; debajo Tiempo · Errores · Nivel (Reto + nivel en el diario); tablero; barra Deshacer · Borrar · Notas · Autonotas · Pista; teclado de 9 números.
 - **Animaciones:** poner número = escala 0,9 → 1 con spring; error = sacudida ±4 pt y háptico; completar una fila, columna o caja = barrido de luz por esas celdas (+ háptico suave); victoria = onda desde la última celda y fuegos. Nada bloquea el siguiente toque; Reduce Motion: fundidos de 150 ms.
 - **Hápticos:** selección al elegir celda, `.place` al poner número, `.success` al completar una unidad y al ganar, `.invalid` en error.
-- **iPad:** mismo layout centrado; teclado físico: números 1–9, flechas para moverse, N para notas, ⌘Z deshacer, H pista, borrar con ⌫.
+- **iPad:** mismo layout centrado; teclado físico: números 1–9, flechas para moverse, N para notas, ⇧N autonotas, ⌘Z deshacer, H pista, borrar con ⌫.
 - **Accesibilidad:** VoiceOver por celda ("Fila 3, columna 7, vacía, notas 2, 5, 8"), acciones para poner números, objetivos ≥ 44 pt en el teclado, Dynamic Type salvo en el tablero (que tiene "Números grandes").
 
 ## Localización
 
-Inglés (development language) y español, String Catalogs, plurales del catálogo. Nombres de técnicas traducidos (Naked single → "Único posible", Hidden single → "Único lugar", X-Wing se queda igual en los dos idiomas).
+Inglés (development language) y español, String Catalogs, plurales del catálogo. Nombres de técnicas traducidos (Naked single → "Único posible", Hidden single → "Único lugar en la caja" / "Único lugar en la línea", X-Wing se queda igual en los dos idiomas).
 
 ## Privacidad
 
@@ -227,7 +245,7 @@ Cada fase termina con su criterio de aceptación cumplido antes de pasar a la si
 | Fase | Estado |
 |---|---|
 | 0. Propuesta y diseño | ✅ Propuesta aprobada por quiet-studio (2026-10-30). Canvas [Quiet Sudoku](https://claude.ai/artifact/CUwSvM9TWjrAphXWbcrGFL) publicado con `qa.py` en 0 errores y 0 avisos: Overview, ícono, 8 pantallas en claro y oscuro, estilos y componentes (tablero, teclado, tarjeta de pista). Faltan en App Store las capturas de la ficha, el header, la búsqueda y las insignias (fase 6). |
-| 1. Motor | ✅ 47 tests (`swift test -c release`): dos resolvedores que coinciden (también en puzzles mínimos), cada técnica usada y nunca contradice la solución, 40 tableros por nivel con solución única y nivel exacto (resuelve con su nivel, no con el anterior), un año de retos, valores de referencia por fecha, sesión, puntaje, logros y tutorial. |
+| 1. Motor | ✅ 49 tests (`swift test -c release`): dos resolvedores que coinciden (también en puzzles mínimos), cada técnica usada y nunca contradice la solución, 40 tableros por nivel con solución única y nivel exacto (resuelve con lo de su nivel y exige al menos un paso o técnica del nivel; escala de 2026-11-13), jugadas disponibles en Fácil y Media, autonotas, un año de retos, valores de referencia por fecha, sesión, puntaje, logros y tutorial. |
 | 2. Juego jugable | 🟡 Jugable en el simulador: tablero, teclado con restantes, notas, borrar, deshacer, pista con explicación, errores al instante u ocultos, victoria con resumen y fuegos, tutorial de 7 pasos. UI tests: pista, notas, ganar y el tutorial completo. Falta probar en iPhone real e iPad. |
 | 3. Persistencia y reto diario | 🟡 Heredado de Quiet Solitaire y adaptado (regla de la familia, calendario, recordatorios); `DailyRuleTests`, `ReminderTests` y `ReminderUITests` pasan. Falta verificar en dispositivo. |
 | 4. Game Center | 🟡 12 logros (con insignias, en/es) y 3 clasificaciones creados en App Store Connect (2026-10-30, `setup-game-center.py --apply`). Falta activarlos en la versión 1.0 y verificar envío y sincronización en el dispositivo. |
@@ -238,4 +256,5 @@ Cada fase termina con su criterio de aceptación cumplido antes de pasar a la si
 
 - [x] Nombre en la App Store (2026-10-30): **Quiet Sudoku: Logic Puzzle** ("Quiet Sudoku" ya existía dos veces y "Quiet Sudoku: Classic Puzzles" también). En la pantalla de inicio sigue "Quiet Sudoku". Bundle ID `com.tavoohoh.quietsudoku` (registrado por Xcode, con Game Center e iCloud), SKU `quietsudoku-ios`, app ID `6828993446` (creada por el usuario en la web: la API no crea apps).
 - [x] Errores: al instante por defecto, con "Marcar errores al instante" en Ajustes (revisión de quiet-studio 2026-10-30); mismo cobro en los dos modos.
-- [ ] ¿Auto-notas (llenar todos los candidatos) como ayuda gratis en clásico? Propuesta: backlog.
+- [x] Auto-notas (2026-11-13): gratis en clásico y en el reto, respeta las notas del jugador (ver Reglas del juego).
+- [x] Escala de dificultad un escalón más fácil (2026-11-13, ver Motor).
