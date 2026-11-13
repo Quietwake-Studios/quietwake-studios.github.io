@@ -18,7 +18,7 @@ Cada app documenta sus comandos exactos en su CLAUDE.md ("Comandos" y "Publicaci
 
 1. Versión: si la versión actual está en revisión o publicada, subir la siguiente (`MARKETING_VERSION` 1.0 → 1.1); el build (`CURRENT_PROJECT_VERSION`) siempre sube y nunca se repite. Cambiarlos en `project.yml`, `xcodegen generate`, commit "Quiet <App>: <versión> build <n>" y push (el usuario lo pide al pedir el build).
 2. Archivar desde una copia limpia de `main`: `git worktree add --detach <scratch>/<app>-release origin/main`, copiar `Config/Local.xcconfig`, `xcodegen generate`, `xcodebuild archive -configuration Release -destination 'generic/platform=iOS' -allowProvisioningUpdates`.
-3. `xcodebuild -exportArchive` con `ExportOptions.plist` (`method app-store-connect`, `destination upload`, `teamID`, firma automática). Si el iPhone del usuario está bloqueado, solo afecta la instalación local, no la subida.
+3. `xcodebuild -exportArchive` con el `scripts/ExportOptions.plist` de la app (`method app-store-connect`, `destination upload`, firma automática; `quiet-words/scripts/ExportOptions.plist` sirve para cualquiera). Si el iPhone del usuario está bloqueado, solo afecta la instalación local, no la subida.
 4. Borrar la copia (`git worktree remove --force`). No quedarse esperando el procesamiento salvo que el usuario lo pida: tarda.
 5. Una versión nueva en la beta externa pasa por revisión de Apple; agregar el build al grupo externo solo si el usuario lo pide.
 
@@ -60,6 +60,10 @@ Toda versión que se envía a revisión lleva en App Review Information › Note
 ## Game Center
 
 Logros y clasificaciones se definen en `AppStore/game-center.json` y se crean con `scripts/setup-game-center.py` (muestra qué haría; `--apply` solo con permiso). Los IDs del código se verifican con `check-game-center.py` / `game-center.py`. Una clasificación publicada no cambia de formato: si hace falta otro criterio, es otra clasificación.
+
+- **Los ítems de Game Center se envían a revisión con la versión.** Crearlos no basta: quedan en "Prepare for Submission" y en producción las clasificaciones salen vacías (le pasó a Quiet Words 1.0, 2026-11-12). Los primeros de cada tipo deben ir en el mismo envío que una versión de la app (`FIRST_OF_TYPE_MUST_ATTACH_VERSION_FOR_REVIEW`). Enviar siempre con `python3 quiet-numbers/scripts/submit-with-game-center.py <sufijo del bundle> <build> [--apply]`: adjunta el build, agrega la versión y cada ítem pendiente al envío y lo manda.
+- `setup-game-center.py` no edita ítems existentes: si cambia la descripción de un logro, actualizar su localización por la API (`PATCH /v1/gameCenterAchievementLocalizations/{id}`) con la versión editable.
+- Retirar un envío (`PATCH /v1/reviewSubmissions/{id}` con `canceled: true`) deja la versión en `DEVELOPER_REJECTED`, editable, y se puede reenviar.
 
 ## Escrituras en App Store Connect
 
