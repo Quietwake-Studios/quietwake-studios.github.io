@@ -62,7 +62,7 @@ Toda versión que se envía a revisión lleva en App Review Information › Note
 Logros y clasificaciones se definen en `AppStore/game-center.json` y se crean con `scripts/setup-game-center.py` (muestra qué haría; `--apply` solo con permiso). Los IDs del código se verifican con `check-game-center.py` / `game-center.py`. Una clasificación publicada no cambia de formato: si hace falta otro criterio, es otra clasificación.
 
 - **Los ítems de Game Center se envían a revisión con la versión.** Crearlos no basta: quedan en "Prepare for Submission" y en producción las clasificaciones salen vacías (le pasó a Quiet Words 1.0, 2026-11-12). Los primeros de cada tipo deben ir en el mismo envío que una versión de la app (`FIRST_OF_TYPE_MUST_ATTACH_VERSION_FOR_REVIEW`). Enviar siempre con `python3 quiet-numbers/scripts/submit-with-game-center.py <sufijo del bundle> <build> [--apply]`: adjunta el build, agrega la versión y cada ítem pendiente al envío y lo manda.
-- `setup-game-center.py` no edita ítems existentes: si cambia la descripción de un logro, actualizar su localización por la API (`PATCH /v1/gameCenterAchievementLocalizations/{id}`) con la versión editable.
+- `setup-game-center.py` no edita ítems existentes: si cambia la descripción de un logro, actualizar su localización por la API (`PATCH /v2/gameCenterAchievementLocalizations/{id}`, ids en `/v2/gameCenterAchievementVersions/{id}/localizations`) mientras la versión del logro no esté publicada.
 - Retirar un envío (`PATCH /v1/reviewSubmissions/{id}` con `canceled: true`) deja la versión en `DEVELOPER_REJECTED`, editable, y se puede reenviar.
 
 ## Escrituras en App Store Connect
