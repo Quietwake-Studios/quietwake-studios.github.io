@@ -30,7 +30,7 @@ Gratis, todos los países. Sin compras dentro de la app.
 
 ## Privacidad
 
-- URL de la política: `https://quietwake.github.io/quiet-solitaire/privacy.html` (se publica con GitHub Pages desde `/docs` al hacer push).
+- URL de la política: `https://quietwake-studios.github.io/quiet-solitaire/privacy.html` (se publica con GitHub Pages desde `/docs` al hacer push).
 - Etiqueta: **Data Not Collected** (mismo criterio que Quiet Numbers: Game Center e iCloud los gestiona Apple y nunca vemos esos datos). `App/Resources/PrivacyInfo.xcprivacy`: sin rastreo, cero tipos de datos, `UserDefaults` con razón `CA92.1`.
 
 ## Versión 1.0
@@ -41,8 +41,8 @@ Gratis, todos los países. Sin compras dentro de la app.
 | Capturas iPhone 6.3" (1206×2622) | `AppStore/store-images/iphone-6.3/<en|es>/` (si App Store Connect las pide aparte) |
 | Capturas iPad 13" (2064×2752) | `AppStore/store-images/ipad-13/<en|es>/` |
 | Texto promocional, descripción, palabras clave, novedades | `fastlane/metadata/<idioma>/*.txt` |
-| URL de soporte | `https://quietwake.github.io/quiet-solitaire/support.html` |
-| URL de marketing | `https://quietwake.github.io/quiet-solitaire/` |
+| URL de soporte | `https://quietwake-studios.github.io/quiet-solitaire/support.html` |
+| URL de marketing | `https://quietwake-studios.github.io/quiet-solitaire/` |
 | Game Center | 13 logros y 3 clasificaciones creados (`scripts/setup-game-center.py`). Falta activar Game Center en la versión y elegirlos ahí |
 | Cifrado | No usa cifrado propio (`ITSAppUsesNonExemptEncryption = NO` en el Info.plist) |
 | Publicación | Automática al aprobarse (como Quiet Numbers) |

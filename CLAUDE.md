@@ -1,6 +1,6 @@
 # The Quiet Project
 
-Nombre del estudio: **Quietwake Studios**; en el splash y como marca corta, **Quietwake** (decisión 2026-11-13; antes Quiet Studios, que estaba tomado en Google Play y restringido en Apple; "Studios" y no "Games" para no cerrar la puerta a apps que no sean juegos). Los juegos siguen siendo la familia **Quiet** (Quiet Numbers, Quiet Words…). Web: `https://quietwake.github.io/` (repo `quietwake/quietwake.github.io` en la organización `quietwake`, Pages desde `/docs`); el repo `tavoohoh/quiet-studios` solo redirige los links viejos que tienen las versiones ya enviadas.
+Nombre del estudio: **Quietwake Studios**; en el splash y como marca corta, **Quietwake** (decisión 2026-11-13; antes Quiet Studios, que estaba tomado en Google Play y restringido en Apple; "Studios" y no "Games" para no cerrar la puerta a apps que no sean juegos). Los juegos siguen siendo la familia **Quiet** (Quiet Numbers, Quiet Words…). Web: `https://quietwake-studios.github.io/` (repo `quietwake-studios/quietwake-studios.github.io` en la organización `quietwake-studios`, Pages desde `/docs`); el repo `tavoohoh/quiet-studios` solo redirige los links viejos que tienen las versiones ya enviadas.
 
 Estudio que construye, con ayuda de AI, apps y juegos para la App Store. Cada app parte de una mecánica conocida y no patentada (2048, Number Match, idle/incremental donde las tareas generan moneda del juego para mejorar y facilitar las siguientes tareas, etc.) y la reinterpreta con identidad propia.
 

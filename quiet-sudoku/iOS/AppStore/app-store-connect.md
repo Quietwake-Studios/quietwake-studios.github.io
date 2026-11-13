@@ -30,7 +30,7 @@ Gratis para siempre (familia "gratis para siempre", `studio/roadmap.md`), todos 
 
 ## Privacidad
 
-- URL de la política: `https://quietwake.github.io/quiet-sudoku/privacy.html` (GitHub Pages desde `/docs`, se publica con el push a main).
+- URL de la política: `https://quietwake-studios.github.io/quiet-sudoku/privacy.html` (GitHub Pages desde `/docs`, se publica con el push a main).
 - Etiqueta: **Data Not Collected**. `App/Resources/PrivacyInfo.xcprivacy`: sin rastreo, cero tipos de datos, `UserDefaults` con razón `CA92.1`.
 
 ## Versión 1.0
@@ -39,8 +39,8 @@ Gratis para siempre (familia "gratis para siempre", `studio/roadmap.md`), todos 
 |---|---|
 | Capturas | Fase 6 (no hacen falta para TestFlight interno) |
 | Texto promocional, descripción, palabras clave, novedades | `fastlane/metadata/<idioma>/*.txt` |
-| URL de soporte | `https://quietwake.github.io/quiet-sudoku/support.html` |
-| URL de marketing | `https://quietwake.github.io/quiet-sudoku/` |
+| URL de soporte | `https://quietwake-studios.github.io/quiet-sudoku/support.html` |
+| URL de marketing | `https://quietwake-studios.github.io/quiet-sudoku/` |
 | Game Center | 12 logros y 3 clasificaciones (`game-center.json`); activar Game Center en la versión y elegirlos |
 | Cifrado | No usa cifrado propio (`ITSAppUsesNonExemptEncryption = NO`) |
 | Publicación | Automática al aprobarse |

@@ -8,7 +8,7 @@ description: Estructura de proyecto, arquitectura y convenciones de código de l
 ## El repositorio
 
 ```
-Quiet/                       repo público quietwake/quietwake.github.io
+Quiet/                       repo público quietwake-studios/quietwake-studios.github.io
 ├── CLAUDE.md                filosofía de la familia, links a los sistemas de diseño
 ├── QuietKit/iOS/            paquete Swift compartido (QuietCore + QuietUI)
 ├── QuietKit/Android/        port en Kotlin (quietkit-core), con fixtures generados desde Swift
