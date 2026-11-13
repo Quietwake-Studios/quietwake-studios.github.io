@@ -1,1 +1,1 @@
-First release of Quiet Words. Thanks for playing!
+Game Center leaderboards and achievements are now available. Cleaner word language setting.

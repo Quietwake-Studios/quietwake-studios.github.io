@@ -14,21 +14,17 @@ struct SettingsView: View {
     @AppStorage(PreferenceKey.appearanceMode) private var mode = AppearanceMode.system
     @Environment(\.colorScheme) private var colorScheme
     @State private var confirmsReset = false
+    @State private var choosesLanguage = false
 
     var body: some View {
-        @Bindable var app = app
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 GroupSection("Game") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Word language").foregroundStyle(theme.ink)
-                        Segments(selection: $app.wordLanguage, options: [(.en, "English words"), (.es, "Palabras en español")])
-                            .accessibilityIdentifier("settingsLanguage")
-                        Text("Words only; the app stays in your language. Each language keeps its own album.")
-                            .font(.footnote)
-                            .foregroundStyle(theme.muted)
+                    Button { choosesLanguage = true } label: {
+                        row("Word language", value: Text(verbatim: String(localized: app.wordLanguage.name).localizedCapitalized))
                     }
-                    .padding(.vertical, 6)
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("settingsLanguage")
                     Toggle("Sound", isOn: $sound).toggleStyle(ThemedToggleStyle())
                     Toggle("Haptics", isOn: $haptics).toggleStyle(ThemedToggleStyle())
                     Toggle(isOn: $largerLetters) {
@@ -72,6 +68,14 @@ struct SettingsView: View {
             .frame(maxWidth: .infinity)
         }
         .screen(Text("Settings"))
+        #if DEBUG
+        .onAppear { if ProcessInfo.processInfo.arguments.contains("-wordLanguageSheet") { choosesLanguage = true } }
+        #endif
+        .sheet(isPresented: $choosesLanguage) {
+            WordLanguageSheet()
+                .presentationDetents([.medium, .large])
+                .presentationCornerRadius(32)
+        }
         .confirmationDialog("Reset all progress?", isPresented: $confirmsReset, titleVisibility: .visible) {
             Button("Reset progress", role: .destructive) { app.resetProgress() }
         } message: {

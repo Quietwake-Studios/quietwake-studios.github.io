@@ -95,6 +95,25 @@ final class GameplayUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["appearanceMode"].waitForExistence(timeout: 1))
     }
 
+    /// Settings › Word language: a row with the current language opens a sheet with the two
+    /// languages; a tap switches, "Done" closes and the row shows the new one (1.0.1).
+    func testWordLanguageSheet() throws {
+        let app = launch(["-open", "settings", "-words", "en"])
+        let row = app.buttons["settingsLanguage"]
+        XCTAssertTrue(row.waitForExistence(timeout: 10))
+        XCTAssertTrue(row.label.contains("English"))
+        row.tap()
+        let spanish = app.buttons["language-es"]
+        XCTAssertTrue(spanish.waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["language-en"].isSelected)
+        spanish.tap()
+        XCTAssertTrue(spanish.isSelected)
+        XCTAssertFalse(app.buttons["language-en"].isSelected)
+        app.buttons["wordLanguageDone"].tap()
+        XCTAssertFalse(spanish.waitForExistence(timeout: 1))
+        XCTAssertTrue(row.label.contains("Spanish"))
+    }
+
     /// Collection › Achievements: every achievement with how it's earned; hidden ones say only
     /// "Hidden achievement" until earned (2026-11-09).
     func testAchievementsTab() throws {

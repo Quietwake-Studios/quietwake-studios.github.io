@@ -35,10 +35,12 @@
 		C088A98D0B7D15236F4DA0CC /* AppClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991952708994274E786CFA00 /* AppClock.swift */; };
 		C25084CC888001B93B215F6C /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9995F6260E870CE8917AED08 /* GameModel.swift */; };
 		C4353C39E953FD10EA1C0D55 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E0D2F5235315463D74F300 /* Appearance.swift */; };
+		C7FB582E98CB011EAEEB2DA3 /* WordLanguageSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CF6E71A05CF39BEB18A3F2 /* WordLanguageSheet.swift */; };
 		CEC4AB5076F127648AE418D0 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB13B8877CEFC7013DDABCC0 /* CollectionView.swift */; };
 		D1AE437845B33C31FB7D22CF /* GameplayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BFF97F63A96EC824408579 /* GameplayUITests.swift */; };
 		D2E18D23574827DE83662444 /* NewGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F309894B27716D875B811A63 /* NewGameView.swift */; };
 		D5424D0A571A4F7E875E4A6E /* TutorialBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3330CF2FAF41DEDA8FD26C /* TutorialBoardTests.swift */; };
+		D71EBDE747D2518CFCE3A87D /* LanguageChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F03A4C34A2984768AFF05 /* LanguageChoice.swift */; };
 		DEB9AFF00788906E35CB42A2 /* QuietWordsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0F982D71F4921F4924CADFAB /* QuietWordsCore */; };
 		E4AC1C0E66863DE62C652AE7 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C784CCFE6A7CCD30E0E511 /* PersistenceService.swift */; };
 		E83B9F879EA6E974AF505B15 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 10B1DD40E61529F10167BEF9 /* PrivacyInfo.xcprivacy */; };
@@ -76,6 +78,7 @@
 		4472C0C075261DACCD8DFC6F /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		44DDE72856B0CF1826C95A23 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		45BFF97F63A96EC824408579 /* GameplayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameplayUITests.swift; sourceTree = "<group>"; };
+		54CF6E71A05CF39BEB18A3F2 /* WordLanguageSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordLanguageSheet.swift; sourceTree = "<group>"; };
 		57B05A45AD5420C950E8B3F9 /* FriendProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileScreen.swift; sourceTree = "<group>"; };
 		584DDC48E1014CD0C01BA0E5 /* LanguagePill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePill.swift; sourceTree = "<group>"; };
 		59474F8170721513F832DD75 /* QuietWordsAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuietWordsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +112,7 @@
 		F309894B27716D875B811A63 /* NewGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameView.swift; sourceTree = "<group>"; };
 		FBB596E569E76D9FBB577EA1 /* QuietWordsUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuietWordsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC1FA7AD2AA7A904835E3739 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FE5F03A4C34A2984768AFF05 /* LanguageChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageChoice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				FC1FA7AD2AA7A904835E3739 /* SettingsView.swift */,
+				54CF6E71A05CF39BEB18A3F2 /* WordLanguageSheet.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -301,6 +306,7 @@
 			children = (
 				89E0D2F5235315463D74F300 /* Appearance.swift */,
 				A0F02EDE15DA11F45C800ED9 /* DayKeyFormat.swift */,
+				FE5F03A4C34A2984768AFF05 /* LanguageChoice.swift */,
 				584DDC48E1014CD0C01BA0E5 /* LanguagePill.swift */,
 				87EB04B95AB0EF2C2B93BCA1 /* LookUp.swift */,
 				E5B0DDAFEAEC897113EE7FD7 /* Rewards.swift */,
@@ -474,6 +480,7 @@
 				C25084CC888001B93B215F6C /* GameModel.swift in Sources */,
 				B142246F39820CC8E4E8A9AB /* GameView.swift in Sources */,
 				FA8B1F9118CE97F57E55709B /* HomeView.swift in Sources */,
+				D71EBDE747D2518CFCE3A87D /* LanguageChoice.swift in Sources */,
 				AA9330781A105711C503A9C7 /* LanguagePill.swift in Sources */,
 				9A8C6AA95D12A5C7AFCB83F9 /* LeaderboardsView.swift in Sources */,
 				1CCA15E530DC77D78E82C67F /* LookUp.swift in Sources */,
@@ -486,6 +493,7 @@
 				45B035D5F22ECF67ABB1343B /* SettingsView.swift in Sources */,
 				7C313FB2381B0D7F4337D7C1 /* SummarySheet.swift in Sources */,
 				108ADC3BB8C19FFDE4F57225 /* TutorialView.swift in Sources */,
+				C7FB582E98CB011EAEEB2DA3 /* WordLanguageSheet.swift in Sources */,
 				303CB593498D696D9F9A357A /* WordParts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -548,7 +556,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -567,7 +575,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -714,7 +722,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -727,7 +735,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
