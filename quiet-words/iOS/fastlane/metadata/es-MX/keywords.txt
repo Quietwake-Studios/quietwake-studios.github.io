@@ -1,1 +1,1 @@
-reto,diario,crucigrama,vocabulario,español,inglés,bilingüe,temas,oculta,relajante,offline,buscar
+sopadeletras,buscar,palabras,juego,vocabulario,español,inglés,bilingüe,relajante,offline,oculta

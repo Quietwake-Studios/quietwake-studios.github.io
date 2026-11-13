@@ -59,8 +59,16 @@ Todos los juegos tienen modo libre y reto diario, y el reto funciona como el de 
 - **Calendario mensual:** muestra los días reales de cada mes (28 a 31), con flechas para ir al mes anterior, los completados (bandas entre días seguidos), los retos a medias y el día de hoy; racha y mejor racha a la vista. Se pueden jugar los días que caen dentro de los últimos 30; los más viejos se ven pero no se abren.
 
 - **Notificaciones (locales, sin servidor):** recordatorio a las 19:00 si no se ha completado el reto de hoy, con lo que hicieron los amigos si ya se sabe; "racha en riesgo" a las 21:00 si sigue sin hacerse y hay racha de 3 o más. Detalle en el backlog de Quiet Numbers.
+- **Al terminar un día pasado (2026-11-13):** el botón del resumen vuelve a la pantalla del Reto diario (calendario), no a Inicio, porque lo normal es seguir rellenando días. Terminar el reto de hoy o una partida libre sigue volviendo a Inicio.
+- **Racha en textos:** "N-day streak" / "Racha de N días" (nunca "N streak").
 
 Un juego que no cumpla algo de esto lo anota en su `BACKLOG.md` hasta alinearlo.
+
+## Reseñas en la tienda (igual en todos los juegos, iOS y Android; decisión 2026-11-13)
+
+- **Pedido automático una sola vez:** al cerrar el resumen de la **3.ª partida terminada** (libre o reto, gane o no), se pide la reseña con el diálogo del sistema: `AppStore.requestReview(in:)` de StoreKit en iOS y la In-App Review API de Google Play en Android. Nunca en medio de una partida ni encima del resumen, nunca con un diálogo propio antes ("¿te gusta?") y nunca más de una vez por instalación (el sistema además limita cuántas veces se muestra). La cuenta de partidas y la marca "ya se pidió" viven en las preferencias locales; "Restablecer progreso" no las borra.
+- **Botón en Ajustes:** fila "Rate Quiet <App>" / "Califica Quiet <App>" que abre la página de reseña de la tienda: iOS `https://apps.apple.com/app/id<app id>?action=write-review`, Android `market://details?id=<paquete>` (con `https://play.google.com/store/apps/details?id=<paquete>` si no hay Play Store). IDs de la App Store: Numbers 6827562391, Solitaire 6828074077, Sudoku 6828993446, Words 6832387795.
+- **Android es espejo de iOS:** misma estructura, pantallas, reglas y textos; solo cambia lo que la plataforma obliga (fuente, íconos de Material, Play Games en lugar de Game Center).
 
 ## Diseño
 
