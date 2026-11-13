@@ -84,6 +84,16 @@
         }
       }
     },
+    "%lld earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ganados"
+          }
+        }
+      }
+    },
     "%lld friends already played; %@ leads with %@.": {
       "localizations": {
         "es": {
@@ -130,6 +140,16 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%lld of %lld wins": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld victorias"
           }
         }
       }
@@ -411,6 +431,16 @@
         }
       }
     },
+    "Best streak: %lld of %lld days": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor racha: %1$lld de %2$lld días"
+          }
+        }
+      }
+    },
     "Board": {
       "localizations": {
         "es": {
@@ -481,6 +511,16 @@
         }
       }
     },
+    "Cascade victory": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victoria en cascada"
+          }
+        }
+      }
+    },
     "Centennial": {
       "localizations": {
         "es": {
@@ -501,6 +541,16 @@
         }
       }
     },
+    "Cheaper hints in classic": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas en clásico"
+          }
+        }
+      }
+    },
     "Check your connection and try again.": {
       "localizations": {
         "es": {
@@ -517,6 +567,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clásico"
+          }
+        }
+      }
+    },
+    "Classic deck": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mazo Clásico"
           }
         }
       }
@@ -681,6 +741,16 @@
         }
       }
     },
+    "Coral card back": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverso Coral"
+          }
+        }
+      }
+    },
     "Couldn't load": {
       "localizations": {
         "es": {
@@ -817,6 +887,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cada palo se arma desde su as en las fundaciones de arriba. Toca el A♦. La carta de abajo se voltea."
+          }
+        }
+      }
+    },
+    "Earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganado"
           }
         }
       }
@@ -1001,6 +1081,16 @@
         }
       }
     },
+    "Gold card back and gold icon": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverso Dorado e ícono dorado"
+          }
+        }
+      }
+    },
     "Habit": {
       "localizations": {
         "es": {
@@ -1111,6 +1201,16 @@
         }
       }
     },
+    "Illustrated deck": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mazo Ilustrado"
+          }
+        }
+      }
+    },
     "In progress": {
       "localizations": {
         "es": {
@@ -1137,6 +1237,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Índigo y durazno"
+          }
+        }
+      }
+    },
+    "Indigo & Peach board": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablero Índigo y durazno"
           }
         }
       }
@@ -1267,6 +1377,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lino"
+          }
+        }
+      }
+    },
+    "Linen card back": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverso Lino"
           }
         }
       }
@@ -1417,6 +1537,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Noctámbulo"
+          }
+        }
+      }
+    },
+    "Night card back": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverso Noche"
           }
         }
       }
@@ -1611,6 +1741,16 @@
         }
       }
     },
+    "Pixel deck": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mazo Pixel"
+          }
+        }
+      }
+    },
     "Play": {
       "localizations": {
         "es": {
@@ -1781,6 +1921,16 @@
         }
       }
     },
+    "Rewards": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recompensas"
+          }
+        }
+      }
+    },
     "Rules": {
       "localizations": {
         "es": {
@@ -1801,12 +1951,32 @@
         }
       }
     },
+    "Sage & Coral board": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablero Salvia y coral"
+          }
+        }
+      }
+    },
     "Sage & Sand": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Salvia y arena"
+          }
+        }
+      }
+    },
+    "Sage & Sand board": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablero Salvia y arena"
           }
         }
       }
@@ -2537,6 +2707,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "corazones"
+          }
+        }
+      }
+    },
+    "of %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de %lld"
           }
         }
       }

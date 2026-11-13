@@ -573,3 +573,16 @@ import Testing
         #expect(app.activeGame?.session == session)
     }
 }
+
+/// Collection › Achievements says what each achievement unlocks: it must match the rewards.
+@Suite struct AchievementRewardTests {
+    @Test func everyRewardLineMatchesAnUnlock() {
+        let unlocks = Set(ThemeChoice.allCases.compactMap(\.unlockedBy) + TileStyle.allCases.compactMap(\.unlockedBy)
+            + NumberFont.allCases.compactMap(\.unlockedBy) + ClearEffect.allCases.compactMap(\.unlockedBy)
+            + SoundPack.allCases.compactMap(\.unlockedBy) + AppIconChoice.allCases.compactMap(\.unlockedBy))
+            .union([.inTheRed]) // Cheaper hints, not a cosmetic.
+        for achievement in Achievement.allCases {
+            #expect((achievement.reward != nil) == unlocks.contains(achievement), "\(achievement)")
+        }
+    }
+}

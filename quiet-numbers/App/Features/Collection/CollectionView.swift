@@ -3,11 +3,39 @@ import QuietNumbersCore
 import QuietUI
 import SwiftUI
 
-/// Achievements and the cosmetics they unlock. Locked items show how to get them.
+enum CollectionTab: Hashable {
+    case rewards, achievements
+}
+
+/// Rewards (the cosmetics, locked ones show how to get them) and achievements (how each one is
+/// earned, with progress), in two tabs like Quiet Words (2026-11-13).
 struct CollectionView: View {
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var tab = CollectionTab.rewards
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 12) {
+                Segments(selection: $tab, options: [(.rewards, "Rewards"), (.achievements, "Achievements")])
+                    .accessibilityIdentifier("collectionTabs")
+                switch tab {
+                case .rewards: RewardsList()
+                case .achievements: AchievementsList()
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .frame(maxWidth: Layout.column(sizeClass))
+            .frame(maxWidth: .infinity)
+        }
+        .screen(Text("Collection"))
+    }
+}
+
+/// Every cosmetic by category; "Cheaper hints" on top once "In the Red" is earned.
+private struct RewardsList: View {
     @Environment(AppModel.self) private var app
     @Environment(\.quietTheme) private var colors
-    @Environment(\.horizontalSizeClass) private var sizeClass
     @AppStorage(PreferenceKey.theme) private var theme = ThemeChoice.tealCoral
     @AppStorage(PreferenceKey.tileStyle) private var tileStyle = TileStyle.plain
     @AppStorage(PreferenceKey.numberFont) private var numberFont = NumberFont.rounded
@@ -17,54 +45,42 @@ struct CollectionView: View {
     @AppStorage(PreferenceKey.cheapHints) private var cheapHints = true
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 18) {
-                // "In the Red" (hidden): the only reward that touches play, so it can be turned
-                // off (2026-11-10). It doesn't show until earned.
-                if app.progress.unlocked.contains(.inTheRed) {
-                    GroupSection("Hints") {
-                        Toggle(isOn: $cheapHints) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Cheaper hints")
-                                    .foregroundStyle(colors.ink)
-                                Text("A hint costs 3 points instead of 10, except in daily challenges, which always cost 10. From your next game.")
-                                    .font(.footnote)
-                                    .foregroundStyle(colors.muted)
-                            }
+        VStack(spacing: 18) {
+            // "In the Red" (hidden): the only reward that touches play, so it can be turned
+            // off (2026-11-10). It doesn't show until earned.
+            if app.progress.unlocked.contains(.inTheRed) {
+                GroupSection("Hints") {
+                    Toggle(isOn: $cheapHints) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Cheaper hints")
+                                .foregroundStyle(colors.ink)
+                            Text("A hint costs 3 points instead of 10, except in daily challenges, which always cost 10. From your next game.")
+                                .font(.footnote)
+                                .foregroundStyle(colors.muted)
                         }
-                        .toggleStyle(ThemedToggleStyle())
-                        .padding(.vertical, 8)
-                        .accessibilityIdentifier("cheapHints")
                     }
-                }
-                RewardSection(title: "Theme", selection: $theme, progress: app.progress) { choice in
-                    ThemePreview(palette: choice.palette)
-                }
-                RewardSection(title: "Tiles", selection: $tileStyle, progress: app.progress) { style in
-                    TilePreview(style: style)
-                }
-                RewardSection(title: "Numbers", selection: $numberFont, progress: app.progress) { font in
-                    Text(verbatim: "12")
-                        .font(.system(size: 20, weight: .bold, design: font.design))
-                        .foregroundStyle(colors.ink)
-                        .frame(width: 36, alignment: .leading)
-                }
-                RewardSection(title: "Row clear", selection: $clearEffect, progress: app.progress)
-                RewardSection(title: "Sound", selection: $soundPack, progress: app.progress)
-                RewardSection(title: "App icon", selection: $appIcon, progress: app.progress)
-                    .onChange(of: appIcon) { setAppIcon(appIcon) }
-                GroupSection("Achievements") {
-                    ForEach(Achievement.allCases, id: \.self) { achievement in
-                        AchievementRow(achievement: achievement, progress: app.progress.progress(of: achievement))
-                    }
+                    .toggleStyle(ThemedToggleStyle())
+                    .padding(.vertical, 8)
+                    .accessibilityIdentifier("cheapHints")
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 12)
-            .frame(maxWidth: Layout.column(sizeClass))
-            .frame(maxWidth: .infinity)
+            RewardSection(title: "Theme", selection: $theme, progress: app.progress) { choice in
+                ThemePreview(palette: choice.palette)
+            }
+            RewardSection(title: "Tiles", selection: $tileStyle, progress: app.progress) { style in
+                TilePreview(style: style)
+            }
+            RewardSection(title: "Numbers", selection: $numberFont, progress: app.progress) { font in
+                Text(verbatim: "12")
+                    .font(.system(size: 20, weight: .bold, design: font.design))
+                    .foregroundStyle(colors.ink)
+                    .frame(width: 36, alignment: .leading)
+            }
+            RewardSection(title: "Row clear", selection: $clearEffect, progress: app.progress)
+            RewardSection(title: "Sound", selection: $soundPack, progress: app.progress)
+            RewardSection(title: "App icon", selection: $appIcon, progress: app.progress)
+                .onChange(of: appIcon) { setAppIcon(appIcon) }
         }
-        .screen(Text("Collection"))
     }
 
     private func setAppIcon(_ choice: AppIconChoice) {
@@ -198,30 +214,91 @@ private struct TilePreview: View {
     }
 }
 
+/// Every achievement: how it's earned, progress when it counts something, whether it's earned
+/// and what it unlocks. A hidden one keeps its condition until earned (like Quiet Words).
+private struct AchievementsList: View {
+    @Environment(AppModel.self) private var app
+    @Environment(\.quietTheme) private var theme
+
+    var body: some View {
+        let progress = app.progress
+        let earned = Achievement.allCases.filter(progress.unlocked.contains).count
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(earned) earned").font(.system(.title2, design: .rounded, weight: .heavy)).foregroundStyle(theme.ink)
+                Spacer()
+                Text("of \(Achievement.allCases.count)").font(.subheadline).foregroundStyle(theme.muted)
+            }
+            .padding(.horizontal, 4)
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("achievementsHeader")
+            GroupSection {
+                ForEach(Achievement.allCases, id: \.self) { achievement in
+                    AchievementRow(achievement: achievement, isEarned: progress.unlocked.contains(achievement),
+                                   step: step(achievement, progress))
+                }
+            }
+        }
+    }
+
+    /// Progress for the ones that count something (nil: one-off).
+    private func step(_ achievement: Achievement, _ progress: PlayerProgress) -> AchievementRow.Step? {
+        let target = achievement.target
+        return switch achievement {
+        case .consistency, .habit:
+            AchievementRow.Step(progress.bestStreak, of: target, Text("Best streak: \(min(progress.bestStreak, target)) of \(target) days"))
+        case .sweeper:
+            AchievementRow.Step(progress.rowsCleared, of: target, Text("\(min(progress.rowsCleared, target)) of \(target) rows"))
+        case .stageFive:
+            AchievementRow.Step(progress.highestStage, of: target, Text("Highest stage: \(min(progress.highestStage, target)) of \(target)"))
+        case .centennial:
+            AchievementRow.Step(progress.dailiesCompleted, of: target,
+                                Text("\(min(progress.dailiesCompleted, target)) of \(target) daily challenges"))
+        case .monotone:
+            AchievementRow.Step(progress.bestEqualPairsRun, of: target,
+                                Text("Best run: \(min(progress.bestEqualPairsRun, target)) of \(target) pairs"))
+        case .firstStep, .cleanSlate, .noHelp, .nightOwl, .inTheRed:
+            nil
+        }
+    }
+}
+
 private struct AchievementRow: View {
+    /// How far a counted achievement has come, and how to say it.
+    struct Step {
+        let fraction: Double
+        let text: Text
+
+        init(_ value: Int, of target: Int, _ text: Text) {
+            fraction = min(Double(value) / Double(max(target, 1)), 1)
+            self.text = text
+        }
+    }
+
     let achievement: Achievement
-    let progress: Double
+    let isEarned: Bool
+    let step: Step?
 
     @Environment(\.quietTheme) private var theme
 
     var body: some View {
         // A hidden achievement keeps its secret until earned: "?" instead of the badge.
-        let secret = achievement.isHidden && progress < 1
-        HStack(spacing: 14) {
+        let secret = achievement.isHidden && !isEarned
+        HStack(alignment: .top, spacing: 14) {
             Group {
                 if secret {
                     Image(systemName: "questionmark")
-                        .font(.title3.weight(.semibold))
+                        .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(theme.muted)
-                        .frame(width: 44, height: 44)
+                        .frame(width: 42, height: 42)
                         .background(theme.surface2, in: Circle())
                 } else {
-                    // Locked badges are shown faded and without color.
+                    // Badges not yet earned are shown faded and without color.
                     achievement.badge
                         .resizable()
-                        .frame(width: 44, height: 44)
-                        .saturation(progress >= 1 ? 1 : 0)
-                        .opacity(progress >= 1 ? 1 : 0.4)
+                        .frame(width: 42, height: 42)
+                        .saturation(isEarned ? 1 : 0)
+                        .opacity(isEarned ? 1 : 0.4)
                 }
             }
             .accessibilityHidden(true)
@@ -232,20 +309,26 @@ private struct AchievementRow: View {
                 Text(secret ? "Keep playing: it shows here once earned." : achievement.condition)
                     .font(.subheadline)
                     .foregroundStyle(theme.muted)
-                if progress > 0, progress < 1, achievement.target > 1 {
-                    ProgressView(value: progress)
-                        .tint(theme.primary)
+                if let step, !isEarned {
+                    ProgressView(value: step.fraction).tint(theme.primary)
+                    step.text.font(.caption.monospacedDigit()).foregroundStyle(theme.muted)
+                }
+                if !secret, let reward = achievement.reward {
+                    Label { Text(reward) } icon: { Image(systemName: "gift") }
+                        .font(.caption)
+                        .foregroundStyle(isEarned ? theme.primary : theme.muted)
                 }
             }
             Spacer(minLength: 8)
-            if progress >= 1 {
+            if isEarned {
                 Image(systemName: "checkmark.seal.fill")
+                    .font(.title3)
                     .foregroundStyle(theme.primary)
+                    .accessibilityLabel(Text("Earned"))
             }
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("achievement-\(achievement.rawValue)")
-        .accessibilityValue(progress >= 1 ? Text("Unlocked") : Text(progress, format: .percent.precision(.fractionLength(0))))
     }
 }

@@ -252,6 +252,25 @@ ES = {
     "Match system": "Igual que el sistema",
     "Light": "Claro",
     "Dark": "Oscuro",
+    # Collection › Rewards · Achievements (2026-11-13, like Quiet Words).
+    "Rewards": "Recompensas",
+    "%lld earned": "%lld ganados",
+    "of %lld": "de %lld",
+    "Earned": "Ganado",
+    "Best streak: %lld of %lld days": "Mejor racha: %1$lld de %2$lld días",
+    "%lld of %lld wins": "%1$lld de %2$lld victorias",
+    "Coral card back": "Reverso Coral",
+    "Sage & Sand board": "Tablero Salvia y arena",
+    "Classic deck": "Mazo Clásico",
+    "Sage & Coral board": "Tablero Salvia y coral",
+    "Indigo & Peach board": "Tablero Índigo y durazno",
+    "Illustrated deck": "Mazo Ilustrado",
+    "Linen card back": "Reverso Lino",
+    "Gold card back and gold icon": "Reverso Dorado e ícono dorado",
+    "Night card back": "Reverso Noche",
+    "Cascade victory": "Victoria en cascada",
+    "Pixel deck": "Mazo Pixel",
+    "Cheaper hints in classic": "Pistas más baratas en clásico",
 }
 
 # QuietKit's texts (QuietUI looks them up in the app's catalog). The compiler doesn't

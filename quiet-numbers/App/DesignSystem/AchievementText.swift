@@ -35,6 +35,24 @@ extension Achievement {
         }
     }
 
+    /// What it unlocks, for Collection › Achievements (nil: nothing to unlock). Matches each
+    /// reward's `unlockedBy` (`AchievementRewardTests`).
+    var reward: LocalizedStringResource? {
+        switch self {
+        case .firstStep: nil
+        case .cleanSlate: "Circle tiles"
+        case .noHelp: "Sage & Sand theme"
+        case .consistency: "Indigo & Peach theme"
+        case .habit: "New York numbers"
+        case .sweeper: "Wave row clear"
+        case .stageFive: "Outline tiles"
+        case .centennial: "Gold icon"
+        case .nightOwl: "Sage & Coral theme"
+        case .monotone: "Marimba sound"
+        case .inTheRed: "Cheaper hints in classic"
+        }
+    }
+
     /// "In the Red" keeps its name and condition secret in Collection until earned
     /// (2026-11-10, like Quiet Words and Quiet Solitaire).
     var isHidden: Bool { self == .inTheRed }

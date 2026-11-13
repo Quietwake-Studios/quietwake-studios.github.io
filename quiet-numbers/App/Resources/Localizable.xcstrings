@@ -11,6 +11,16 @@
         }
       }
     },
+    "%lld earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ganados"
+          }
+        }
+      }
+    },
     "%lld friends already played; %@ leads with %@.": {
       "localizations": {
         "es": {
@@ -27,6 +37,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡%lld seguidas!"
+          }
+        }
+      }
+    },
+    "%lld of %lld daily challenges": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld retos diarios"
+          }
+        }
+      }
+    },
+    "%lld of %lld rows": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld filas"
           }
         }
       }
@@ -269,6 +299,16 @@
         }
       }
     },
+    "Best run: %lld of %lld pairs": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor serie: %1$lld de %2$lld parejas"
+          }
+        }
+      }
+    },
     "Best score": {
       "localizations": {
         "es": {
@@ -285,6 +325,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mejor racha"
+          }
+        }
+      }
+    },
+    "Best streak: %lld of %lld days": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor racha: %1$lld de %2$lld días"
           }
         }
       }
@@ -329,6 +379,16 @@
         }
       }
     },
+    "Cheaper hints in classic": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistas más baratas en clásico"
+          }
+        }
+      }
+    },
     "Check your connection and try again.": {
       "localizations": {
         "es": {
@@ -345,6 +405,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Círculo"
+          }
+        }
+      }
+    },
+    "Circle tiles": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fichas de círculo"
           }
         }
       }
@@ -699,6 +769,16 @@
         }
       }
     },
+    "Earned": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganado"
+          }
+        }
+      }
+    },
     "Empty a whole row and it goes away, for 10 points. Match the last two 6s.": {
       "localizations": {
         "es": {
@@ -849,6 +929,16 @@
         }
       }
     },
+    "Gold icon": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ícono dorado"
+          }
+        }
+      }
+    },
     "Habit": {
       "localizations": {
         "es": {
@@ -885,6 +975,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alto contraste"
+          }
+        }
+      }
+    },
+    "Highest stage: %lld of %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etapa más alta: %1$lld de %2$lld"
           }
         }
       }
@@ -955,6 +1055,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Índigo y durazno"
+          }
+        }
+      }
+    },
+    "Indigo & Peach theme": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema Índigo y durazno"
           }
         }
       }
@@ -1052,6 +1162,16 @@
     "Marimba": {
       "shouldTranslate": false
     },
+    "Marimba sound": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonido marimba"
+          }
+        }
+      }
+    },
     "Match system": {
       "localizations": {
         "es": {
@@ -1094,6 +1214,16 @@
     },
     "New York": {
       "shouldTranslate": false
+    },
+    "New York numbers": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números New York"
+          }
+        }
+      }
     },
     "New best score!": {
       "localizations": {
@@ -1345,6 +1475,16 @@
         }
       }
     },
+    "Outline tiles": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fichas de contorno"
+          }
+        }
+      }
+    },
     "Pairs": {
       "localizations": {
         "es": {
@@ -1535,6 +1675,16 @@
         }
       }
     },
+    "Rewards": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recompensas"
+          }
+        }
+      }
+    },
     "Row clear": {
       "localizations": {
         "es": {
@@ -1568,12 +1718,32 @@
         }
       }
     },
+    "Sage & Coral theme": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema Salvia y coral"
+          }
+        }
+      }
+    },
     "Sage & Sand": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Salvia y arena"
+          }
+        }
+      }
+    },
+    "Sage & Sand theme": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema Salvia y arena"
           }
         }
       }
@@ -1954,6 +2124,16 @@
         }
       }
     },
+    "Wave row clear": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fila completa: ola"
+          }
+        }
+      }
+    },
     "With only cleared cells between them, numbers still connect, and it's worth more: 4 points. Match the 7 and the 3.": {
       "localizations": {
         "es": {
@@ -2090,6 +2270,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu racha"
+          }
+        }
+      }
+    },
+    "of %lld": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de %lld"
           }
         }
       }

@@ -205,6 +205,8 @@ Noctámbulo y Economía eran ocultos; desde el 2026-10-28 muestran su condición
 
 Categorías en Colección: mazo, reverso, tablero, efecto de victoria, pack de sonido, ícono; con Números rojos, Pistas (2026-11-10).
 
+**Colección en dos pestañas (2026-11-13, como Quiet Words):** arriba, `Segments` **Recompensas · Logros** (Words además tiene Álbum). Recompensas: las categorías de siempre y, con Números rojos, la sección Pistas. Logros: "N ganados de M" y una fila por logro con nombre, condición, progreso cuando cuenta algo (racha y victorias), sello si está ganado y la recompensa (`Achievement.reward`, que `AchievementRewardTests` compara con el `unlockedBy` de cada recompensa). Números rojos sin ganar: "Logro oculto · Sigue jugando…", sin condición ni recompensa. UI tests `testAchievementsTab` y `testCollectionTabsDemo` (capturas de las dos pestañas con `-demo`; `TEST_RUNNER_COLLECTION_LANGUAGE=es` para español).
+
 ## Estética y UX
 
 - **Misma UI y colores que Quiet Numbers**, vía QuietKit: temas por rol (`Theme`), SF Pro Rounded con `.monospacedDigit()`, botones redondos arriba, puntaje grande centrado, barra inferior al alcance del pulgar, splash de Quiet Studios.

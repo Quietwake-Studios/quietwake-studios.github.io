@@ -1,4 +1,5 @@
 import Foundation
+import QuietSolitaireCore
 import Testing
 @testable import Quiet_Solitaire
 
@@ -43,5 +44,18 @@ import Testing
         #expect(BoardChoice.sageSand.unlockedBy == .noHints)
         #expect(BoardChoice.sageCoral.unlockedBy == .tenWins)
         #expect(BoardChoice.indigoPeach.unlockedBy == .consistency)
+    }
+}
+
+/// Collection › Achievements says what each achievement unlocks: it must match the rewards.
+@Suite struct AchievementRewardTests {
+    @Test func everyRewardLineMatchesAnUnlock() {
+        let unlocks = Set(BoardChoice.allCases.compactMap(\.unlockedBy) + DeckStyle.allCases.compactMap(\.unlockedBy)
+            + CardBack.allCases.compactMap(\.unlockedBy) + VictoryEffect.allCases.compactMap(\.unlockedBy)
+            + AppIconChoice.allCases.compactMap(\.unlockedBy))
+            .union([.inTheRed]) // Cheaper hints, not a cosmetic.
+        for achievement in Achievement.allCases {
+            #expect((achievement.reward != nil) == unlocks.contains(achievement), "\(achievement)")
+        }
     }
 }

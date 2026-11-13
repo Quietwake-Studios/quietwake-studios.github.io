@@ -25,7 +25,7 @@ extension Achievement {
         case .firstWin: "Solve your first sudoku."
         case .noMistakes: "Solve a sudoku without mistakes."
         case .noHints: "Solve a sudoku without hints."
-        case .noNotes: "Solve a medium or harder sudoku without notes."
+        case .noNotes: "Solve a hard or expert sudoku without notes."
         case .tenWins: "Solve 10 sudokus."
         case .consistency: "Complete 7 daily challenges in a row."
         case .habit: "Complete 30 daily challenges in a row."
@@ -34,6 +34,25 @@ extension Achievement {
         case .nightOwl: "Solve a daily challenge between midnight and 4 a.m."
         case .centennial: "Solve 100 sudokus."
         case .inTheRed: "Take your score below zero."
+        }
+    }
+
+    /// What it unlocks, for Collection › Achievements (nil: nothing to unlock). Matches each
+    /// reward's `unlockedBy` (`AchievementRewardTests`).
+    var reward: LocalizedStringResource? {
+        switch self {
+        case .firstWin: nil
+        case .noMistakes: "Classic digits"
+        case .noHints: "Sage & Sand board"
+        case .noNotes: "Typewriter digits"
+        case .tenWins: "Notes in color"
+        case .consistency: "Indigo & Peach board"
+        case .habit: "Wave victory"
+        case .expert: "Pen digits"
+        case .quick: "Soft highlight"
+        case .nightOwl: "Sage & Coral board"
+        case .centennial: "Gold icon"
+        case .inTheRed: "Cheaper hints in classic"
         }
     }
 
@@ -65,7 +84,8 @@ extension Technique {
     var title: LocalizedStringResource {
         switch self {
         case .fullHouse: "Last empty cell"
-        case .hiddenSingle: "Only place"
+        case .hiddenSingleBox: "Only place in a box"
+        case .hiddenSingleLine: "Only place in a line"
         case .nakedSingle: "Only digit"
         case .pointing: "Pointing"
         case .claiming: "Box and line"
@@ -87,7 +107,8 @@ extension Technique {
     var explanation: LocalizedStringResource {
         switch self {
         case .fullHouse: "A row, column or box with one empty cell: it takes the missing digit."
-        case .hiddenSingle: "In a row, column or box, a digit fits in only one cell because its other copies rule out the rest."
+        case .hiddenSingleBox: "In a box, a digit fits in only one cell because its other copies rule out the rest."
+        case .hiddenSingleLine: "The same on a row or column: a digit fits in only one of its cells. Harder to spot than in a box."
         case .nakedSingle: "A cell's row, column and box already hold eight different digits: the ninth goes there."
         case .pointing: "In a box, a digit's only cells lie on one line. It must be there, so it's not elsewhere on that line."
         case .claiming: "On a row or column, a digit's only cells lie in one box. It's not in the rest of that box."

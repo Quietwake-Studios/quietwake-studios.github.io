@@ -65,7 +65,7 @@ final class CollectionUITests: XCTestCase {
         app.buttons["collection"].tap()
         XCTAssertTrue(app.buttons["Petróleo y coral"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.descendants(matching: .any)["cheapHints"].exists)
-        let hidden = inTheRedRow(app)
+        let hidden = inTheRedRow(app, tab: "Logros")
         XCTAssertTrue(hidden.label.contains("Logro oculto"), hidden.label)
         XCTAssertTrue(hidden.label.contains("Sigue jugando"), hidden.label)
         XCTAssertFalse(hidden.label.contains("Números rojos"), hidden.label)
@@ -95,19 +95,69 @@ final class CollectionUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Pistas más baratas"].exists)
         XCTAssertTrue(app.buttons["Petróleo y coral"].exists)
         snapshot(app, "collection-cheap-hints-es")
-        let earned = inTheRedRow(app)
+        let earned = inTheRedRow(app, tab: "Logros")
         XCTAssertTrue(earned.label.contains("Números rojos"), earned.label)
         XCTAssertFalse(earned.label.contains("Logro oculto"), earned.label)
     }
 
-    /// "In the Red" in Collection's achievements, at the bottom of the list.
+    /// "In the Red" in Collection › Achievements, at the bottom of the list.
     @MainActor
-    private func inTheRedRow(_ app: XCUIApplication) -> XCUIElement {
+    private func inTheRedRow(_ app: XCUIApplication, tab: String) -> XCUIElement {
+        app.buttons[tab].tap()
         let row = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
         for _ in 0..<8 where !row.isHittable { app.swipeUp() }
         XCTAssertTrue(row.waitForExistence(timeout: 3))
         snapshot(app, "collection-in-the-red")
         return row
+    }
+
+    /// Collection › Achievements (2026-11-13, like Quiet Words): "N earned of M", each
+    /// achievement with its condition, progress when it counts something and its reward; the
+    /// hidden one says only "Hidden achievement" until earned.
+    @MainActor
+    func testAchievementsTab() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        app.buttons["collection"].tap()
+        XCTAssertTrue(app.buttons["Rewards"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Teal & Coral"].exists)
+        app.buttons["Achievements"].tap()
+        let header = app.descendants(matching: .any)["achievementsHeader"].firstMatch
+        XCTAssertTrue(header.waitForExistence(timeout: 3))
+        XCTAssertTrue(header.label.contains("0 earned"), header.label)
+        XCTAssertTrue(header.label.contains("of 11"), header.label)
+        let first = app.descendants(matching: .any)["achievement-firstStep"].firstMatch
+        XCTAssertTrue(first.label.contains("Clear your first board or finish your first game."), first.label)
+        let sweeper = app.descendants(matching: .any)["achievement-sweeper"].firstMatch
+        for _ in 0..<4 where !sweeper.isHittable { app.swipeUp() }
+        XCTAssertTrue(sweeper.label.contains("0 of 100 rows"), sweeper.label)
+        XCTAssertTrue(sweeper.label.contains("Wave row clear"), sweeper.label)
+        XCTAssertFalse(app.buttons["Teal & Coral"].exists)
+        let red = app.descendants(matching: .any)["achievement-inTheRed"].firstMatch
+        for _ in 0..<6 where !red.isHittable { app.swipeUp() }
+        XCTAssertTrue(red.label.contains("Hidden achievement"), red.label)
+        XCTAssertFalse(red.label.contains("below zero"), red.label)
+        XCTAssertFalse(red.label.contains("Cheaper hints"), red.label)
+        snapshot(app, "collection-achievements")
+    }
+
+    /// Both Collection tabs with the demo state, for design review. The language comes from
+    /// `COLLECTION_LANGUAGE` (`TEST_RUNNER_COLLECTION_LANGUAGE=es xcodebuild test …`), English by default.
+    @MainActor
+    func testCollectionTabsDemo() {
+        let spanish = ProcessInfo.processInfo.environment["COLLECTION_LANGUAGE"] == "es"
+        let app = XCUIApplication()
+        app.launchArguments = ["-demo"] + (spanish ? ["-AppleLanguages", "(es)", "-AppleLocale", "es_CO"]
+                                                   : ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        app.launch()
+        app.buttons["collection"].tap()
+        let achievements = app.buttons[spanish ? "Logros" : "Achievements"]
+        XCTAssertTrue(achievements.waitForExistence(timeout: 5))
+        snapshot(app, "collection-rewards")
+        achievements.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["achievementsHeader"].waitForExistence(timeout: 3))
+        snapshot(app, "collection-achievements")
     }
 
     /// Signed out of Game Center, leaderboards explain how to sign in instead of failing.

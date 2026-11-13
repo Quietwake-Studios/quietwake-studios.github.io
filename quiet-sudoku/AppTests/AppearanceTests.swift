@@ -1,4 +1,5 @@
 import Foundation
+import QuietSudokuCore
 import Testing
 @testable import Quiet_Sudoku
 
@@ -45,5 +46,18 @@ import Testing
     @Test func everyThemeIsAPaletteAndKeepsItsAchievement() {
         #expect(BoardChoice.allCases.map(\.palette) == [.tealCoral, .sageSand, .indigoPeach, .sageCoral, .highContrast])
         #expect(BoardChoice.allCases.compactMap(\.unlockedBy) == [.noHints, .consistency, .nightOwl])
+    }
+}
+
+/// Collection › Achievements says what each achievement unlocks: it must match the rewards.
+@Suite struct AchievementRewardTests {
+    @Test func everyRewardLineMatchesAnUnlock() {
+        let unlocks = Set(BoardChoice.allCases.compactMap(\.unlockedBy) + DigitStyle.allCases.compactMap(\.unlockedBy)
+            + NotesStyle.allCases.compactMap(\.unlockedBy) + HighlightStyle.allCases.compactMap(\.unlockedBy)
+            + VictoryEffect.allCases.compactMap(\.unlockedBy) + AppIconChoice.allCases.compactMap(\.unlockedBy))
+            .union([.inTheRed]) // Cheaper hints, not a cosmetic.
+        for achievement in Achievement.allCases {
+            #expect((achievement.reward != nil) == unlocks.contains(achievement), "\(achievement)")
+        }
     }
 }

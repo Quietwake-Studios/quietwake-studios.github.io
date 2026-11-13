@@ -39,6 +39,26 @@ extension Achievement {
         }
     }
 
+    /// What it unlocks, for Collection › Achievements (nil: nothing to unlock). Matches each
+    /// reward's `unlockedBy` (`AchievementRewardTests`).
+    var reward: LocalizedStringResource? {
+        switch self {
+        case .firstWin: nil
+        case .noUndo: "Coral card back"
+        case .noHints: "Sage & Sand board"
+        case .onePass: "Classic deck"
+        case .tenWins: "Sage & Coral board"
+        case .consistency: "Indigo & Peach board"
+        case .habit: "Illustrated deck"
+        case .ladder: "Linen card back"
+        case .centennial: "Gold card back and gold icon"
+        case .nightOwl: "Night card back"
+        case .fiftyWins: "Cascade victory"
+        case .economy: "Pixel deck"
+        case .inTheRed: "Cheaper hints in classic"
+        }
+    }
+
     /// Game Center identifier (App Store Connect).
     var gameCenterID: String {
         "qs_" + rawValue.replacing(/([A-Z])/) { "_" + $0.output.1.lowercased() }
