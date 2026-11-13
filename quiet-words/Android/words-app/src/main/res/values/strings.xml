@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- From iOS/App/Resources/Localizable.xcstrings (only the keys Android uses). -->
+<resources>
+    <string name="app_name" translatable="false">Quiet Words</string>
+    <!-- Written in their own language on purpose (same on iOS). -->
+    <string name="words_title_en" translatable="false">English words</string>
+    <string name="words_title_es" translatable="false">Palabras en español</string>
+
+    <string name="back">Back</string>
+    <string name="menu">Menu</string>
+    <string name="cancel">Cancel</string>
+    <string name="board">Board</string>
+    <string name="home">Home</string>
+    <string name="done">Done</string>
+    <string name="play">Play</string>
+    <string name="continue_">Continue</string>
+    <string name="skip">Skip</string>
+    <string name="new_game">New Game</string>
+    <string name="start_over">Start over</string>
+    <string name="start_over_question">Start this puzzle over?</string>
+
+    <string name="tagline">Your 5-minute break.</string>
+    <string name="daily_challenge">Daily challenge</string>
+    <string name="pair">%1$s · %2$s</string>
+
+    <string name="level_gentle">Gentle</string>
+    <string name="level_medium">Medium</string>
+    <string name="level_hard">Hard</string>
+    <string name="level_detail">%1$d×%2$d · about %3$d words · %4$d directions</string>
+
+    <string name="language_english">English</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="words_in">Words in %s</string>
+
+    <string name="surprise">Surprise</string>
+    <string name="any_theme">Any theme</string>
+    <string name="play_theme">Play %s</string>
+    <string name="play_surprise">Play a surprise</string>
+
+    <string name="score_a11y">Score %d</string>
+    <string name="context_free">%1$s · %2$s · %3$s</string>
+    <string name="context_daily">Daily · %1$s · %2$s</string>
+    <string name="words">Words</string>
+    <string name="found_of">%1$d of %2$d found</string>
+    <string name="word_found">%s, found</string>
+    <string name="word_to_find">%s, to find</string>
+    <string name="hint">Hint</string>
+    <string name="hint_a11y">Hint, costs %d points</string>
+    <string name="guess">Guess</string>
+    <string name="guess_a11y">Guess the hidden word, %d points</string>
+
+    <string name="cell">%1$s, row %2$d, column %3$d</string>
+    <string name="cell_first">%1$s, row %2$d, column %3$d, first letter</string>
+    <string name="cell_found">%1$s, row %2$d, column %3$d, in a found word</string>
+
+    <string name="hidden_word">Hidden word</string>
+    <plurals name="hidden_caption">
+        <item quantity="one">%d letter · the leftover one</item>
+        <item quantity="other">%d letters · the leftover ones</item>
+    </plurals>
+    <string name="hidden_guessed">Guessed · +%d</string>
+    <string name="hidden_revealed">Revealed · +%d</string>
+    <plurals name="hidden_a11y">
+        <item quantity="one">Hidden word, %d letter</item>
+        <item quantity="other">Hidden word, %d letters</item>
+    </plurals>
+    <string name="hidden_a11y_shown">Hidden word: %s</string>
+
+    <string name="guess_title">Guess the hidden word</string>
+    <string name="guess_explain">A word of the theme made of the letters no word uses. Get it now for +%d.</string>
+    <plurals name="tries_left">
+        <item quantity="one">%d try left · a miss costs nothing</item>
+        <item quantity="other">%d tries left · a miss costs nothing</item>
+    </plurals>
+
+    <string name="summary_free">Puzzle complete!</string>
+    <string name="summary_daily">Challenge complete!</string>
+    <string name="leftover_letters">The leftover letters</string>
+    <string name="time">Time</string>
+    <string name="time_bonus">Time bonus</string>
+    <string name="hints">Hints</string>
+    <string name="summary_hidden_guessed">guessed early · +%d</string>
+    <string name="summary_hidden_revealed">revealed · +%d</string>
+
+    <string name="step_of">Step %1$d of %2$d</string>
+    <string name="which_words">Which words do you want to find?</string>
+    <string name="app_stays">The app stays in your language. You can change this anytime where you start a game, or in Settings.</string>
+    <string name="themed_en">Themed lists in English</string>
+    <string name="themed_es">Themed lists in Spanish, with Ñ</string>
+    <string name="find_word">Find %s</string>
+    <string name="now_word">Now %s</string>
+    <string name="tutorial_drag">Drag from the first letter to the last.</string>
+    <string name="tutorial_tap">Or tap its first letter, then its last. Words can run down and diagonally too.</string>
+    <string name="tutorial_hidden_title">The hidden word</string>
+    <string name="tutorial_hidden">The letters no word uses spell a word of the theme. Guess it early for +100, or it shows up at the end.</string>
+    <string name="start_playing">Start playing</string>
+</resources>

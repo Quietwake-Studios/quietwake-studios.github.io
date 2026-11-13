@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back">Volver</string>
+    <string name="menu">Menú</string>
+    <string name="cancel">Cancelar</string>
+    <string name="board">Tablero</string>
+    <string name="home">Inicio</string>
+    <string name="done">Listo</string>
+    <string name="play">Jugar</string>
+    <string name="continue_">Continuar</string>
+    <string name="skip">Saltar</string>
+    <string name="new_game">Nueva partida</string>
+    <string name="start_over">Empezar de nuevo</string>
+    <string name="start_over_question">¿Empezar esta sopa de nuevo?</string>
+
+    <string name="tagline">Tu pausa de 5 minutos.</string>
+    <string name="daily_challenge">Reto diario</string>
+    <string name="pair">%1$s · %2$s</string>
+
+    <string name="level_gentle">Suave</string>
+    <string name="level_medium">Medio</string>
+    <string name="level_hard">Difícil</string>
+    <string name="level_detail">%1$d×%2$d · unas %3$d palabras · %4$d direcciones</string>
+
+    <string name="language_english">inglés</string>
+    <string name="language_spanish">español</string>
+    <string name="words_in">Palabras en %s</string>
+
+    <string name="surprise">Sorpresa</string>
+    <string name="any_theme">Cualquier tema</string>
+    <string name="play_theme">Jugar %s</string>
+    <string name="play_surprise">Jugar una sorpresa</string>
+
+    <string name="score_a11y">Puntaje %d</string>
+    <string name="context_free">%1$s · %2$s · %3$s</string>
+    <string name="context_daily">Reto · %1$s · %2$s</string>
+    <string name="words">Palabras</string>
+    <string name="found_of">%1$d de %2$d encontradas</string>
+    <string name="word_found">%s, encontrada</string>
+    <string name="word_to_find">%s, por encontrar</string>
+    <string name="hint">Pista</string>
+    <string name="hint_a11y">Pista, cuesta %d puntos</string>
+    <string name="guess">Adivinar</string>
+    <string name="guess_a11y">Adivinar la palabra oculta, %d puntos</string>
+
+    <string name="cell">%1$s, fila %2$d, columna %3$d</string>
+    <string name="cell_first">%1$s, fila %2$d, columna %3$d, primera letra</string>
+    <string name="cell_found">%1$s, fila %2$d, columna %3$d, en una palabra encontrada</string>
+
+    <string name="hidden_word">Palabra oculta</string>
+    <plurals name="hidden_caption">
+        <item quantity="one">%d letra · la que sobra</item>
+        <item quantity="other">%d letras · las que sobran</item>
+    </plurals>
+    <string name="hidden_guessed">Adivinada · +%d</string>
+    <string name="hidden_revealed">Revelada · +%d</string>
+    <plurals name="hidden_a11y">
+        <item quantity="one">Palabra oculta, %d letra</item>
+        <item quantity="other">Palabra oculta, %d letras</item>
+    </plurals>
+    <string name="hidden_a11y_shown">Palabra oculta: %s</string>
+
+    <string name="guess_title">Adivina la palabra oculta</string>
+    <string name="guess_explain">Una palabra del tema hecha con las letras que no usa ninguna palabra. Si la adivinas ahora, +%d.</string>
+    <plurals name="tries_left">
+        <item quantity="one">Queda %d intento · fallar no cuesta</item>
+        <item quantity="other">Quedan %d intentos · fallar no cuesta</item>
+    </plurals>
+
+    <string name="summary_free">¡Sopa completa!</string>
+    <string name="summary_daily">¡Reto completado!</string>
+    <string name="leftover_letters">Las letras que sobraban</string>
+    <string name="time">Tiempo</string>
+    <string name="time_bonus">Bono por tiempo</string>
+    <string name="hints">Pistas</string>
+    <string name="summary_hidden_guessed">adivinada antes · +%d</string>
+    <string name="summary_hidden_revealed">revelada · +%d</string>
+
+    <string name="step_of">Paso %1$d de %2$d</string>
+    <string name="which_words">¿Qué palabras quieres encontrar?</string>
+    <string name="app_stays">La app sigue en tu idioma. Puedes cambiarlo cuando quieras donde empiezas una partida, o en Ajustes.</string>
+    <string name="themed_en">Listas temáticas en inglés</string>
+    <string name="themed_es">Listas temáticas en español, con Ñ</string>
+    <string name="find_word">Encuentra %s</string>
+    <string name="now_word">Ahora %s</string>
+    <string name="tutorial_drag">Arrastra de la primera letra a la última.</string>
+    <string name="tutorial_tap">O toca su primera letra y luego la última. Las palabras también van hacia abajo y en diagonal.</string>
+    <string name="tutorial_hidden_title">La palabra oculta</string>
+    <string name="tutorial_hidden">Las letras que no usa ninguna palabra forman una palabra del tema. Adivínala antes por +100, o aparece al final.</string>
+    <string name="start_playing">Empezar a jugar</string>
+</resources>

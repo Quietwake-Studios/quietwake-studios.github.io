@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Teal & coral background, so the window matches Compose before the first frame. -->
+    <color name="window_background">#F3F7F8</color>
+    <style name="Theme.QuietWords" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+    <!-- System splash (SplashScreen API): the background only; Compose draws the lockup after it. -->
+    <style name="Theme.QuietWords.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/window_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_blank</item>
+        <item name="postSplashScreenTheme">@style/Theme.QuietWords</item>
+    </style>
+</resources>

@@ -20,4 +20,8 @@ rootProject.name = "quiet-words"
 include(":quietkit-core")
 project(":quietkit-core").projectDir = file("../../QuietKit/Android/quietkit-core")
 
+include(":quietkit-ui")
+project(":quietkit-ui").projectDir = file("../../QuietKit/Android/quietkit-ui")
+
 include(":words-core")
+include(":words-app")
