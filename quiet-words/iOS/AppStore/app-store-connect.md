@@ -21,7 +21,7 @@ Todo lo necesario para crear y publicar la app. Textos en `fastlane/metadata/{en
 | Categoría | Juegos, subcategorías **Palabras** y **Puzle** (`upload-metadata.py` la pone) |
 | Clasificación por edad | Cuestionario: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+** |
 | Derechos de contenido | No contiene contenido de terceros (listas escritas por nosotros; definiciones del diccionario del sistema, que no viajan en la app) |
-| Copyright | © 2026 Quiet Studios |
+| Copyright | © 2026 Quietwake Studios |
 | Localizaciones | English (U.S.) y Spanish (Mexico) |
 
 ## Precio y disponibilidad
@@ -30,7 +30,7 @@ Gratis para siempre, todos los países. Sin compras dentro de la app.
 
 ## Privacidad
 
-- URL de la política: `https://tavoohoh.github.io/quiet-studios/quiet-words/privacy.html` (GitHub Pages desde `/docs`, se publica con el push a main).
+- URL de la política: `https://quietwake.github.io/quiet-words/privacy.html` (GitHub Pages desde `/docs`, se publica con el push a main).
 - Etiqueta: **Data Not Collected**. `App/Resources/PrivacyInfo.xcprivacy`: sin rastreo, cero tipos de datos, `UserDefaults` con razón `CA92.1`.
 
 ## Versión 1.0
@@ -39,8 +39,8 @@ Gratis para siempre, todos los países. Sin compras dentro de la app.
 |---|---|
 | Capturas | Pendientes hasta tener capturas reales (no hacen falta para TestFlight interno) |
 | Texto promocional, descripción, palabras clave, novedades | `fastlane/metadata/<idioma>/*.txt` |
-| URL de soporte | `https://tavoohoh.github.io/quiet-studios/quiet-words/support.html` |
-| URL de marketing | `https://tavoohoh.github.io/quiet-studios/quiet-words/` |
+| URL de soporte | `https://quietwake.github.io/quiet-words/support.html` |
+| URL de marketing | `https://quietwake.github.io/quiet-words/` |
 | Game Center | 11 logros (`qw_in_the_red` aún sin crear en App Store Connect, 2026-11-09) y 5 clasificaciones (`game-center.json`); activar Game Center en la versión y elegirlos |
 | Cifrado | No usa cifrado propio (`ITSAppUsesNonExemptEncryption = NO`) |
 | Publicación | Automática al aprobarse |

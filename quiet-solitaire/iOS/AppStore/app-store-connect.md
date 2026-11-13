@@ -21,7 +21,7 @@ Todo lo necesario para crear y publicar la app. App creada el 2026-10-28 (ID `68
 | Categoría | Juegos, subcategorías **Cartas** y Puzle (sin categoría secundaria) |
 | Clasificación por edad | Cuestionario: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+**. Sin contenido generado por usuarios, sin navegador web, sin compras, sin juegos de azar con dinero (es solitario de un jugador, sin apuestas) |
 | Derechos de contenido | No contiene contenido de terceros (arte, figuras y palos dibujados para la app) |
-| Copyright | © 2026 Quiet Studios |
+| Copyright | © 2026 Quietwake Studios |
 | Localizaciones | English (U.S.) y Spanish (Mexico) |
 
 ## Precio y disponibilidad
@@ -30,7 +30,7 @@ Gratis, todos los países. Sin compras dentro de la app.
 
 ## Privacidad
 
-- URL de la política: `https://tavoohoh.github.io/quiet-studios/quiet-solitaire/privacy.html` (se publica con GitHub Pages desde `/docs` al hacer push).
+- URL de la política: `https://quietwake.github.io/quiet-solitaire/privacy.html` (se publica con GitHub Pages desde `/docs` al hacer push).
 - Etiqueta: **Data Not Collected** (mismo criterio que Quiet Numbers: Game Center e iCloud los gestiona Apple y nunca vemos esos datos). `App/Resources/PrivacyInfo.xcprivacy`: sin rastreo, cero tipos de datos, `UserDefaults` con razón `CA92.1`.
 
 ## Versión 1.0
@@ -41,8 +41,8 @@ Gratis, todos los países. Sin compras dentro de la app.
 | Capturas iPhone 6.3" (1206×2622) | `AppStore/store-images/iphone-6.3/<en|es>/` (si App Store Connect las pide aparte) |
 | Capturas iPad 13" (2064×2752) | `AppStore/store-images/ipad-13/<en|es>/` |
 | Texto promocional, descripción, palabras clave, novedades | `fastlane/metadata/<idioma>/*.txt` |
-| URL de soporte | `https://tavoohoh.github.io/quiet-studios/quiet-solitaire/support.html` |
-| URL de marketing | `https://tavoohoh.github.io/quiet-studios/quiet-solitaire/` |
+| URL de soporte | `https://quietwake.github.io/quiet-solitaire/support.html` |
+| URL de marketing | `https://quietwake.github.io/quiet-solitaire/` |
 | Game Center | 13 logros y 3 clasificaciones creados (`scripts/setup-game-center.py`). Falta activar Game Center en la versión y elegirlos ahí |
 | Cifrado | No usa cifrado propio (`ITSAppUsesNonExemptEncryption = NO` en el Info.plist) |
 | Publicación | Automática al aprobarse (como Quiet Numbers) |
@@ -71,7 +71,7 @@ En `app-review-notes.md` (notas en inglés y guion del video).
 
 Cinco por dispositivo e idioma, en este orden (`scripts/screenshots.sh` y luego `scripts/store-images.py`):
 
-Línea "la capa gratis de Quiet Studios" (aprobada el 2026-11-05): qué es el juego y por qué existe; "gratis" no va en las imágenes, el porqué está al final de la descripción y en la web de soporte.
+Línea "la capa gratis de Quietwake Studios" (aprobada el 2026-11-05): qué es el juego y por qué existe; "gratis" no va en las imágenes, el porqué está al final de la descripción y en la web de soporte.
 
 | # | Archivo | English | Español |
 |---|---|---|---|

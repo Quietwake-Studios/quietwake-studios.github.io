@@ -1,7 +1,7 @@
 // swift-tools-version: 6.0
 import PackageDescription
 
-/// Shared by every Quiet Studios app. `QuietCore` is pure logic (no UI, no GameKit) and is
+/// Shared by every Quietwake Studios app. `QuietCore` is pure logic (no UI, no GameKit) and is
 /// tested with `swift test`; `QuietUI` is the design system and services, built by each app.
 let package = Package(
     name: "QuietKit",

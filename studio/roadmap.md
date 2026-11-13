@@ -1,4 +1,4 @@
-# Hoja de ruta de Quiet Studios
+# Hoja de ruta de Quietwake Studios
 
 Objetivo (2026-10-29): probar el mercado con juegos gratis, sin anuncios ni compras, y más adelante lanzar un juego más completo **de pago** para recuperar la licencia de Apple (USD 99 al año) y el costo de crear los juegos.
 

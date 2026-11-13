@@ -1,6 +1,6 @@
 # Quiet Sudoku
 
-**Canvas de diseño:** [Quiet Sudoku](https://claude.ai/artifact/CUwSvM9TWjrAphXWbcrGFL) · Sistema de diseño de la familia: [Quiet Studios](https://claude.ai/artifact/59yz1mHLFU3u3jvSfugf7B)
+**Canvas de diseño:** [Quiet Sudoku](https://claude.ai/artifact/CUwSvM9TWjrAphXWbcrGFL) · Sistema de diseño de la familia: [Quiet](https://claude.ai/artifact/59yz1mHLFU3u3jvSfugf7B)
 
 Sudoku clásico 9×9: llenar la cuadrícula para que cada fila, cada columna y cada caja de 3×3 tenga los números del 1 al 9 una sola vez. Gratis para siempre, sin anuncios, sin compras y sin recolectar datos. Tercera app de la familia Quiet (ver `../CLAUDE.md` y `../studio/roadmap.md`).
 

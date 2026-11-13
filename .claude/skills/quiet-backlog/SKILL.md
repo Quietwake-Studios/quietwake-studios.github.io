@@ -1,6 +1,6 @@
 ---
 name: quiet-backlog
-description: Administrar el backlog de cada juego de Quiet Studios (quiet-<app>/BACKLOG.md) - anotar ideas y pendientes, revisar y priorizar, mover algo a "en curso" y cerrarlo al publicarlo. Usar cuando el usuario diga "déjalo en el backlog", pregunte qué falta o qué sigue en un juego, o al terminar una versión.
+description: Administrar el backlog de cada juego de Quietwake Studios (quiet-<app>/BACKLOG.md) - anotar ideas y pendientes, revisar y priorizar, mover algo a "en curso" y cerrarlo al publicarlo. Usar cuando el usuario diga "déjalo en el backlog", pregunte qué falta o qué sigue en un juego, o al terminar una versión.
 ---
 
 # Backlog de un juego

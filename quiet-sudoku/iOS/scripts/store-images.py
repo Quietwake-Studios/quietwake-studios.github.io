@@ -30,7 +30,7 @@ DEVICES = {
                     inner_radius=34, text_scale=1.55, pad=(84, 72), callout_scale=1.6),
 }
 
-# Quiet Studios' free-collection copy (2026-11-05): say why the game exists, never sell
+# Quietwake Studios' free-collection copy (2026-11-05): say why the game exists, never sell
 # "free" or "no ads" as an offer.
 # Title in two lines (white, then peach) and a subtitle broken at its punctuation, never
 # leaving a word alone (quiet-release, "Composición de header, búsqueda y capturas").

@@ -31,7 +31,7 @@ DEVICES = {
                     inner_radius=34, text_scale=1.55, pad=(84, 72), callout_scale=1.6),
 }
 
-# "La capa gratis de Quiet Studios" (2026-11-05): what the game is and why it exists; the word
+# "La capa gratis de Quietwake Studios" (2026-11-05): what the game is and why it exists; the word
 # "free" stays out of the images (the "Why is it free?" paragraph is in the description).
 TEXT = {
     "en": {

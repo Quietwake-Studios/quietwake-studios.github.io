@@ -38,7 +38,7 @@ Antes de grabar:
 
 Guion (nombres de la interfaz en inglés, con el iPhone en inglés):
 
-1. **Abrir la app** desde la pantalla de inicio de iOS: splash de Quiet Studios → Home.
+1. **Abrir la app** desde la pantalla de inicio de iOS: splash de Quietwake Studios → Home.
 2. **New Game** → el tutorial completo (seis jugadas guiadas) → arranca una partida.
 3. **Partida clásica:** tocar el mazo un par de veces (robar), mover una carta a una columna y otra a una fundación, **Undo**, **Hint** (se marca la jugada) y hacerla.
 4. Volver a Home (flecha atrás) → **Daily Challenge** → **Play**. Hacer unas jugadas.

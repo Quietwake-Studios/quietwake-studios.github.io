@@ -21,7 +21,7 @@ Todo lo necesario para crear y publicar la app. Textos en `fastlane/metadata/{en
 | Categoría | Juegos, subcategorías **Puzle** y Juegos de mesa (`upload-metadata.py` la pone) |
 | Clasificación por edad | Cuestionario: todo "Ninguno"/"No" salvo **Contests: Infrequent** (clasificaciones y reto diario con amigos: competencia opcional, sin premios; "Frequent" sube a 13+; decisión 2026-11-11) → **4+** |
 | Derechos de contenido | No contiene contenido de terceros (todos los tableros los genera el motor propio) |
-| Copyright | © 2026 Quiet Studios |
+| Copyright | © 2026 Quietwake Studios |
 | Localizaciones | English (U.S.) y Spanish (Mexico) |
 
 ## Precio y disponibilidad
@@ -30,7 +30,7 @@ Gratis para siempre (familia "gratis para siempre", `studio/roadmap.md`), todos 
 
 ## Privacidad
 
-- URL de la política: `https://tavoohoh.github.io/quiet-studios/quiet-sudoku/privacy.html` (GitHub Pages desde `/docs`, se publica con el push a main).
+- URL de la política: `https://quietwake.github.io/quiet-sudoku/privacy.html` (GitHub Pages desde `/docs`, se publica con el push a main).
 - Etiqueta: **Data Not Collected**. `App/Resources/PrivacyInfo.xcprivacy`: sin rastreo, cero tipos de datos, `UserDefaults` con razón `CA92.1`.
 
 ## Versión 1.0
@@ -39,8 +39,8 @@ Gratis para siempre (familia "gratis para siempre", `studio/roadmap.md`), todos 
 |---|---|
 | Capturas | Fase 6 (no hacen falta para TestFlight interno) |
 | Texto promocional, descripción, palabras clave, novedades | `fastlane/metadata/<idioma>/*.txt` |
-| URL de soporte | `https://tavoohoh.github.io/quiet-studios/quiet-sudoku/support.html` |
-| URL de marketing | `https://tavoohoh.github.io/quiet-studios/quiet-sudoku/` |
+| URL de soporte | `https://quietwake.github.io/quiet-sudoku/support.html` |
+| URL de marketing | `https://quietwake.github.io/quiet-sudoku/` |
 | Game Center | 12 logros y 3 clasificaciones (`game-center.json`); activar Game Center en la versión y elegirlos |
 | Cifrado | No usa cifrado propio (`ITSAppUsesNonExemptEncryption = NO`) |
 | Publicación | Automática al aprobarse |

@@ -1,6 +1,6 @@
 ---
 name: quiet-release
-description: Publicar y mantener una app de Quiet Studios en la App Store - subir builds a TestFlight, versiones, ficha (textos, capturas, header y búsqueda), Game Center por la API y la web de soporte. Usar cuando se pida subir un build, preparar una versión, cambiar la ficha o revisar el estado en App Store Connect.
+description: Publicar y mantener una app de Quietwake Studios en la App Store - subir builds a TestFlight, versiones, ficha (textos, capturas, header y búsqueda), Game Center por la API y la web de soporte. Usar cuando se pida subir un build, preparar una versión, cambiar la ficha o revisar el estado en App Store Connect.
 ---
 
 # Publicar y mantener
@@ -41,7 +41,7 @@ Cada app documenta sus comandos exactos en su CLAUDE.md ("Comandos" y "Publicaci
   - Header: + "Nothing to sell. Just play." / "Nada que venderte. Solo juega."
   - Búsqueda: + "Daily challenge with friends. Calm, no catch." / "Reto diario con tus amigos. Tranquilo, sin trampas."
   - Capturas, en este orden: 1 qué es, 2 reto ("A new challenge every day." / "Un reto nuevo cada día."), 3 amigos ("Play with your friends." / "Juega con tus amigos."), 4 recompensas ("Earned by playing." / "Todo se gana jugando." + "<lo propio>, themes and more" / "…, temas y más"), 5 lo propio del juego.
-  - Descripción (último párrafo) y web de soporte: "Why is it free? <App> is part of the free collection from Quiet Studios. We make these games because we enjoy making them and want them to exist: no ads, no purchases, and none of your data collected. There's nothing to sell you. We just want you to play." / "¿Por qué es gratis? <App> es parte de la colección gratuita de Quiet Studios. Hacemos estos juegos porque nos gusta hacerlos y queremos que existan: sin anuncios, sin compras y sin recolectar tus datos. No hay nada que venderte. Solo queremos que juegues."
+  - Descripción (último párrafo) y web de soporte: "Why is it free? <App> is part of the free collection from Quietwake Studios. We make these games because we enjoy making them and want them to exist: no ads, no purchases, and none of your data collected. There's nothing to sell you. We just want you to play." / "¿Por qué es gratis? <App> es parte de la colección gratuita de Quietwake Studios. Hacemos estos juegos porque nos gusta hacerlos y queremos que existan: sin anuncios, sin compras y sin recolectar tus datos. No hay nada que venderte. Solo queremos que juegues."
   - Un juego de pago futuro no usa esta fórmula.
 - **Composición de header, búsqueda y capturas** (decisión 2026-11-05, igual en los tres juegos):
   - Fondo: el degradado teal vivo de la búsqueda (#19BFCD → #0A8AA5, paleta A2), también en el header y en las capturas. Nunca el teal apagado (#0E6B78 o similar).

@@ -1,6 +1,6 @@
 ---
 name: quiet-project-structure
-description: Estructura de proyecto, arquitectura y convenciones de código de las apps de Quiet Studios (SwiftUI, Swift 6, SwiftData, GameKit, QuietKit, XcodeGen). Usar al crear archivos o módulos nuevos, al mover código a QuietKit, o cuando haya dudas de dónde va algo o cómo se prueba.
+description: Estructura de proyecto, arquitectura y convenciones de código de las apps de Quietwake Studios (SwiftUI, Swift 6, SwiftData, GameKit, QuietKit, XcodeGen). Usar al crear archivos o módulos nuevos, al mover código a QuietKit, o cuando haya dudas de dónde va algo o cómo se prueba.
 ---
 
 # Estructura y arquitectura
@@ -8,7 +8,7 @@ description: Estructura de proyecto, arquitectura y convenciones de código de l
 ## El repositorio
 
 ```
-Quiet/                       repo público tavoohoh/quiet-studios
+Quiet/                       repo público quietwake/quietwake.github.io
 ├── CLAUDE.md                filosofía de la familia, links a los sistemas de diseño
 ├── QuietKit/iOS/            paquete Swift compartido (QuietCore + QuietUI)
 ├── QuietKit/Android/        port en Kotlin (quietkit-core), con fixtures generados desde Swift

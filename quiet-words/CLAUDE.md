@@ -1,6 +1,6 @@
 # Quiet Words
 
-**Canvas de diseño:** [Quiet Words](https://claude.ai/artifact/TFyB6fy62EYshzScLAaEKk) · Sistema de diseño de la familia: [Quiet Studios](https://claude.ai/artifact/59yz1mHLFU3u3jvSfugf7B)
+**Canvas de diseño:** [Quiet Words](https://claude.ai/artifact/TFyB6fy62EYshzScLAaEKk) · Sistema de diseño de la familia: [Quiet](https://claude.ai/artifact/59yz1mHLFU3u3jvSfugf7B)
 
 Sopa de letras con **temas para adultos**: cada tablero es una colección de palabras de un tema (Océano, Espacio, Botánica, Café y té…), y las letras que no usa ninguna palabra forman la **palabra oculta**. Lo que la aleja de lo infantil no es el arte sino el vocabulario ("abisal", "nebulosa", "tueste"), la tipografía, la calma y los hápticos; nada de dibujos ni mascotas. Gratis para siempre, sin anuncios, sin compras y sin recolectar datos. Cuarta app de la familia Quiet (ver `../CLAUDE.md` y `../studio/roadmap.md`).
 

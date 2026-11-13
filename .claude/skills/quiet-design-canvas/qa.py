@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""QA de un canvas de diseño de Quiet Studios (plantilla de 5 páginas).
+"""QA de un canvas de diseño de Quietwake Studios (plantilla de 5 páginas).
 
 Uso:
   python3 .claude/skills/quiet-design-canvas/qa.py <carpeta del canvas> <app> <salida>
@@ -39,7 +39,7 @@ def lint(project, assets):
     if pages != PAGES:
         errors.append(f"páginas {pages}; deben ser exactamente {PAGES}")
     if not any(ds.get("artifact") == QUIET_STUDIOS_DS for ds in canvas.get("designSystems", [])):
-        errors.append("falta instalar el sistema de diseño de Quiet Studios (designSystems)")
+        errors.append("falta instalar el sistema de diseño de la familia Quiet (designSystems)")
     boards = canvas.get("boards", {})
     files = {f for f in os.listdir(project) if f.endswith(".dc.html")}
     for f in sorted(files - set(boards)):

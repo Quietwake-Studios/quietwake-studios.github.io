@@ -38,7 +38,7 @@ DEVICES = {
                     bezel=14, radius=48, inner_radius=34, text_scale=1.55, pad=(84, 72), callout_scale=1.6),
 }
 
-# "Quiet Studios' free collection" copy (2026-11-05): what the game is and why it exists, never
+# "Quietwake Studios' free collection" copy (2026-11-05): what the game is and why it exists, never
 # "free" as an offer. 5 has no subtitle. Subtitles are HTML: break with <br> at a period.
 TEXT = {
     "en": {

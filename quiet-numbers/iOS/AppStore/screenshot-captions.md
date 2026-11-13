@@ -2,7 +2,7 @@
 
 Titular y línea de apoyo de cada imagen de `store-images/<dispositivo>/<en|es>/`, compuestas por `scripts/store-images.py` (los textos viven en su `TEXT`). Las de español sirven para es-MX y es-ES. Solo iPhone 6.9" (más 6.3") y iPad 13".
 
-Línea "la capa gratis de Quiet Studios" (aprobada 2026-11-05, para la 1.3): contamos qué es el juego y por qué existe, no vendemos "gratis" ni "sin anuncios" como oferta. La palabra "gratis" no va en las imágenes; el porqué está en el párrafo final de la descripción y en la web de soporte.
+Línea "la capa gratis de Quietwake Studios" (aprobada 2026-11-05, para la 1.3): contamos qué es el juego y por qué existe, no vendemos "gratis" ni "sin anuncios" como oferta. La palabra "gratis" no va en las imágenes; el porqué está en el párrafo final de la descripción y en la web de soporte.
 
 | # | Imagen (captura) | English | Español |
 |---|---|---|---|

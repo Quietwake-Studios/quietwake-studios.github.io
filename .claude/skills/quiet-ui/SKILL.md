@@ -1,11 +1,11 @@
 ---
 name: quiet-ui
-description: Componentes, pantallas que se repiten y patrones de interacción de las apps de Quiet Studios (QuietUI). Usar al construir o modificar cualquier pantalla, al agregar un componente, o al decidir animaciones, hápticos, textos y accesibilidad.
+description: Componentes, pantallas que se repiten y patrones de interacción de las apps de Quietwake Studios (QuietUI). Usar al construir o modificar cualquier pantalla, al agregar un componente, o al decidir animaciones, hápticos, textos y accesibilidad.
 ---
 
 # UI de la familia
 
-Fuente: el sistema de diseño de Quiet Studios (link en `CLAUDE.md` de la raíz; leer su `README.md`, `pantallas.md` y la tarjeta del componente) y el código de `QuietKit/iOS/Sources/QuietUI/`. Si no coinciden, manda el código y se corrige el sistema de diseño.
+Fuente: el sistema de diseño de la familia Quiet (link en `CLAUDE.md` de la raíz; leer su `README.md`, `pantallas.md` y la tarjeta del componente) y el código de `QuietKit/iOS/Sources/QuietUI/`. Si no coinciden, manda el código y se corrige el sistema de diseño.
 
 ## Componentes (QuietUI)
 

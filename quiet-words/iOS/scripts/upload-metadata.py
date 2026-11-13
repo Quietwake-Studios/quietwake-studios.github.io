@@ -22,7 +22,7 @@ METADATA = ROOT / "fastlane/metadata"
 IMAGES = ROOT / "AppStore/store-images"
 BUNDLE_ID = "com.tavoohoh.quietwords"
 LOCALES = {"en-US": "en", "es-MX": "es"}
-COPYRIGHT = "2026 Quiet Studios"
+COPYRIGHT = "2026 Quietwake Studios"
 # Games › Word, with Puzzle as the second subcategory.
 CATEGORY = {"primaryCategory": "GAMES", "primarySubcategoryOne": "GAMES_PUZZLE", "primarySubcategoryTwo": "GAMES_WORD"}
 SCREENSHOTS = {"APP_IPHONE_67": "iphone-6.9", "APP_IPAD_PRO_3GEN_129": "ipad-13"}

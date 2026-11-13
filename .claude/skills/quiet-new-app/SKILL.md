@@ -1,11 +1,11 @@
 ---
 name: quiet-new-app
-description: Crear una app o juego nuevo de la familia Quiet (Quiet Studios), desde la idea hasta el primer build en TestFlight. Usar cuando se pida empezar un juego nuevo, evaluar una mecánica o armar el CLAUDE.md de un proyecto nuevo.
+description: Crear una app o juego nuevo de la familia Quiet (Quietwake Studios), desde la idea hasta el primer build en TestFlight. Usar cuando se pida empezar un juego nuevo, evaluar una mecánica o armar el CLAUDE.md de un proyecto nuevo.
 ---
 
-# Crear una app nueva de Quiet Studios
+# Crear una app nueva de Quietwake Studios
 
-Antes de nada leer `CLAUDE.md` de la raíz (filosofía y reglas de la familia) y el sistema de diseño de Quiet Studios (link en ese CLAUDE.md). Las dos apps existentes son la referencia viva: `quiet-numbers/` (primera, la más completa) y `quiet-solitaire/` (nació ya sobre QuietKit).
+Antes de nada leer `CLAUDE.md` de la raíz (filosofía y reglas de la familia) y el sistema de diseño de la familia Quiet (link en ese CLAUDE.md). Las dos apps existentes son la referencia viva: `quiet-numbers/` (primera, la más completa) y `quiet-solitaire/` (nació ya sobre QuietKit).
 
 ## 0. Decidir la idea (con el usuario)
 

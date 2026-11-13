@@ -1,6 +1,6 @@
 # The Quiet Project
 
-Nombre del estudio (marca visible en las apps, p. ej. el splash): **Quiet Studios**.
+Nombre del estudio: **Quietwake Studios**; en el splash y como marca corta, **Quietwake** (decisión 2026-11-13; antes Quiet Studios, que estaba tomado en Google Play y restringido en Apple; "Studios" y no "Games" para no cerrar la puerta a apps que no sean juegos). Los juegos siguen siendo la familia **Quiet** (Quiet Numbers, Quiet Words…). Web: `https://quietwake.github.io/` (repo `quietwake/quietwake.github.io` en la organización `quietwake`, Pages desde `/docs`); el repo `tavoohoh/quiet-studios` solo redirige los links viejos que tienen las versiones ya enviadas.
 
 Estudio que construye, con ayuda de AI, apps y juegos para la App Store. Cada app parte de una mecánica conocida y no patentada (2048, Number Match, idle/incremental donde las tareas generan moneda del juego para mejorar y facilitar las siguientes tareas, etc.) y la reinterpreta con identidad propia.
 
@@ -64,8 +64,8 @@ Un juego que no cumpla algo de esto lo anota en su `BACKLOG.md` hasta alinearlo.
 
 ## Diseño
 
-- **Sistema de diseño de Quiet Studios:** https://claude.ai/artifact/59yz1mHLFU3u3jvSfugf7B (tokens de color por tema, tipografía, componentes de QuietUI, pantallas que se repiten, reglas de la App Store, logos). Lo genera el código de `QuietKit`; si no coinciden, manda el código y se actualiza el artefacto.
-- **Cada app tiene un solo artefacto de diseño:** un canvas (tipo "Design", título `Quiet <App>`) con 5 páginas: Overview, App Store, Screens, Styles y Components. Solo lleva lo propio del juego; nada que ya esté en el sistema de Quiet Studios (decisión 2026-10-29). Plantilla, QA y procedimiento en `.claude/skills/quiet-design-canvas`. Su link va en la primera línea del `CLAUDE.md` de la app. Una app nueva no empieza a programar pantallas sin él.
+- **Sistema de diseño de la familia Quiet:** https://claude.ai/artifact/59yz1mHLFU3u3jvSfugf7B (tokens de color por tema, tipografía, componentes de QuietUI, pantallas que se repiten, reglas de la App Store, logos). Lo genera el código de `QuietKit`; si no coinciden, manda el código y se actualiza el artefacto.
+- **Cada app tiene un solo artefacto de diseño:** un canvas (tipo "Design", título `Quiet <App>`) con 5 páginas: Overview, App Store, Screens, Styles y Components. Solo lleva lo propio del juego; nada que ya esté en el sistema de Quietwake Studios (decisión 2026-10-29). Plantilla, QA y procedimiento en `.claude/skills/quiet-design-canvas`. Su link va en la primera línea del `CLAUDE.md` de la app. Una app nueva no empieza a programar pantallas sin él.
 - Links: [Quiet Numbers](https://claude.ai/artifact/3Z4eY31mrvGeqPvR8hUaZL) · [Quiet Solitaire](https://claude.ai/artifact/EwWvXPwMtEVpx47drg2AJV) · [Quiet Sudoku](https://claude.ai/artifact/CUwSvM9TWjrAphXWbcrGFL). Los artefactos anteriores (un sistema de diseño y un canvas por app) se borraron el 2026-10-29; sus archivos están en `quiet-<app>/design/backups/pre-plantilla-2026-10-29/`.
 - **Respaldos:** con cada versión aprobada en la App Store se exporta el canvas de esa app como HTML a `quiet-<app>/design/backups/<versión>/` (procedimiento en `quiet-release`). Los artefactos son privados: para compartirlos, menú Share.
 
