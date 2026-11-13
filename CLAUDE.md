@@ -61,6 +61,7 @@ Todos los juegos tienen modo libre y reto diario, y el reto funciona como el de 
 - **Notificaciones (locales, sin servidor):** recordatorio a las 19:00 si no se ha completado el reto de hoy, con lo que hicieron los amigos si ya se sabe; "racha en riesgo" a las 21:00 si sigue sin hacerse y hay racha de 3 o más. Detalle en el backlog de Quiet Numbers.
 - **Al terminar un día pasado (2026-11-13):** el botón del resumen vuelve a la pantalla del Reto diario (calendario), no a Inicio, porque lo normal es seguir rellenando días. Terminar el reto de hoy o una partida libre sigue volviendo a Inicio.
 - **Racha en textos:** "N-day streak" / "Racha de N días" (nunca "N streak").
+- **Restablecer progreso (Ajustes):** pide confirmación con el mismo texto en todos los juegos y plataformas: "Se borra todo el progreso de tu partida." / "All your game progress is erased." Borra partidas, retos, rachas, logros, recompensas y el guardado en la nube; conserva ajustes (idioma, apariencia, sonido, recordatorios) y la marca del pedido de reseña.
 
 Un juego que no cumpla algo de esto lo anota en su `BACKLOG.md` hasta alinearlo.
 

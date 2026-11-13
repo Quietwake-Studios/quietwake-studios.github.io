@@ -6,63 +6,24 @@
   <meta name="color-scheme" content="light dark">
   <title>Support · Quiet Solitaire</title>
   <meta name="description" content="Help with Quiet Solitaire: rules, scoring, daily challenge, Game Center.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%201024'%3E%3Cdefs%3E%3ClinearGradient%20id='bg'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%2319BFCD'/%3E%3Cstop%20offset='1'%20stop-color='%230A8AA5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='1024'%20height='1024'%20rx='230'%20fill='url(%23bg)'/%3E%3Cg%20transform='rotate(-12%20420%20500)'%3E%3Crect%20x='232'%20y='232'%20width='384'%20height='540'%20rx='56'%20fill='%232FD6E4'/%3E%3C/g%3E%3Cg%20transform='rotate(7%20600%20540)'%3E%3Crect%20x='400'%20y='272'%20width='384'%20height='540'%20rx='56'%20fill='%23FFFFFF'/%3E%3Cpath%20d='M12%2020.5c-.4%200-7.9-4.9-9.4-9.6C1.5%207.6%203.6%204.5%206.8%204.5c2.1%200%203.7%201.2%205.2%203.1%201.5-1.9%203.1-3.1%205.2-3.1%203.2%200%205.3%203.1%204.2%206.4-1.5%204.7-9%209.6-9.4%209.6z'%20fill='%23FF9277'%20transform='translate(460.6%20405.1)%20scale(10.9524)'/%3E%3C/g%3E%3C/svg%3E">
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #f3f7f8;
-      --surface: #ffffff;
-      --ink: #16201f;
-      --muted: #5e6f72;
-      --accent: #0e6b78;
-      --line: #e3eaec;
-      --coral: #b9472f;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f1a1d;
-        --surface: #172629;
-        --ink: #e8f1f2;
-        --muted: #8a9da0;
-        --accent: #5bc2cf;
-        --line: #263a3e;
-        --coral: #ff9a85;
-      }
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      -webkit-text-size-adjust: 100%;
-    }
-    main { max-width: 640px; margin: 0 auto; padding: 48px 20px 64px; }
-    header { margin-bottom: 40px; }
-    h1, h2, h3 { font-family: ui-rounded, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.2; }
-    h1 { font-size: 34px; margin: 0 0 8px; }
-    h2 { font-size: 24px; margin: 48px 0 12px; }
-    h3 { font-size: 18px; margin: 28px 0 6px; }
-    p, li { color: var(--ink); }
-    .muted { color: var(--muted); }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    nav { display: flex; flex-wrap: wrap; gap: 16px; font-size: 15px; }
-    .lang { font-size: 15px; color: var(--muted); margin: 0 0 24px; }
-    section + section { border-top: 1px solid var(--line); margin-top: 48px; }
-    .card { background: var(--surface); border-radius: 18px; padding: 20px 22px; margin: 20px 0; }
-    .card ul { margin: 0; padding-left: 20px; }
-    .mark { display: block; margin-bottom: 16px; }
-    footer { margin-top: 56px; font-size: 14px; color: var(--muted); }
-  </style>
+  <link rel="icon" href="../assets/icons/quiet-solitaire.png">
+  <link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
   <main>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../">← Quietwake Studios</a>
+      <span class="sep">›</span>
+      <a href="./">Quiet Solitaire</a>
+      <span class="sep">›</span>
+      <span aria-current="page">Support · Soporte</span>
+    </nav>
     <header>
-      <nav>
+      <img class="mark icon" src="../assets/icons/quiet-solitaire.png" width="72" height="72" alt="">
+      <nav class="tabs">
         <a href="./">Quiet Solitaire</a>
         <a href="privacy.html">Privacy · Privacidad</a>
-        <a href="support.html">Support · Soporte</a>
+        <a href="support.html" aria-current="page">Support · Soporte</a>
       </nav>
     </header>
     <p class="lang"><a href="#en">English</a> · <a href="#es">Español</a></p>
