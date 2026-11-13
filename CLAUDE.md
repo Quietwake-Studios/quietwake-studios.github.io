@@ -20,7 +20,9 @@ Tomamos mecánicas genéricas, nunca nombres, marcas, assets, textos ni arte de 
 
 ## Plataforma
 
-Solo ecosistema Apple (iPhone, iPad, Mac). Ecosistema controlado: lo que funciona en un iPhone con el target soportado funciona en el resto.
+Ecosistema Apple (iPhone, iPad, Mac) primero. Ecosistema controlado: lo que funciona en un iPhone con el target soportado funciona en el resto.
+
+**Android (decisión 2026-11-13):** empieza con Quiet Words, nativo en Kotlin + Compose, en `quiet-words/Android/` (ver su `CLAUDE.md`). El reto del día es el mismo en las dos plataformas y el contenido sale de los mismos archivos; clasificaciones con Google Play Games.
 
 Stack por defecto (cada app puede ajustarlo en su propio CLAUDE.md):
 
@@ -39,6 +41,7 @@ Cada app vive en su propio directorio en la raíz, con su propio `CLAUDE.md` que
 - `quiet-solitaire/` — solitario clásico (Klondike, robar 1). Segunda app, jugable en el simulador.
 - `quiet-sudoku/` — sudoku 9×9 con solución única y dificultad por técnicas lógicas. Tercera app, jugable en el simulador (2026-10-30).
 - `quiet-words/` — sopa de letras con temas para adultos en/es y palabra oculta. Cuarta app, jugable en el simulador (2026-11-08).
+- **Plataformas por carpeta (decisión 2026-11-13):** cada app tiene `iOS/` y `Android/` dentro de su carpeta (`quiet-words/iOS`, `quiet-words/Android`), y el kit igual (`QuietKit/iOS`, `QuietKit/Android`). Android empieza con Quiet Words; mover el código iOS existente a `iOS/` está pendiente.
 - `QuietKit/` — paquete compartido: `QuietCore` (PRNG, día del reto, rachas, paleta de temas) y `QuietUI` (tema, componentes, hápticos, tonos, Game Center, splash). Lo usan Quiet Solitaire y Quiet Numbers (migrado el 2026-10-28, para su 1.1; sin cambios visibles ni en los tableros de cada fecha).
 
 ## Reto diario (igual en todos los juegos)
