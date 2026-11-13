@@ -19,7 +19,7 @@ public struct SplashView: View {
             .contentShape(Rectangle())
             .onTapGesture(perform: onFinished)
             // The studio's name is a brand: never translated.
-            .accessibilityLabel(Text(verbatim: "quiet studios"))
+            .accessibilityLabel(Text(verbatim: "quietwake"))
             .task {
                 try? await Task.sleep(for: .seconds(1.2))
                 onFinished()

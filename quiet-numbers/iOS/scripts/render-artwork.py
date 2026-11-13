@@ -56,7 +56,7 @@ ICONS = {
     },
 }
 
-# MARK: Splash lockup ("Q en pausa" + "quiet studios"), same image in the launch screen
+# MARK: Splash lockup ("Q en pausa" + "quietwake"), same image in the launch screen
 
 LOCKUP_SIZE = (240, 136)  # points
 
@@ -72,7 +72,7 @@ def lockup(ring, bar, text):
         f'<circle cx="21" cy="22" r="14" fill="none" stroke="{ring}" stroke-width="5"/>'
         f'<line x1="31" y1="38" x2="43" y2="38" stroke="{bar}" stroke-width="5" stroke-linecap="round"/></g>'
         f'<text x="{LOCKUP_SIZE[0] / 2}" y="122" text-anchor="middle" font-family="SF Pro Rounded" '
-        f'font-weight="800" font-size="30" letter-spacing="-0.3" fill="{text}">quiet studios</text>'
+        f'font-weight="800" font-size="30" letter-spacing="-0.3" fill="{text}">quietwake</text>'
         "</svg>"
     )
 
