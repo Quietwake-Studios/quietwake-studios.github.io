@@ -130,7 +130,7 @@
     <string name="account">Cuenta</string>
     <string name="how_to_play">Cómo jugar</string>
     <string name="privacy">Privacidad</string>
-    <string name="privacy_text">Quiet Words no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo.</string>
+    <string name="privacy_text">Quiet Words no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo. Si inicias sesión en Play Juegos, tus puntajes y logros se comparten con Google Play Juegos y tu progreso se guarda en tu cuenta de Google.</string>
     <string name="version">Versión</string>
 
     <string name="reminder_toggle">Recordatorio del reto</string>
@@ -159,7 +159,7 @@
     <string name="reset_question">¿Restablecer todo el progreso?</string>
     <string name="reset_message">Se borra todo el progreso de tu partida.</string>
     <string name="rate_app">Califica Quiet Words</string>
-    <string name="reset_footnote">Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas en este dispositivo.</string>
+    <string name="reset_footnote">Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas, aquí y en la nube.</string>
     <string name="about">Acerca de</string>
     <string name="reset_confirm">Restablecer progreso</string>
 
@@ -259,4 +259,21 @@
     <string name="rew_consistency">Tema Salvia y coral</string>
     <string name="rew_steady_hand">Marcador Subrayado</string>
     <string name="rew_in_the_red">Pistas más baratas en juego libre</string>
+
+    <string name="signed_in_as">Sesión iniciada como %s</string>
+    <string name="not_signed_in">Sin sesión iniciada</string>
+    <string name="leaderboards">Clasificaciones</string>
+    <string name="lb_today">Hoy</string>
+    <string name="lb_best_hard">Mejor · Difícil</string>
+    <string name="lb_streak">Racha</string>
+    <string name="lb_global">Global</string>
+    <string name="lb_friends">Amigos</string>
+    <string name="couldnt_load">No se pudo cargar</string>
+    <string name="check_connection">Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="no_scores">Todavía no hay puntajes</string>
+    <string name="scores_from">Puntajes de Play Juegos · recién actualizados</string>
+    <string name="play_with_friends">Juega con tus amigos</string>
+    <string name="sign_in_to_see">Inicia sesión en Play Juegos en Ajustes para ver las clasificaciones. Tu progreso se guarda en este dispositivo de todas formas.</string>
+    <string name="open_settings">Abrir Ajustes</string>
+    <string name="among_friends">#%d entre amigos</string>
 </resources>

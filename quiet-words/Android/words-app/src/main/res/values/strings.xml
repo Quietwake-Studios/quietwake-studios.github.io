@@ -136,7 +136,7 @@
     <string name="account">Account</string>
     <string name="how_to_play">How to play</string>
     <string name="privacy">Privacy</string>
-    <string name="privacy_text">Quiet Words doesn\'t collect any data. Your games, streaks and achievements stay on this device.</string>
+    <string name="privacy_text">Quiet Words doesn\'t collect any data. Your games, streaks and achievements stay on this device. If you sign in to Play Games, your scores and achievements are shared with Google Play Games and your progress is saved in your Google account.</string>
     <string name="version">Version</string>
 
     <string name="reminder_toggle">Daily challenge reminder</string>
@@ -163,7 +163,7 @@
     <string name="reset_question">Reset all progress?</string>
     <string name="reset_message">All your game progress is erased.</string>
     <string name="rate_app">Rate Quiet Words</string>
-    <string name="reset_footnote">Deletes games, daily results, streaks, achievements and unlocked rewards on this device.</string>
+    <string name="reset_footnote">Deletes games, daily results, streaks, achievements and unlocked rewards, here and in the cloud.</string>
     <string name="about">About</string>
     <string name="reset_confirm">Reset progress</string>
 
@@ -262,4 +262,23 @@
     <string name="rew_consistency">Sage &amp; coral theme</string>
     <string name="rew_steady_hand">Underline marker</string>
     <string name="rew_in_the_red">Cheaper hints in free play</string>
+
+    <!-- Phase 5: Play Games -->
+    <string name="play_games" translatable="false">Play Games</string>
+    <string name="signed_in_as">Signed in as %s</string>
+    <string name="not_signed_in">Not signed in</string>
+    <string name="leaderboards">Leaderboards</string>
+    <string name="lb_today">Today</string>
+    <string name="lb_best_hard">Best · Hard</string>
+    <string name="lb_streak">Streak</string>
+    <string name="lb_global">Global</string>
+    <string name="lb_friends">Friends</string>
+    <string name="couldnt_load">Couldn\'t load</string>
+    <string name="check_connection">Check your connection and try again.</string>
+    <string name="no_scores">No scores yet</string>
+    <string name="scores_from">Scores from Play Games · updated just now</string>
+    <string name="play_with_friends">Play with friends</string>
+    <string name="sign_in_to_see">Sign in to Play Games in Settings to see leaderboards. Your progress is saved on this device either way.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="among_friends">#%d among friends</string>
 </resources>

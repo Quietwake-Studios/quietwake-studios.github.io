@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- No network, no tracking. Only local daily reminders: the notification permission
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- No tracking. Network only through Google Play Games (optional sign-in). Local daily reminders: the notification permission
          (asked from Settings or after a first completed daily) and re-planning them after a reboot. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -42,6 +43,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <!-- Google Play Games (Phase 5): the project ID from games-ids.xml. Play's automatic init
+             provider is removed: PlayGamesService starts the SDK only once a real ID is set. -->
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/play_games_app_id" />
+        <provider
+            android:name="com.google.android.gms.games.provider.PlayGamesInitProvider"
+            android:authorities="${applicationId}.playgamesinitprovider"
+            tools:node="remove" />
         <receiver android:name=".reminders.RescheduleReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

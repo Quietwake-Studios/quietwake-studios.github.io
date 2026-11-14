@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Google Play Games IDs (Phase 5). TODO: every value below is a placeholder until the game
+    exists in Play Console (the account is pending verification; nothing is created there
+    without the user). Replace each TODO with the ID Play Console gives (Play Games Services ›
+    Configuration). While `play_games_app_id` isn't a number, the app never starts Play Games
+    and everything works signed out. Same concepts as iOS's Game Center (qw_…); see CLAUDE.md.
+-->
+<resources>
+    <!-- Play Games Services › Configuration › Project ID (digits only). -->
+    <string name="play_games_app_id" translatable="false">TODO_PLAY_GAMES_APP_ID</string>
+
+    <string name="achievement_qw_first_puzzle" translatable="false">TODO_qw_first_puzzle</string>
+    <string name="achievement_qw_words_100" translatable="false">TODO_qw_words_100</string>
+    <string name="achievement_qw_words_1000" translatable="false">TODO_qw_words_1000</string>
+    <string name="achievement_qw_words_10000" translatable="false">TODO_qw_words_10000</string>
+    <string name="achievement_qw_theme_complete" translatable="false">TODO_qw_theme_complete</string>
+    <string name="achievement_qw_hidden_early" translatable="false">TODO_qw_hidden_early</string>
+    <string name="achievement_qw_daily_7" translatable="false">TODO_qw_daily_7</string>
+    <string name="achievement_qw_daily_30" translatable="false">TODO_qw_daily_30</string>
+    <string name="achievement_qw_hard_fast" translatable="false">TODO_qw_hard_fast</string>
+    <string name="achievement_qw_bilingual" translatable="false">TODO_qw_bilingual</string>
+    <string name="achievement_qw_in_the_red" translatable="false">TODO_qw_in_the_red</string>
+
+    <string name="leaderboard_qw_daily_en" translatable="false">TODO_qw_daily_en</string>
+    <string name="leaderboard_qw_daily_es" translatable="false">TODO_qw_daily_es</string>
+    <string name="leaderboard_qw_best_hard_en" translatable="false">TODO_qw_best_hard_en</string>
+    <string name="leaderboard_qw_best_hard_es" translatable="false">TODO_qw_best_hard_es</string>
+    <string name="leaderboard_qw_longest_streak" translatable="false">TODO_qw_longest_streak</string>
+</resources>

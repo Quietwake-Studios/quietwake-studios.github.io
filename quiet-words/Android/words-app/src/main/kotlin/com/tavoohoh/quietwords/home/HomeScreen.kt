@@ -53,6 +53,7 @@ import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.Route
 import com.tavoohoh.quietwords.CollectionTab
 import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.ui.semantics.onClick
 import com.tavoohoh.quietwords.core.DailyChallenge
 import com.tavoohoh.quietwords.core.WordLanguage
@@ -114,7 +115,7 @@ fun HomeScreen(app: AppModel) {
     }
 }
 
-/** Collection · Settings in a capsule at the top right (Leaderboards joins it with Play Games, Phase 5). */
+/** Leaderboards · Collection · Settings in a capsule at the top right. */
 @Composable
 private fun Menu(app: AppModel) {
     val colors = QuietTheme.colors
@@ -122,6 +123,7 @@ private fun Menu(app: AppModel) {
         Spacer(Modifier.weight(1f))
         Row(Modifier.quietSurface(CircleShape).padding(horizontal = 6.dp)) {
             for ((icon, label, tag, action) in listOf(
+                MenuItem(Icons.Outlined.EmojiEvents, stringResource(R.string.leaderboards), "leaderboards") { app.push(Route.LEADERBOARDS) },
                 MenuItem(Icons.Outlined.GridView, stringResource(R.string.collection), "collection") { app.openCollection(CollectionTab.REWARDS) },
                 MenuItem(Icons.Outlined.Settings, stringResource(R.string.settings), "settings") { app.push(Route.SETTINGS) },
             )) {

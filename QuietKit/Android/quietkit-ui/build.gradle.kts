@@ -28,4 +28,5 @@ dependencies {
     api(libs.compose.material3)
     implementation(libs.core.ktx)
     implementation(libs.play.review.ktx)
+    implementation(libs.play.games.v2)
 }

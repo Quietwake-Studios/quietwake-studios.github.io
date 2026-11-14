@@ -118,6 +118,7 @@ private fun Screen(app: AppModel, route: Route) {
     when (route) {
         Route.HOME -> HomeScreen(app)
         Route.DAILY -> DailyScreen(app, onBack = app::pop)
+        Route.LEADERBOARDS -> com.tavoohoh.quietwords.leaderboards.LeaderboardsScreen(app, onBack = app::pop, onOpenSettings = { app.push(Route.SETTINGS) })
         Route.COLLECTION -> com.tavoohoh.quietwords.collection.CollectionScreen(app, onBack = app::pop)
         Route.ALBUM_THEME -> com.tavoohoh.quietwords.collection.AlbumThemeScreen(app, onBack = app::pop)
         Route.SETTINGS -> SettingsScreen(app, onBack = app::pop, onHowToPlay = { app.push(Route.TUTORIAL) })

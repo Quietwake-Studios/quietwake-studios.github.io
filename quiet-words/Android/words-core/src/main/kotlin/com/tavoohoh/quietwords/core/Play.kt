@@ -214,6 +214,22 @@ class WordsPlay(
         onChange()
     }
 
+    // Play Games (the cloud only mirrors local data)
+
+    /** Progress, album and daily results for the saved game. */
+    fun cloudSnapshot(): CloudSnapshot = CloudSnapshot(profile, store.dailies)
+
+    /** What another device saved, merged in (never loses progress). */
+    fun mergeCloud(remote: CloudSnapshot) {
+        profile = profile.merged(remote.profile)
+        store.saveProfile(profile)
+        store.mergeDailies(remote.dailies)
+        onChange()
+    }
+
+    /** Achievements and scores to push after a sign-in or a finished game. */
+    fun playGamesPlan(): PlayGamesPlan = PlayGamesPlan.of(progress, store.dailies, todayKey)
+
     /** Whether today is done (either language) and the current streak, for the reminders. */
     fun reminderState(): Pair<Boolean, Int> = (todayKey in store.completedDays) to currentStreak
 

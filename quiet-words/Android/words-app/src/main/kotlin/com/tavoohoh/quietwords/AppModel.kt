@@ -15,6 +15,9 @@ import androidx.lifecycle.viewModelScope
 import com.tavoohoh.quiet.core.DailyKey
 import com.tavoohoh.quiet.ui.DailyReminders
 import com.tavoohoh.quiet.ui.QuietTones
+import com.tavoohoh.quiet.ui.PlayGamesService
+import com.tavoohoh.quietwords.core.CloudSnapshot
+import com.tavoohoh.quietwords.core.conceptID
 import com.tavoohoh.quiet.core.Palette
 import com.tavoohoh.quietwords.core.AppIconChoice
 import com.tavoohoh.quietwords.core.BoardFont
@@ -51,7 +54,7 @@ import kotlin.random.Random
 /** Debug `uiTesting`: cells mark "start"/"end" of the next word and the hidden word row carries the answer. */
 val LocalUiTesting = staticCompositionLocalOf { false }
 
-enum class Route { HOME, NEW_GAME, GAME, TUTORIAL, DAILY, SETTINGS, COLLECTION, ALBUM_THEME }
+enum class Route { HOME, NEW_GAME, GAME, TUTORIAL, DAILY, SETTINGS, COLLECTION, ALBUM_THEME, LEADERBOARDS }
 
 /** Collection's tabs. */
 enum class CollectionTab { ALBUM, REWARDS, ACHIEVEMENTS }
@@ -89,6 +92,13 @@ class AppModel(application: Application) : AndroidViewModel(application) {
     /** The once-per-install review prompt (its own preferences; Reset progress keeps them). */
     lateinit var storeReview: StoreReview
         private set
+    /** Google Play Games (optional; IDs in games-ids.xml, placeholders until Play Console exists). */
+    lateinit var games: PlayGamesService
+        private set
+    /** Debug `demo`: sample leaderboards and a signed-in look, for screenshots (iOS `-demo`). */
+    var demoActive = false
+        private set
+
     /** The active game's finish was already counted for the review prompt. */
     private var reviewCounted = false
 
@@ -172,6 +182,11 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         play.onChange = { revision++ }
         reminders = wordsReminders(app, uiTesting = args.uiTesting) { play.reminderState() }
         storeReview = StoreReview(app, if (args.uiTesting) "storeReview-uitesting" else "storeReview")
+        demoActive = args.demo
+        // UI tests never touch Play Games (iOS: -uiTesting is offline too).
+        games = PlayGamesService(if (args.uiTesting) "" else app.getString(R.string.play_games_app_id))
+        games.onAuthenticated = { syncPlayGames() }
+        games.initialize(app)
         load()
         args.words?.let { chooseLanguage(it) }
         if (args.tutorialDone) finishTutorial()
@@ -390,7 +405,10 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         activeGame?.dispose()
         model.onChange = { session, events ->
             play.update(session, events)
-            if (kind is GameKind.Daily && events.any { it is GameSession.Event.Won }) reminders.reschedule()
+            if (events.any { it is GameSession.Event.Won }) {
+                if (kind is GameKind.Daily) reminders.reschedule()
+                pushToPlayGames()
+            }
         }
         activeGame = model
         activeKind = kind
@@ -437,12 +455,58 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         if (chosenLooks.icon != AppIconChoice.STANDARD && !uiTesting) LauncherIcon.set(getApplication(), AppIconChoice.STANDARD)
         chosenLooks = Looks()
         if (!uiTesting) reminders.reschedule()
+        // The saved game too (iOS: iCloud); if signed out, on the next sign-in.
+        prefs.edit { putBoolean(KEY_PENDING_CLOUD_RESET, true) }
+        syncPlayGames()
+    }
+
+    // Play Games
+
+    private fun gamesID(prefix: String, conceptID: String): String {
+        val app = getApplication<Application>()
+        val res = app.resources.getIdentifier("${prefix}_$conceptID", "string", app.packageName)
+        return if (res == 0) "" else app.getString(res)
+    }
+
+    fun leaderboardID(board: com.tavoohoh.quietwords.core.Leaderboard) = gamesID("leaderboard", board.conceptID)
+
+    /** On sign-in: pull what other devices saved, merge it into local data, then push everything. */
+    fun syncPlayGames() {
+        if (!games.isAuthenticated) return
+        viewModelScope.launch {
+            runCatching {
+                if (prefs.getBoolean(KEY_PENDING_CLOUD_RESET, false)) {
+                    if (games.deleteSnapshot(CloudSnapshot.NAME)) prefs.edit { remove(KEY_PENDING_CLOUD_RESET) }
+                } else {
+                    val bytes = games.loadSnapshot(CloudSnapshot.NAME) { a, b ->
+                        val x = CloudSnapshot.decode(a)
+                        val y = CloudSnapshot.decode(b)
+                        (if (x != null && y != null) x.merged(y) else x ?: y ?: CloudSnapshot()).encode()
+                    }
+                    bytes?.let(CloudSnapshot::decode)?.let(play::mergeCloud)
+                }
+            }
+            pushToPlayGames()
+        }
+    }
+
+    /** Achievements, scores (today's best per language with its day and time) and the saved game. */
+    fun pushToPlayGames() {
+        if (!games.isAuthenticated) return
+        val plan = play.playGamesPlan()
+        for (a in plan.unlocks) games.unlock(gamesID("achievement", a.conceptID))
+        for ((a, steps) in plan.steps) games.setSteps(gamesID("achievement", a.conceptID), steps)
+        for (score in plan.scores) games.submit(leaderboardID(score.leaderboard), score.value, score.tag)
+        if (prefs.getBoolean(KEY_PENDING_CLOUD_RESET, false)) return
+        val snapshot = play.cloudSnapshot().encode()
+        viewModelScope.launch { runCatching { games.saveSnapshot(CloudSnapshot.NAME, snapshot) } }
     }
 
     /** Back from the game: the attempt in progress is saved; maybe offer the reminders. */
     fun leftGame() {
         val completedFirst = play.leftGame(activeGame?.state)
         if (completedFirst && reminders.shouldOffer) offersReminders = true
+        pushToPlayGames()
     }
 
     /** The app went to the background. */
@@ -465,6 +529,7 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             "tutorial" -> show(Route.TUTORIAL)
             "daily" -> show(Route.DAILY)
             "settings" -> show(Route.SETTINGS)
+            "leaderboards" -> show(Route.LEADERBOARDS)
             "collection" -> { show(); openCollection(CollectionTab.REWARDS) }
             "album" -> { show(); openCollection(CollectionTab.ALBUM) }
             "achievements" -> { show(); openCollection(CollectionTab.ACHIEVEMENTS) }
@@ -527,6 +592,8 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         private const val KEY_MARKER = "marker"
         private const val KEY_BOARD_FONT = "boardFont"
         private const val KEY_ICON = "appIcon"
+        /** A reset made while signed out of Play Games: delete the saved game on the next sign-in. */
+        private const val KEY_PENDING_CLOUD_RESET = "pendingCloudReset"
         /** Cosmetic choices, cleared by "Reset progress" (iOS `PreferenceKey.rewards`). */
         private val REWARD_KEYS = listOf(KEY_PALETTE, KEY_MARKER, KEY_BOARD_FONT, KEY_ICON, KEY_CHEAP_HINTS)
 
