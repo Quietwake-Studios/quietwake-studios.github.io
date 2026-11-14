@@ -51,6 +51,9 @@ import com.tavoohoh.quiet.ui.rememberHaptics
 import com.tavoohoh.quietwords.AppModel
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.Route
+import com.tavoohoh.quietwords.CollectionTab
+import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.ui.semantics.onClick
 import com.tavoohoh.quietwords.core.DailyChallenge
 import com.tavoohoh.quietwords.core.WordLanguage
 import com.tavoohoh.quietwords.design.LanguagePill
@@ -111,21 +114,26 @@ fun HomeScreen(app: AppModel) {
     }
 }
 
-/** Settings in a capsule at the top right (Leaderboards and Collection join it later). */
+/** Collection · Settings in a capsule at the top right (Leaderboards joins it with Play Games, Phase 5). */
 @Composable
 private fun Menu(app: AppModel) {
     val colors = QuietTheme.colors
     Row(Modifier.fillMaxWidth().padding(top = 8.dp)) {
         Spacer(Modifier.weight(1f))
-        Box(
-            Modifier.quietSurface(CircleShape).padding(horizontal = 6.dp).size(width = 44.dp, height = 44.dp)
-                .quietClickable { app.push(Route.SETTINGS) }.testTag("settings"),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(Icons.Outlined.Settings, stringResource(R.string.settings), tint = colors.ink, modifier = Modifier.size(22.dp))
+        Row(Modifier.quietSurface(CircleShape).padding(horizontal = 6.dp)) {
+            for ((icon, label, tag, action) in listOf(
+                MenuItem(Icons.Outlined.GridView, stringResource(R.string.collection), "collection") { app.openCollection(CollectionTab.REWARDS) },
+                MenuItem(Icons.Outlined.Settings, stringResource(R.string.settings), "settings") { app.push(Route.SETTINGS) },
+            )) {
+                Box(Modifier.size(44.dp).quietClickable(onClick = action).testTag(tag), contentAlignment = Alignment.Center) {
+                    Icon(icon, label, tint = colors.ink, modifier = Modifier.size(22.dp))
+                }
+            }
         }
     }
 }
+
+private data class MenuItem(val icon: androidx.compose.ui.graphics.vector.ImageVector, val label: String, val tag: String, val action: () -> Unit)
 
 /** Puzzles · Album · Best streak. */
 @Composable
@@ -133,7 +141,12 @@ private fun Stats(app: AppModel) {
     val album = app.album.total(app.wordLanguage, app.library)
     Row(Modifier.fillMaxWidth()) {
         Stat("${app.progress.gamesWon}", stringResource(R.string.puzzles), Modifier.weight(1f))
-        Stat("${album.found}", stringResource(R.string.album), Modifier.weight(1f))
+        val opens = stringResource(R.string.opens_album)
+        Stat(
+            "${album.found}", stringResource(R.string.album),
+            Modifier.weight(1f).quietClickable { app.openCollection(CollectionTab.ALBUM) }
+                .semantics { onClick(label = opens) { app.openCollection(CollectionTab.ALBUM); true } }.testTag("albumStat"),
+        )
         Stat("${app.longestStreak}", stringResource(R.string.best_streak), Modifier.weight(1f).testTag("bestStreak"))
     }
 }

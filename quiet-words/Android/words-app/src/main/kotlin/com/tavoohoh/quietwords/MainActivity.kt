@@ -9,6 +9,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.tavoohoh.quiet.ui.QuietTheme
+import com.tavoohoh.quietwords.design.BoardLooks
+import com.tavoohoh.quietwords.design.LocalBoardLooks
+import com.tavoohoh.quietwords.design.LocalFeedback
 
 class MainActivity : ComponentActivity() {
     private val app: AppModel by viewModels()
@@ -19,15 +22,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         app.configure(intent)
         setContent {
-            // Teal & coral (the palette choice is a reward, Phase 4); light or dark following
-            // the system unless Settings › Appearance fixes one.
+            // The theme picked in Collection › Rewards (if unlocked); light or dark following the
+            // system unless Settings › Appearance fixes one.
             val dark = when (app.appearance) {
                 AppearanceMode.SYSTEM -> isSystemInDarkTheme()
                 AppearanceMode.LIGHT -> false
                 AppearanceMode.DARK -> true
             }
-            QuietTheme(dark = dark) {
-                CompositionLocalProvider(LocalUiTesting provides app.uiTesting) {
+            val looks = app.looks
+            QuietTheme(palette = looks.palette, dark = dark) {
+                CompositionLocalProvider(
+                    LocalUiTesting provides app.uiTesting,
+                    LocalFeedback provides app.feedback,
+                    LocalBoardLooks provides BoardLooks(looks.marker, looks.boardFont, app.largerLetters),
+                ) {
                     WordsApp(app)
                 }
             }

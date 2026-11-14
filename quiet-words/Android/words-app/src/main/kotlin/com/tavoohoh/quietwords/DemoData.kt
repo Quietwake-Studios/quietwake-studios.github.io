@@ -2,6 +2,7 @@ package com.tavoohoh.quietwords
 
 import com.tavoohoh.quiet.core.DailyKey
 import com.tavoohoh.quietwords.core.Album
+import com.tavoohoh.quietwords.core.Achievement
 import com.tavoohoh.quietwords.core.DailyChallenge
 import com.tavoohoh.quietwords.core.DailyID
 import com.tavoohoh.quietwords.core.FreeGame
@@ -53,7 +54,10 @@ object DemoData {
             repeat(164) { s.tick() }
             store.saveGame(s, Slot.Free)
         }
-        val progress = PlayerProgress(gamesWon = 23, gamesPlayed = 26, wordsFound = 412, dailiesCompleted = 13, bestStreak = 7, lateDays = setOf(day(-9)))
+        val progress = PlayerProgress(
+            unlocked = setOf(Achievement.FIRST_PUZZLE, Achievement.WORDS_100, Achievement.IN_PLAIN_SIGHT, Achievement.HABIT, Achievement.BILINGUAL),
+            gamesWon = 23, gamesPlayed = 26, wordsFound = 412, dailiesCompleted = 13, bestStreak = 7, lateDays = setOf(day(-9)),
+        )
         store.saveProfile(Profile(progress, demoAlbum(language)))
     }
 

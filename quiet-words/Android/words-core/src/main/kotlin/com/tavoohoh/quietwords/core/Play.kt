@@ -47,6 +47,9 @@ class WordsPlay(
         private set
     var unlockedThisGame: List<Achievement> = emptyList()
         private set
+    /** Unlocked during play and not shown yet (the "Achievement unlocked" banner). */
+    var pendingUnlocks: List<Achievement> = emptyList()
+        private set
     private var completedDailyThisGame = false
 
     /** Anything the UI shows changed. */
@@ -155,6 +158,7 @@ class WordsPlay(
         bestAtStart = progress.bestScore(session.level, session.language)
         albumAtStart = library.theme(session.themeID)?.let { profile.album.count(it, session.language).found } ?: 0
         unlockedThisGame = emptyList()
+        pendingUnlocks = emptyList()
         completedDailyThisGame = false
         activeKind = kind
         onChange()
@@ -205,6 +209,7 @@ class WordsPlay(
         freeInProgress = null
         activeKind = null
         unlockedThisGame = emptyList()
+        pendingUnlocks = emptyList()
         completedDailyThisGame = false
         onChange()
     }
@@ -219,6 +224,19 @@ class WordsPlay(
         profile = profile.copy(progress = progress)
         store.saveProfile(profile)
         unlockedThisGame = unlockedThisGame + unlocked
+        pendingUnlocks = pendingUnlocks + unlocked
+    }
+
+    fun dismissUnlock(achievement: Achievement) {
+        pendingUnlocks = pendingUnlocks - achievement
+        onChange()
+    }
+
+    /** Debug and screenshots: every achievement unlocked (iOS `-unlockAll`). */
+    fun unlockAll() {
+        profile = profile.copy(progress = profile.progress.copy(unlocked = Achievement.entries.toSet()))
+        store.saveProfile(profile)
+        onChange()
     }
 
     private fun handle(event: GameSession.Event, session: GameSession) {

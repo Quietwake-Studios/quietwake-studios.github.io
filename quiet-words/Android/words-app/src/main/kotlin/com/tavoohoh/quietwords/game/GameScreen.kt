@@ -67,6 +67,11 @@ import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.design.clock
 import com.tavoohoh.quietwords.design.play
 import com.tavoohoh.quietwords.design.title
+import com.tavoohoh.quietwords.design.icon
+import com.tavoohoh.quietwords.core.Achievement
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.semantics.semantics
 import kotlinx.coroutines.delay
 
 /**
@@ -78,6 +83,10 @@ fun GameScreen(
     model: GameModel,
     kind: GameKind,
     themeName: String,
+    extras: SummaryExtras = SummaryExtras(),
+    /** An achievement unlocked during play, shown in a banner for a moment. */
+    pendingUnlock: Achievement? = null,
+    onUnlockShown: (Achievement) -> Unit = {},
     onBack: () -> Unit,
     onNewGame: () -> Unit,
     onRestart: () -> Unit,
@@ -85,9 +94,10 @@ fun GameScreen(
 ) {
     val colors = QuietTheme.colors
     val haptics = rememberHaptics()
+    val feedback = com.tavoohoh.quietwords.design.LocalFeedback.current
     val reduceMotion = QuietTheme.reduceMotion
     SideEffect {
-        model.onFeedback = { haptics.play(it) }
+        model.onFeedback = { event, step -> feedback.play(event, haptics, step) }
         model.reduceMotion = reduceMotion
     }
     // The clock runs while the app is in front.
@@ -131,8 +141,25 @@ fun GameScreen(
             },
             exit = fadeOut(),
         ) {
-            SummarySheet(session, kind, themeName, card = wide, onNewGame = onNewGame, onHome = onHome)
+            SummarySheet(session, kind, themeName, card = wide, extras = extras, onNewGame = onNewGame, onHome = onHome)
         }
+        // "Achievement unlocked" during play (not over the summary).
+        val banner = pendingUnlock?.takeUnless { session.isWon }
+        AnimatedVisibility(
+            banner != null, modifier = Modifier.align(Alignment.TopCenter).safeDrawingPadding(),
+            enter = if (reduceMotion) fadeIn() else slideInVertically { -it } + fadeIn(), exit = fadeOut(),
+        ) {
+            var shown by remember { mutableStateOf(banner) }
+            if (banner != null) shown = banner
+            shown?.let { UnlockBanner(it) }
+        }
+        if (banner != null) {
+            LaunchedEffect(banner) {
+                delay(2500)
+                onUnlockShown(banner)
+            }
+        }
+        if (session.isWon && pendingUnlock != null) LaunchedEffect(Unit) { onUnlockShown(pendingUnlock) }
         if (model.showsSummary && kind is GameKind.Daily) {
             Fireworks(listOf(colors.primary, colors.accent, colors.suitRed, androidx.compose.ui.graphics.Color(0xFFF2BF4D), colors.ink), Modifier.fillMaxSize())
         }
@@ -156,6 +183,24 @@ fun GameScreen(
                 }
             },
         )
+    }
+}
+
+@Composable
+private fun UnlockBanner(achievement: Achievement) {
+    val colors = QuietTheme.colors
+    Row(
+        Modifier.padding(top = 8.dp).shadow(12.dp, CircleShape).background(colors.surface, CircleShape)
+            .semantics(mergeDescendants = true) {}.testTag("unlockBanner").padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Box(Modifier.size(36.dp).background(colors.primary, CircleShape), contentAlignment = Alignment.Center) {
+            Icon(achievement.icon, null, tint = colors.onPrimary, modifier = Modifier.size(18.dp))
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(stringResource(R.string.achievement_unlocked), style = QuietType.caption, color = colors.muted)
+            Text(achievement.title(), style = QuietType.headline, color = colors.ink)
+        }
     }
 }
 

@@ -65,11 +65,15 @@ import com.tavoohoh.quietwords.core.WordLanguage
 import com.tavoohoh.quietwords.design.DayFormat
 import com.tavoohoh.quietwords.design.LanguageChoice
 import com.tavoohoh.quietwords.design.displayName
+import com.tavoohoh.quietwords.design.GroupDivider
+import com.tavoohoh.quietwords.design.GroupRow
+import com.tavoohoh.quietwords.design.GroupSection
+import com.tavoohoh.quietwords.design.GroupToggle
 
 /**
- * Settings, minimal for Phase 3 (iOS `SettingsView` is the reference): words language, the
- * daily reminder, appearance, how to play, rate the app, privacy, reset progress and version.
- * Sound, larger letters and Play Games come with later phases.
+ * Settings, in the family's order (iOS `SettingsView`): Play (words language, sound, haptics,
+ * larger letters), Appearance, Daily Challenge (reminder), Account, Privacy, Reset Progress…
+ * and About. Play Games comes in Phase 5.
  */
 @Composable
 fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
@@ -87,14 +91,21 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Column(Modifier.widthIn(max = if (regular) 560.dp else 480.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                    Section(stringResource(R.string.game_section)) {
-                        SettingsRow(stringResource(R.string.word_language), app.wordLanguage.displayName(), Modifier.testTag("settingsLanguage")) { choosesLanguage = true }
-                        Divider()
-                        ReminderToggle(app.reminders, requestNotifications)
+                    GroupSection(stringResource(R.string.play_section)) {
+                        GroupRow(stringResource(R.string.word_language), app.wordLanguage.displayName(), Modifier.testTag("settingsLanguage")) { choosesLanguage = true }
+                        GroupDivider()
+                        GroupToggle(stringResource(R.string.sound), null, app.soundEnabled, Modifier.testTag("sound"), onChange = app::setSound)
+                        GroupDivider()
+                        GroupToggle(stringResource(R.string.haptics), null, app.hapticsEnabled, Modifier.testTag("haptics"), onChange = app::setHaptics)
+                        GroupDivider()
+                        GroupToggle(
+                            stringResource(R.string.larger_letters), stringResource(R.string.larger_letters_detail), app.largerLetters,
+                            Modifier.testTag("largerLetters"), onChange = app::chooseLargerLetters,
+                        )
                     }
-                    Section(stringResource(R.string.appearance)) {
+                    GroupSection(stringResource(R.string.appearance)) {
                         val dark = colors.isDark
-                        Toggle(stringResource(R.string.match_system), null, app.appearance == AppearanceMode.SYSTEM, Modifier.testTag("matchSystem")) { matches ->
+                        GroupToggle(stringResource(R.string.match_system), null, app.appearance == AppearanceMode.SYSTEM, Modifier.testTag("matchSystem")) { matches ->
                             // Off: start on the opposite of what's on screen so the change shows right away.
                             app.setAppearanceMode(if (matches) AppearanceMode.SYSTEM else if (dark) AppearanceMode.LIGHT else AppearanceMode.DARK)
                         }
@@ -105,13 +116,16 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
                             )
                         }
                     }
-                    Section(stringResource(R.string.account)) {
-                        SettingsRow(stringResource(R.string.how_to_play), null, Modifier.testTag("howToPlay"), onClick = onHowToPlay)
+                    GroupSection(stringResource(R.string.daily_challenge_title)) {
+                        ReminderToggle(app.reminders, requestNotifications)
                     }
-                    Section(stringResource(R.string.privacy)) {
+                    GroupSection(stringResource(R.string.account)) {
+                        GroupRow(stringResource(R.string.how_to_play), null, Modifier.testTag("howToPlay"), onClick = onHowToPlay)
+                    }
+                    GroupSection(stringResource(R.string.privacy)) {
                         Text(stringResource(R.string.privacy_text), style = QuietType.subheadline, color = colors.muted, modifier = Modifier.padding(vertical = 10.dp))
                     }
-                    Section(null) {
+                    GroupSection(null) {
                         Text(
                             stringResource(R.string.reset_progress), style = QuietType.body, color = colors.accent,
                             modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 48.dp).quietClickable { confirmsReset = true }
@@ -122,10 +136,10 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
                         stringResource(R.string.reset_footnote), style = QuietType.footnote, color = colors.muted,
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 0.dp).offset(y = (-10).dp),
                     )
-                    Section(stringResource(R.string.about)) {
-                        SettingsRow(stringResource(R.string.rate_app), null, Modifier.testTag("rateApp")) { StoreReview.openRatePage(context) }
-                        Divider()
-                        SettingsRow(stringResource(R.string.version), BuildConfig.VERSION_NAME, chevron = false)
+                    GroupSection(stringResource(R.string.about)) {
+                        GroupRow(stringResource(R.string.rate_app), null, Modifier.testTag("rateApp")) { StoreReview.openRatePage(context) }
+                        GroupDivider()
+                        GroupRow(stringResource(R.string.version), BuildConfig.VERSION_NAME, chevron = false)
                     }
                 }
             }
@@ -219,7 +233,7 @@ private fun ReminderToggle(reminders: DailyReminders, request: () -> Unit) {
     val context = LocalContext.current
     val locale = LocalConfiguration.current.locales[0]
     val denied = reminders.authorization == DailyReminders.Authorization.DENIED
-    Toggle(
+    GroupToggle(
         stringResource(R.string.reminder_toggle),
         stringResource(R.string.reminder_detail, DayFormat.hour(DailyReminderPlan.REMINDER_HOUR, locale), DayFormat.hour(DailyReminderPlan.STREAK_HOUR, locale)),
         reminders.isActive, Modifier.testTag("reminderToggle"), enabled = !denied,
@@ -232,60 +246,3 @@ private fun ReminderToggle(reminders: DailyReminders, request: () -> Unit) {
     }
 }
 
-// Rows
-
-@Composable
-private fun Section(title: String?, content: @Composable ColumnScope.() -> Unit) {
-    val colors = QuietTheme.colors
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        if (title != null) {
-            Text(
-                title.uppercase(), style = QuietType.caption.copy(fontWeight = FontWeight.Bold), color = colors.muted,
-                modifier = Modifier.padding(start = 16.dp).semantics { heading() },
-            )
-        }
-        Column(Modifier.fillMaxWidth().quietSurface(RoundedCornerShape(20.dp)).padding(horizontal = 16.dp, vertical = 4.dp), content = content)
-    }
-}
-
-@Composable
-private fun Divider() = HorizontalDivider(thickness = 1.dp, color = QuietTheme.colors.separator.copy(alpha = 0.6f))
-
-@Composable
-private fun SettingsRow(label: String, value: String?, modifier: Modifier = Modifier, chevron: Boolean = true, onClick: (() -> Unit)? = null) {
-    val colors = QuietTheme.colors
-    Row(
-        modifier.fillMaxWidth().defaultMinSize(minHeight = 48.dp)
-            .then(if (onClick != null) Modifier.quietClickable(onClick = onClick) else Modifier),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(label, style = QuietType.body, color = colors.ink)
-        Spacer(Modifier.weight(1f))
-        if (value != null) Text(value, style = QuietType.body, color = colors.muted)
-        if (chevron && onClick != null) Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null, tint = colors.muted, modifier = Modifier.size(22.dp))
-    }
-}
-
-@Composable
-private fun Toggle(label: String, detail: String?, checked: Boolean, modifier: Modifier = Modifier, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
-    val colors = QuietTheme.colors
-    Row(
-        modifier.fillMaxWidth().defaultMinSize(minHeight = 52.dp)
-            .quietClickable(enabled = enabled, role = Role.Switch) { onChange(!checked) }
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(label, style = QuietType.body, color = colors.ink)
-            if (detail != null) Text(detail, style = QuietType.subheadline, color = colors.muted)
-        }
-        Switch(
-            checked = checked, onCheckedChange = null, enabled = enabled,
-            colors = SwitchDefaults.colors(
-                checkedTrackColor = colors.primary, checkedThumbColor = colors.onPrimary,
-                uncheckedTrackColor = colors.surface2, uncheckedThumbColor = colors.muted, uncheckedBorderColor = colors.surface2,
-            ),
-        )
-    }
-}

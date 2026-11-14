@@ -118,6 +118,8 @@ private fun Screen(app: AppModel, route: Route) {
     when (route) {
         Route.HOME -> HomeScreen(app)
         Route.DAILY -> DailyScreen(app, onBack = app::pop)
+        Route.COLLECTION -> com.tavoohoh.quietwords.collection.CollectionScreen(app, onBack = app::pop)
+        Route.ALBUM_THEME -> com.tavoohoh.quietwords.collection.AlbumThemeScreen(app, onBack = app::pop)
         Route.SETTINGS -> SettingsScreen(app, onBack = app::pop, onHowToPlay = { app.push(Route.TUTORIAL) })
         Route.NEW_GAME -> NewGameScreen(app, onBack = app::pop)
         Route.TUTORIAL -> TutorialScreen(app, onFinish = app::tutorialFinished)
@@ -129,6 +131,14 @@ private fun Screen(app: AppModel, route: Route) {
                     model = game,
                     kind = kind,
                     themeName = app.theme(game.state.themeID)?.localizedName() ?: "",
+                    extras = com.tavoohoh.quietwords.game.SummaryExtras(
+                        bestScore = app.bestAtStart,
+                        unlocked = app.unlockedThisGame,
+                        newAlbumWords = app.newAlbumWords(game.state),
+                        album = app.theme(game.state.themeID)?.let { t -> app.album.count(t, game.state.language).let { it.found to it.total } },
+                    ),
+                    pendingUnlock = app.pendingUnlocks.firstOrNull(),
+                    onUnlockShown = app::dismissUnlock,
                     onBack = app::pop,
                     onNewGame = { if (app.leaveGame(toNewGame = true)) activity?.let(app.storeReview::request) },
                     onRestart = app::restart,

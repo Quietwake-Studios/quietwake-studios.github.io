@@ -81,7 +81,8 @@ class DailyUiTests {
             assertTrue("the board never ends", ++words < 40)
         }
         waitFor("summaryDone")
-        compose.onNodeWithTag("summaryDone").performClick()
+        // The summary grows with the achievements of the game: scroll to its button.
+        compose.onNodeWithTag("summaryDone").performScrollTo().performClick()
         compose.waitForIdle()
         // The first completed daily offers the reminders once.
         if (exists("notNow")) compose.onNodeWithTag("notNow").performClick()

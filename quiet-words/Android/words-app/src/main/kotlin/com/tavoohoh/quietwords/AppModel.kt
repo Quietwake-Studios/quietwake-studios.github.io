@@ -14,6 +14,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tavoohoh.quiet.core.DailyKey
 import com.tavoohoh.quiet.ui.DailyReminders
+import com.tavoohoh.quiet.ui.QuietTones
+import com.tavoohoh.quiet.core.Palette
+import com.tavoohoh.quietwords.core.AppIconChoice
+import com.tavoohoh.quietwords.core.BoardFont
+import com.tavoohoh.quietwords.core.Looks
+import com.tavoohoh.quietwords.core.Marker
+import com.tavoohoh.quietwords.design.FeedbackService
+import com.tavoohoh.quietwords.design.LauncherIcon
 import com.tavoohoh.quiet.ui.StoreReview
 import com.tavoohoh.quietwords.core.Achievement
 import com.tavoohoh.quietwords.core.Album
@@ -43,7 +51,10 @@ import kotlin.random.Random
 /** Debug `uiTesting`: cells mark "start"/"end" of the next word and the hidden word row carries the answer. */
 val LocalUiTesting = staticCompositionLocalOf { false }
 
-enum class Route { HOME, NEW_GAME, GAME, TUTORIAL, DAILY, SETTINGS }
+enum class Route { HOME, NEW_GAME, GAME, TUTORIAL, DAILY, SETTINGS, COLLECTION, ALBUM_THEME }
+
+/** Collection's tabs. */
+enum class CollectionTab { ALBUM, REWARDS, ACHIEVEMENTS }
 
 /** "Match system", or a fixed light or dark look. */
 enum class AppearanceMode(val rawValue: String) {
@@ -93,6 +104,30 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         private set
     var appearance by mutableStateOf(AppearanceMode.SYSTEM)
         private set
+    var soundEnabled by mutableStateOf(true)
+        private set
+    var hapticsEnabled by mutableStateOf(true)
+        private set
+    /** "Larger letters": the board has its own size instead of following the font scale. */
+    var largerLetters by mutableStateOf(false)
+        private set
+    /** "Cheaper hints" (the "In the Red" reward): on when earned, the player can turn it off. */
+    var cheapHints by mutableStateOf(true)
+        private set
+    /** What the player picked in Rewards (`looks` is what applies: only unlocked choices). */
+    var chosenLooks by mutableStateOf(Looks())
+        private set
+    val looks: Looks get() = chosenLooks.effective(progress)
+
+    /** Collection: the tab it opens on, and the theme whose album is open. */
+    var collectionTab by mutableStateOf(CollectionTab.ALBUM)
+    var albumThemeID: String? by mutableStateOf(null)
+        private set
+    var albumLanguage by mutableStateOf(WordLanguage.EN)
+
+    /** Haptics and tones for play (Settings › Sound and Haptics). */
+    lateinit var feedback: FeedbackService
+        private set
     var lastLevel: Level = Level.GENTLE
         private set
     var lastThemeID: String? = null
@@ -132,7 +167,8 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             app.getSharedPreferences("storeReview-uitesting", Context.MODE_PRIVATE).edit(commit = true) { clear() }
         }
         if (args.demo) DemoData.seed(directory, args.words ?: WordLanguage.EN)
-        play = WordsPlay(WordsStore(directory), today = { AppClock.todayKey })
+        play = WordsPlay(WordsStore(directory), today = { AppClock.todayKey }, cheapHintsEnabled = { cheapHints })
+        feedback = FeedbackService(QuietTones(app), sound = { soundEnabled }, haptics = { hapticsEnabled })
         play.onChange = { revision++ }
         reminders = wordsReminders(app, uiTesting = args.uiTesting) { play.reminderState() }
         storeReview = StoreReview(app, if (args.uiTesting) "storeReview-uitesting" else "storeReview")
@@ -140,6 +176,7 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         args.words?.let { chooseLanguage(it) }
         if (args.tutorialDone) finishTutorial()
         args.appearance?.let(::setAppearanceMode)
+        if (args.unlockAll) play.unlockAll()
         applyDebug(args)
         // Warm the theme library and today's board off the main thread.
         viewModelScope.launch(Dispatchers.Default) { library }
@@ -150,6 +187,16 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         hasChosenLanguage = prefs.getBoolean(KEY_CHOSE_LANGUAGE, false)
         tutorialDone = prefs.getBoolean(KEY_TUTORIAL, false)
         appearance = AppearanceMode.fromRaw(prefs.getString(KEY_APPEARANCE, null))
+        soundEnabled = prefs.getBoolean(KEY_SOUND, true)
+        hapticsEnabled = prefs.getBoolean(KEY_HAPTICS, true)
+        largerLetters = prefs.getBoolean(KEY_LARGER, false)
+        cheapHints = prefs.getBoolean(KEY_CHEAP_HINTS, true)
+        chosenLooks = Looks(
+            palette = prefs.getString(KEY_PALETTE, null)?.let(Palette::fromRaw) ?: Palette.TEAL_CORAL,
+            marker = Marker.fromRaw(prefs.getString(KEY_MARKER, null)) ?: Marker.HIGHLIGHTER,
+            boardFont = BoardFont.fromRaw(prefs.getString(KEY_BOARD_FONT, null)) ?: BoardFont.ROUNDED,
+            icon = AppIconChoice.fromRaw(prefs.getString(KEY_ICON, null)) ?: AppIconChoice.STANDARD,
+        )
         lastLevel = prefs.getString(KEY_LEVEL, null)?.let(Level::fromRaw) ?: Level.GENTLE
         lastThemeID = prefs.getString(KEY_THEME, null)
     }
@@ -225,6 +272,43 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         finishTutorial()
         show(Route.NEW_GAME)
     }
+
+    fun setSound(on: Boolean) { soundEnabled = on; prefs.edit { putBoolean(KEY_SOUND, on) } }
+    fun setHaptics(on: Boolean) { hapticsEnabled = on; prefs.edit { putBoolean(KEY_HAPTICS, on) } }
+    fun chooseLargerLetters(on: Boolean) { largerLetters = on; prefs.edit { putBoolean(KEY_LARGER, on) } }
+    fun chooseCheapHints(on: Boolean) { cheapHints = on; prefs.edit { putBoolean(KEY_CHEAP_HINTS, on) } }
+
+    /** A reward picked in Collection (only unlocked ones can be picked). */
+    fun choose(looks: Looks) {
+        val iconChanged = looks.icon != chosenLooks.icon
+        chosenLooks = looks
+        prefs.edit {
+            putString(KEY_PALETTE, looks.palette.rawValue)
+            putString(KEY_MARKER, looks.marker.rawValue)
+            putString(KEY_BOARD_FONT, looks.boardFont.rawValue)
+            putString(KEY_ICON, looks.icon.rawValue)
+        }
+        if (iconChanged && !uiTesting) LauncherIcon.set(getApplication(), looks.icon)
+    }
+
+    // Collection
+
+    fun openCollection(tab: CollectionTab) {
+        collectionTab = tab
+        albumLanguage = wordLanguage
+        push(Route.COLLECTION)
+    }
+
+    fun openAlbum(themeID: String, language: WordLanguage) {
+        albumThemeID = themeID
+        albumLanguage = language
+        push(Route.ALBUM_THEME)
+    }
+
+    val pendingUnlocks: List<Achievement> get() = observed { play.pendingUnlocks }
+    fun dismissUnlock(achievement: Achievement) = play.dismissUnlock(achievement)
+    /** Best score of the active game's level and language when it started ("New best"). */
+    val bestAtStart: Int get() = observed { play.bestAtStart }
 
     fun setAppearanceMode(mode: AppearanceMode) {
         appearance = mode
@@ -347,7 +431,11 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         activeKind = null
         play.reset()
         tutorialDone = false
-        prefs.edit { remove(KEY_TUTORIAL) }
+        // Like iOS: the cosmetic choices and the tutorial go; settings stay.
+        prefs.edit { for (key in REWARD_KEYS + KEY_TUTORIAL) remove(key) }
+        cheapHints = true
+        if (chosenLooks.icon != AppIconChoice.STANDARD && !uiTesting) LauncherIcon.set(getApplication(), AppIconChoice.STANDARD)
+        chosenLooks = Looks()
         if (!uiTesting) reminders.reschedule()
     }
 
@@ -377,6 +465,12 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             "tutorial" -> show(Route.TUTORIAL)
             "daily" -> show(Route.DAILY)
             "settings" -> show(Route.SETTINGS)
+            "collection" -> { show(); openCollection(CollectionTab.REWARDS) }
+            "album" -> { show(); openCollection(CollectionTab.ALBUM) }
+            "achievements" -> { show(); openCollection(CollectionTab.ACHIEVEMENTS) }
+        }
+        args.albumTheme?.takeIf { library.theme(it) != null }?.let { id ->
+            show(); openCollection(CollectionTab.ALBUM); openAlbum(id, wordLanguage)
         }
         args.playDay?.let { day ->
             val started = play.playDaily(day, wordLanguage) ?: return@let
@@ -425,6 +519,16 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         private const val KEY_LEVEL = "lastLevel"
         private const val KEY_THEME = "lastTheme"
         private const val KEY_APPEARANCE = "appearanceMode"
+        private const val KEY_SOUND = "soundEnabled"
+        private const val KEY_HAPTICS = "hapticsEnabled"
+        private const val KEY_LARGER = "largerLetters"
+        private const val KEY_CHEAP_HINTS = "cheapHints"
+        private const val KEY_PALETTE = "palette"
+        private const val KEY_MARKER = "marker"
+        private const val KEY_BOARD_FONT = "boardFont"
+        private const val KEY_ICON = "appIcon"
+        /** Cosmetic choices, cleared by "Reset progress" (iOS `PreferenceKey.rewards`). */
+        private val REWARD_KEYS = listOf(KEY_PALETTE, KEY_MARKER, KEY_BOARD_FONT, KEY_ICON, KEY_CHEAP_HINTS)
 
         fun storeDirectory(context: Context) = File(context.filesDir, "store")
     }
@@ -456,6 +560,10 @@ data class LaunchArgs(
     /** Opens a day's challenge (`yyyy-MM-dd`) in the words language (with `won`, finished). */
     val playDay: String? = null,
     val appearance: AppearanceMode? = null,
+    /** Every achievement unlocked (iOS `-unlockAll`). */
+    val unlockAll: Boolean = false,
+    /** Opens one theme's album (iOS `-albumTheme`). */
+    val albumTheme: String? = null,
 ) {
     companion object {
         fun from(intent: Intent?): LaunchArgs {
@@ -479,6 +587,8 @@ data class LaunchArgs(
                 demo = e.getBoolean("demo"),
                 playDay = e.getString("playDay"),
                 appearance = e.getString("appearance")?.let(AppearanceMode::fromRaw),
+                unlockAll = e.getBoolean("unlockAll"),
+                albumTheme = e.getString("albumTheme"),
             )
         }
     }

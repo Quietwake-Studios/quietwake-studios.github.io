@@ -47,7 +47,7 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
         private set
 
     /** Haptics (set by the screen). */
-    var onFeedback: (Feedback) -> Unit = {}
+    var onFeedback: (Feedback, Int) -> Unit = { _, _ -> }
     /** After every move: the session as it is now and what happened (progress, album, saving). */
     var onChange: (GameSession, List<GameSession.Event>) -> Unit = { _, _ -> }
     /** Reduce Motion (set by the screen): no letter-by-letter reveal. */
@@ -77,7 +77,7 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
         stroke = to
         // A touch that hasn't moved may be the second tap: keep the first letter until it does.
         if (to.start != to.end) firstTap = null
-        if (length != previous) onFeedback(Feedback.LETTER)
+        if (length != previous) onFeedback(Feedback.LETTER, length - 1)
     }
 
     /** The finger lifted. A stroke of one letter is a tap. */
@@ -100,7 +100,7 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
         val first = firstTap
         if (first == null) {
             firstTap = cell
-            return onFeedback(Feedback.LETTER)
+            return onFeedback(Feedback.LETTER, 0)
         }
         if (first == cell) {
             firstTap = null
@@ -108,7 +108,7 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
         }
         if (board.line(first, cell) == null) {
             firstTap = cell
-            return onFeedback(Feedback.LETTER)
+            return onFeedback(Feedback.LETTER, 0)
         }
         firstTap = null
         commit(first, cell)
@@ -118,14 +118,14 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
 
     private fun commit(start: Int, end: Int) {
         val allowed = allowedWord
-        if (allowed != null && board.placement(start, end) != allowed) return onFeedback(Feedback.INVALID)
+        if (allowed != null && board.placement(start, end) != allowed) return onFeedback(Feedback.INVALID, 0)
         val events = session.select(start, end) ?: return
         handle(events)
     }
 
     fun requestHint() {
         val event = session.hint() ?: return
-        onFeedback(Feedback.HINT)
+        onFeedback(Feedback.HINT, 0)
         handle(listOf(event))
     }
 
@@ -155,17 +155,17 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
         for (event in events) {
             when (event) {
                 is GameSession.Event.Found -> {
-                    onFeedback(Feedback.FOUND)
+                    onFeedback(Feedback.FOUND, 0)
                     flash(event.index)
                 }
                 is GameSession.Event.AlreadyFound -> flash(event.index)
-                is GameSession.Event.GuessRight -> onFeedback(Feedback.HIDDEN_WORD)
+                is GameSession.Event.GuessRight -> onFeedback(Feedback.HIDDEN_WORD, 0)
                 is GameSession.Event.GuessWrong -> {
-                    onFeedback(Feedback.INVALID)
+                    onFeedback(Feedback.INVALID, 0)
                     guessShake += 1
                 }
                 is GameSession.Event.Won -> {
-                    onFeedback(Feedback.WON)
+                    onFeedback(Feedback.WON, 0)
                     reveal()
                 }
                 GameSession.Event.Miss, is GameSession.Event.Hint -> Unit

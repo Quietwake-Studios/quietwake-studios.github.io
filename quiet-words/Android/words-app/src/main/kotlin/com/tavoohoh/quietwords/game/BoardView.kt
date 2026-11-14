@@ -42,6 +42,10 @@ import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quietwords.LocalUiTesting
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.GameSession
+import com.tavoohoh.quietwords.core.Marker
+import com.tavoohoh.quietwords.design.LocalBoardLooks
+import com.tavoohoh.quietwords.design.family
+import com.tavoohoh.quietwords.design.weight
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
@@ -94,7 +98,6 @@ data class BoardGeometry(val side: Int, val size: Float) {
 val AnswerMark = SemanticsPropertyKey<String>("AnswerMark")
 var SemanticsPropertyReceiver.answerMark by AnswerMark
 
-/** The marker a found word stays in. Only the Highlighter for now (the others are rewards, Phase 4). */
 private enum class Ink { FOUND, FLASH, STROKE }
 
 /**
@@ -119,8 +122,11 @@ fun BoardView(model: GameModel, size: Dp, modifier: Modifier = Modifier) {
     val hiddenLit = board.hiddenCells.take(revealed).toSet()
     val foundCells = session.foundCells
     val answer = if (uiTesting) nextAnswer(session) else null
-    val fontSize = with(density) { (geometry.cell * 0.5f).toSp() }
-    val letterStyle = TextStyle(fontSize = fontSize, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+    val looks = LocalBoardLooks.current
+    val fontSize = with(density) { (geometry.cell * (if (looks.largerLetters) 0.6f else 0.5f)).toSp() }
+    val letterStyle = TextStyle(
+        fontSize = fontSize, fontFamily = looks.boardFont.family, fontWeight = looks.boardFont.weight, textAlign = TextAlign.Center,
+    )
 
     Box(
         modifier
@@ -162,7 +168,7 @@ fun BoardView(model: GameModel, size: Dp, modifier: Modifier = Modifier) {
                         drawRoundRect(colors.primary, rect.first, rect.second, radius, style = Stroke(2 * density.density))
                     }
                     Ink.FLASH -> drawRoundRect(colors.accent.copy(alpha = 0.26f), rect.first, rect.second, radius)
-                    Ink.FOUND -> drawRoundRect(colors.primary.copy(alpha = if (dark) 0.24f else 0.18f), rect.first, rect.second, radius)
+                    Ink.FOUND -> drawMarker(looks.marker, rect.first, rect.second, radius, colors.primary, colors.ink, dark, density.density)
                 }
             }
             for (index in session.found) {
@@ -224,6 +230,25 @@ fun BoardView(model: GameModel, size: Dp, modifier: Modifier = Modifier) {
             ) {
                 Text(letter, style = letterStyle, color = if (index in hiddenLit) colors.accent else colors.ink)
             }
+        }
+    }
+}
+
+/** A found word in the player's marker (iOS `Marker.draw`); `topLeft`/`size` is the capsule, unrotated. */
+fun DrawScope.drawMarker(marker: Marker, topLeft: Offset, size: Size, radius: CornerRadius, primary: Color, ink: Color, dark: Boolean, d: Float) {
+    when (marker) {
+        Marker.HIGHLIGHTER -> drawRoundRect(primary.copy(alpha = if (dark) 0.24f else 0.18f), topLeft, size, radius)
+        Marker.PENCIL -> drawRoundRect(ink.copy(alpha = 0.55f), topLeft, size, radius, style = Stroke(1.5f * d))
+        Marker.INK -> {
+            drawRoundRect(primary.copy(alpha = 0.1f), topLeft, size, radius)
+            drawRoundRect(primary.copy(alpha = 0.75f), topLeft, size, radius, style = Stroke(2f * d))
+        }
+        Marker.UNDERLINE -> {
+            val y = topLeft.y + size.height - 1.5f * d
+            drawLine(
+                primary, Offset(topLeft.x + size.height * 0.3f, y), Offset(topLeft.x + size.width - size.height * 0.3f, y),
+                strokeWidth = 3f * d, cap = androidx.compose.ui.graphics.StrokeCap.Round,
+            )
         }
     }
 }

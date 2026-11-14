@@ -130,7 +130,8 @@ private fun LanguageStep(language: WordLanguage, onSelect: (WordLanguage) -> Uni
 private fun PlayStep(model: GameModel, step: Int, language: WordLanguage, boardSize: androidx.compose.ui.unit.Dp, onAdvance: (Int) -> Unit, onFinish: () -> Unit) {
     val colors = QuietTheme.colors
     val haptics = rememberHaptics()
-    SideEffect { model.onFeedback = { haptics.play(it) } }
+    val feedback = com.tavoohoh.quietwords.design.LocalFeedback.current
+    SideEffect { model.onFeedback = { event, step -> feedback.play(event, haptics, step) } }
     val words = if (language == WordLanguage.EN) listOf("CORAL", "WAVES") else listOf("CORAL", "MEDUSA")
     val found = model.state.found.size
     LaunchedEffect(found) {

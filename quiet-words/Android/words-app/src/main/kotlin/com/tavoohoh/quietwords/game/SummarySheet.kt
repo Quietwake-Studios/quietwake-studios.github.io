@@ -40,6 +40,13 @@ import com.tavoohoh.quietwords.core.GameKind
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.GameSession
 import com.tavoohoh.quietwords.design.clock
+import com.tavoohoh.quietwords.design.icon
+import com.tavoohoh.quietwords.design.reward
+import com.tavoohoh.quietwords.design.title
+import com.tavoohoh.quietwords.core.Achievement
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 
 /**
  * End of a game: score, the hidden word, the stats and the words. A bottom sheet on phones,
@@ -47,7 +54,10 @@ import com.tavoohoh.quietwords.design.clock
  * daily's fireworks can go over it.
  */
 @Composable
-fun SummarySheet(session: GameSession, kind: GameKind, themeName: String, card: Boolean, onNewGame: () -> Unit, onHome: () -> Unit) {
+fun SummarySheet(
+    session: GameSession, kind: GameKind, themeName: String, card: Boolean, extras: SummaryExtras,
+    onNewGame: () -> Unit, onHome: () -> Unit,
+) {
     val colors = QuietTheme.colors
     val content = @Composable {
         Column(
@@ -60,6 +70,12 @@ fun SummarySheet(session: GameSession, kind: GameKind, themeName: String, card: 
                 style = QuietType.headline, color = colors.muted, modifier = Modifier.padding(top = 28.dp),
             )
             Text("${session.score}", style = QuietType.score(56.sp), color = colors.ink, modifier = Modifier.testTag("summaryScore"))
+            if (kind == GameKind.Free && session.score > extras.bestScore) {
+                Text(
+                    stringResource(R.string.new_best), style = QuietType.footnote.copy(fontWeight = FontWeight.Bold), color = colors.accent,
+                    modifier = Modifier.background(colors.accent.copy(alpha = 0.14f), CircleShape).padding(horizontal = 12.dp, vertical = 4.dp).testTag("newBest"),
+                )
+            }
             Column(Modifier.padding(vertical = 6.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 HiddenSlots(
                     session.board.hidden.length, session.board.hidden,
@@ -67,8 +83,9 @@ fun SummarySheet(session: GameSession, kind: GameKind, themeName: String, card: 
                 )
                 Text(stringResource(R.string.leftover_letters), style = QuietType.footnote, color = colors.muted)
             }
-            Stats(session)
+            Stats(session, themeName, extras)
             Words(session)
+            if (extras.unlocked.isNotEmpty()) Achievements(extras.unlocked)
             Buttons(kind, onNewGame, onHome, Modifier.padding(top = 4.dp))
         }
     }
@@ -108,7 +125,7 @@ fun SummarySheet(session: GameSession, kind: GameKind, themeName: String, card: 
 }
 
 @Composable
-private fun Stats(session: GameSession) {
+private fun Stats(session: GameSession, themeName: String, extras: SummaryExtras) {
     val colors = QuietTheme.colors
     Column(Modifier.fillMaxWidth().background(colors.background, RoundedCornerShape(18.dp)).padding(horizontal = 14.dp, vertical = 2.dp)) {
         StatRow(stringResource(R.string.words), "${session.found.size}/${session.board.placements.size} · ${session.wordPoints}", first = true)
@@ -120,6 +137,44 @@ private fun Stats(session: GameSession) {
             else stringResource(R.string.summary_hidden_revealed, session.scoring.hiddenRevealed),
         )
         if (session.hintsUsed > 0) StatRow(stringResource(R.string.hints), "${session.hintsUsed} · −${session.hintCost}")
+        extras.album?.let { (found, total) ->
+            StatRow(stringResource(R.string.new_in_album), "${extras.newAlbumWords} · $themeName $found/$total")
+        }
+    }
+}
+
+/** What the summary shows besides the session: the best before this game, the album and the achievements. */
+data class SummaryExtras(
+    /** Best free score of this level and language when the game started ("New best"). */
+    val bestScore: Int = Int.MAX_VALUE,
+    val unlocked: List<Achievement> = emptyList(),
+    val newAlbumWords: Int = 0,
+    /** The theme's album, found / total. */
+    val album: Pair<Int, Int>? = null,
+)
+
+@Composable
+private fun Achievements(unlocked: List<Achievement>) {
+    val colors = QuietTheme.colors
+    Column(
+        Modifier.fillMaxWidth().background(colors.background, RoundedCornerShape(18.dp)).padding(14.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        for (achievement in unlocked) {
+            Row(Modifier.semantics(mergeDescendants = true) {}, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(Modifier.size(40.dp).background(colors.primary, CircleShape), contentAlignment = Alignment.Center) {
+                    Icon(achievement.icon, null, tint = colors.onPrimary, modifier = Modifier.size(20.dp))
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(stringResource(R.string.achievement).uppercase(), style = QuietType.caption.copy(fontWeight = FontWeight.Bold), color = colors.muted)
+                    val reward = achievement.reward()
+                    Text(
+                        if (reward != null) "${achievement.title()} · $reward" else achievement.title(),
+                        style = QuietType.subheadline.copy(fontWeight = FontWeight.SemiBold), color = colors.ink,
+                    )
+                }
+            }
+        }
     }
 }
 
