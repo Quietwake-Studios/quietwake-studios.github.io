@@ -51,7 +51,7 @@ import com.tavoohoh.quietwords.AppClock
 import com.tavoohoh.quietwords.AppModel
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.DailyChallenge
-import com.tavoohoh.quietwords.design.DayFormat
+import com.tavoohoh.quiet.ui.DayFormat
 import com.tavoohoh.quietwords.design.LanguagePill
 import com.tavoohoh.quietwords.design.localizedName
 import com.tavoohoh.quietwords.design.title

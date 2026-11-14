@@ -1,4 +1,4 @@
-package com.tavoohoh.quietwords.design
+package com.tavoohoh.quiet.ui
 
 import android.icu.text.MeasureFormat
 import android.icu.util.Measure

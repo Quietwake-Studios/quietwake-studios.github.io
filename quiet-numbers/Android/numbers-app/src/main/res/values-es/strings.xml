@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">Tu pausa de 5 minutos.</string>
+    <string name="back">Atrás</string>
+    <string name="menu">Menú</string>
+    <string name="home">Inicio</string>
+    <string name="done">Listo</string>
+    <string name="new_game">Nueva partida</string>
+    <string name="daily_challenge">Reto diario</string>
+    <string name="not_played_yet">Aún no lo juegas</string>
+
+    <string name="score">Puntaje</string>
+    <string name="stage_n">Etapa %d</string>
+    <string name="best_n">Mejor %s</string>
+    <string name="goal_n">Meta %s</string>
+    <string name="goal_reached">Meta alcanzada</string>
+    <string name="goal_reached_praise">¡Meta alcanzada!</string>
+    <string name="numbers_left">Números que quedan: %s</string>
+    <string name="cell">%1$d, fila %2$d, columna %3$d</string>
+    <string name="cleared">Eliminada</string>
+
+    <string name="undo">Deshacer</string>
+    <string name="add_numbers">Agregar números</string>
+    <plurals name="remaining">
+        <item quantity="one">Queda %d</item>
+        <item quantity="many">Quedan %d</item>
+        <item quantity="other">Quedan %d</item>
+    </plurals>
+    <string name="hint">Pista</string>
+    <plurals name="costs_points">
+        <item quantity="one">Cuesta %d punto</item>
+        <item quantity="many">Cuesta %d puntos</item>
+        <item quantity="other">Cuesta %d puntos</item>
+    </plurals>
+
+    <string name="no_pairs_try_plus">No hay parejas. Prueba +</string>
+    <string name="triple_row">¡Triple fila!</string>
+    <string name="double_row">¡Doble fila!</string>
+    <string name="long_shot">¡Tiro largo!</string>
+    <string name="no_more_digit">¡Ya no hay más %d!</string>
+    <string name="in_a_row">¡%d seguidas!</string>
+
+    <string name="challenge_complete">Reto completado</string>
+    <string name="no_moves_left">No quedan jugadas</string>
+    <string name="new_best_score">¡Nuevo récord!</string>
+    <string name="replay">Repetición</string>
+    <string name="goal">Meta</string>
+    <string name="time">Tiempo</string>
+    <string name="stage">Etapa</string>
+    <string name="pairs">Parejas</string>
+    <string name="rows_cleared">Filas limpiadas</string>
+    <string name="plus_used">Usos de +</string>
+    <string name="hints">Pistas</string>
+    <string name="achievement_unlocked">Logro desbloqueado</string>
+    <string name="achievements_unlocked">Logros desbloqueados</string>
+</resources>

@@ -41,6 +41,7 @@ Cada app vive en su propio directorio en la raíz, con su propio `CLAUDE.md` que
 - `quiet-solitaire/` — solitario clásico (Klondike, robar 1). Segunda app, jugable en el simulador.
 - `quiet-sudoku/` — sudoku 9×9 con solución única y dificultad por técnicas lógicas. Tercera app, jugable en el simulador (2026-10-30).
 - `quiet-words/` — sopa de letras con temas para adultos en/es y palabra oculta. Cuarta app, jugable en el simulador (2026-11-08).
+- `quiet-numbers/Android/` — Quiet Numbers para Android (2026-11-14): fases 1–2 en emulador; ver su `CLAUDE.md`.
 - **Plataformas por carpeta (decisión 2026-11-13):** cada app tiene `iOS/` y `Android/` dentro de su carpeta (`quiet-words/iOS`, `quiet-words/Android`), y el kit igual (`QuietKit/iOS`, `QuietKit/Android`). Android empieza con Quiet Words; cuando Words Android esté terminado (fases 1–5, código completo), sigue Quiet Numbers (decisión 2026-11-13).
 - `QuietKit/` — paquete compartido: `QuietCore` (PRNG, día del reto, rachas, paleta de temas) y `QuietUI` (tema, componentes, hápticos, tonos, Game Center, splash). Lo usan Quiet Solitaire y Quiet Numbers (migrado el 2026-10-28, para su 1.1; sin cambios visibles ni en los tableros de cada fecha).
 

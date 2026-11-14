@@ -59,7 +59,7 @@ import com.tavoohoh.quietwords.AppModel
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.Leaderboard
 import com.tavoohoh.quietwords.core.WordLanguage
-import com.tavoohoh.quietwords.design.clock
+import com.tavoohoh.quiet.ui.clock
 import java.text.NumberFormat
 
 /** Minimal leaderboards (iOS `LeaderboardsView`): pick a board, Global or Friends. Play Games does the ranking; today's board breaks ties by time. */

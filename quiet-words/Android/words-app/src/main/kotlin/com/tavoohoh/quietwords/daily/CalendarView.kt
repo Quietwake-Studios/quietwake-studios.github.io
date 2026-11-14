@@ -36,7 +36,7 @@ import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quiet.ui.quietClickable
 import com.tavoohoh.quietwords.R
-import com.tavoohoh.quietwords.design.DayFormat
+import com.tavoohoh.quiet.ui.DayFormat
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.format.TextStyle

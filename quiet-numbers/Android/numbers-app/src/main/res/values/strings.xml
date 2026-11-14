@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- From iOS/App/Resources/Localizable.xcstrings (only the keys Android uses). -->
+<resources>
+    <string name="app_name" translatable="false">Quiet Numbers</string>
+    <string name="tagline">Your 5-minute break.</string>
+    <string name="back">Back</string>
+    <string name="menu">Menu</string>
+    <string name="home">Home</string>
+    <string name="done">Done</string>
+    <string name="new_game">New Game</string>
+    <string name="daily_challenge">Daily Challenge</string>
+    <string name="not_played_yet">Not played yet</string>
+
+    <string name="score">Score</string>
+    <string name="stage_n">Stage %d</string>
+    <string name="best_n">Best %s</string>
+    <string name="goal_n">Goal %s</string>
+    <string name="goal_reached">Goal reached</string>
+    <string name="goal_reached_praise">Goal reached!</string>
+    <string name="numbers_left">Numbers left: %s</string>
+    <string name="cell">%1$d, row %2$d, column %3$d</string>
+    <string name="cleared">Cleared</string>
+
+    <string name="undo">Undo</string>
+    <string name="add_numbers">Add numbers</string>
+    <plurals name="remaining">
+        <item quantity="one">%d remaining</item>
+        <item quantity="other">%d remaining</item>
+    </plurals>
+    <string name="hint">Hint</string>
+    <plurals name="costs_points">
+        <item quantity="one">Costs %d point</item>
+        <item quantity="other">Costs %d points</item>
+    </plurals>
+
+    <string name="no_pairs_try_plus">No pairs. Try +</string>
+    <string name="triple_row">Triple row!</string>
+    <string name="double_row">Double row!</string>
+    <string name="long_shot">Long shot!</string>
+    <string name="no_more_digit">No more %ds!</string>
+    <string name="in_a_row">%d in a row!</string>
+
+    <string name="challenge_complete">Challenge complete</string>
+    <string name="no_moves_left">No moves left</string>
+    <string name="new_best_score">New best score!</string>
+    <string name="replay">Replay</string>
+    <string name="goal">Goal</string>
+    <string name="time">Time</string>
+    <string name="stage">Stage</string>
+    <string name="pairs">Pairs</string>
+    <string name="rows_cleared">Rows cleared</string>
+    <string name="plus_used">+ used</string>
+    <string name="hints">Hints</string>
+    <string name="achievement_unlocked">Achievement unlocked</string>
+    <string name="achievements_unlocked">Achievements unlocked</string>
+</resources>

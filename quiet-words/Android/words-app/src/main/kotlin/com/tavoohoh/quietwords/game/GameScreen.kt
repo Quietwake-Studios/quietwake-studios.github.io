@@ -64,7 +64,7 @@ import com.tavoohoh.quiet.ui.RoundIconButton
 import com.tavoohoh.quiet.ui.rememberHaptics
 import com.tavoohoh.quietwords.core.GameKind
 import com.tavoohoh.quietwords.R
-import com.tavoohoh.quietwords.design.clock
+import com.tavoohoh.quiet.ui.clock
 import com.tavoohoh.quietwords.design.play
 import com.tavoohoh.quietwords.design.title
 import com.tavoohoh.quietwords.design.icon

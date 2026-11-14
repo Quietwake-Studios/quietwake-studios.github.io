@@ -62,7 +62,7 @@ import com.tavoohoh.quietwords.AppearanceMode
 import com.tavoohoh.quietwords.BuildConfig
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.WordLanguage
-import com.tavoohoh.quietwords.design.DayFormat
+import com.tavoohoh.quiet.ui.DayFormat
 import com.tavoohoh.quietwords.design.LanguageChoice
 import com.tavoohoh.quietwords.design.displayName
 import com.tavoohoh.quietwords.design.GroupDivider

@@ -39,7 +39,7 @@ import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quietwords.core.GameKind
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.GameSession
-import com.tavoohoh.quietwords.design.clock
+import com.tavoohoh.quiet.ui.clock
 import com.tavoohoh.quietwords.design.icon
 import com.tavoohoh.quietwords.design.reward
 import com.tavoohoh.quietwords.design.title

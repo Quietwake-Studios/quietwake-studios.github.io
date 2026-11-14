@@ -54,6 +54,3 @@ fun WordTheme.localizedName(): String = name(appLanguage())
 /** The system's language as a suggestion for the words (preselected, never decided for the player). */
 fun systemWordLanguage(): WordLanguage =
     if (Resources.getSystem().configuration.locales[0].language == "es") WordLanguage.ES else WordLanguage.EN
-
-/** "2:14". */
-fun clock(seconds: Int): String = "%d:%02d".format(seconds / 60, seconds % 60)
