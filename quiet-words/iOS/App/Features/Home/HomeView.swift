@@ -84,7 +84,7 @@ struct HomeView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .game:
-                    ActiveGameView(onNewGame: { path = [.newGame] }, onHome: { path = [] })
+                    ActiveGameView(onNewGame: { path = [.newGame] }, onHome: { path = app.summaryReturnsToDaily ? [.daily] : [] })
                 case .newGame:
                     NewGameView { themeID, level in
                         Task {
@@ -120,7 +120,12 @@ struct HomeView: View {
             }
             .onChange(of: app.gameCenter.isAuthenticated, initial: true) { updateAccessPoint() }
             .dailyReminderOffer(app.reminders, isPresented: $app.offersReminders)
-            .onChange(of: path) { updateAccessPoint() }
+            .onChange(of: path) {
+                updateAccessPoint()
+                // Back on Home or the Daily Challenge: a review prompt that waited (the third
+                // summary closed with "New Game") can show now.
+                if path.last == nil || path.last == .daily { app.storeReview.returnedToMenu() }
+            }
             .onChange(of: app.wordLanguage) { app.warmUpDaily() }
         }
         #if DEBUG
@@ -262,7 +267,7 @@ private struct DailyCard: View {
                     }
                     .font(.system(.title3, design: .rounded, weight: .heavy))
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(Text("Streak \(app.currentStreak)"))
+                    .accessibilityLabel(Text("\(app.currentStreak)-day streak"))
                     LanguagePill(language: $language, done: done, onPrimary: true)
                 }
             }

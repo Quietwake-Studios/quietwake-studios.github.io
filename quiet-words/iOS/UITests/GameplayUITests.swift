@@ -169,4 +169,61 @@ final class GameplayUITests: XCTestCase {
         app.buttons["startPlaying"].tap()
         XCTAssertTrue(app.buttons["play"].waitForExistence(timeout: 3))
     }
+
+    /// Settings › About: "Rate Quiet Words" (2026-11-13). `TEST_RUNNER_SHOTS_DIR=<dir>` saves a capture.
+    func testRateRowInSettings() {
+        let app = launch(["-open", "settings", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        let rate = app.buttons["rateApp"]
+        XCTAssertTrue(rate.waitForExistence(timeout: 5))
+        var swipes = 0
+        while !rate.isHittable, swipes < 6 {
+            app.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(rate.isHittable)
+        XCTAssertEqual(rate.label, "Rate Quiet Words")
+        saveShot(app, "settings-words")
+        // The reset confirmation, the same text in every app (2026-11-13).
+        app.buttons["resetProgress"].firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["All your game progress is erased."].waitForExistence(timeout: 3))
+        sleep(1)
+        saveShot(app, "words-reset-confirmation")
+    }
+
+    /// 2026-11-13: finishing a daily (here today's), "Done" goes back to the Daily Challenge
+    /// (the calendar), not Home. `TEST_RUNNER_SHOTS_DIR=<dir>` saves the summary and the calendar.
+    func testDoneAfterADailyReturnsToTheCalendar() throws {
+        let app = launch(["-words", "en", "-open", "daily", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        let play = app.buttons["playToday"]
+        XCTAssertTrue(play.waitForExistence(timeout: 10))
+        play.tap()
+        XCTAssertTrue(app.staticTexts["score"].waitForExistence(timeout: 30))
+        var words = 0
+        while words < 40, cell(app, value: "start").waitForExistence(timeout: 2) {
+            drag(app)
+            words += 1
+        }
+        let done = app.buttons["summaryDone"]
+        XCTAssertTrue(done.waitForExistence(timeout: 8))
+        sleep(2)
+        saveShot(app, "words-today-summary")
+        done.tap()
+        // The first completed daily offers the reminder, over the calendar.
+        let notNow = app.buttons["Not now"]
+        if notNow.waitForExistence(timeout: 3) {
+            sleep(1)
+            saveShot(app, "words-today-reminder-offer")
+            notNow.tap()
+        }
+        XCTAssertTrue(app.buttons["Previous month"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["playToday"].exists)
+        sleep(1)
+        saveShot(app, "words-today-calendar")
+    }
+
+    /// A capture for review, only when `TEST_RUNNER_SHOTS_DIR` is set.
+    private func saveShot(_ app: XCUIApplication, _ name: String) {
+        guard let dir = ProcessInfo.processInfo.environment["SHOTS_DIR"], !dir.isEmpty else { return }
+        try? app.screenshot().pngRepresentation.write(to: URL(fileURLWithPath: dir).appendingPathComponent("\(name).png"))
+    }
 }

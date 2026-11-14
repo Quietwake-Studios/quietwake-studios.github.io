@@ -35,10 +35,16 @@ import Testing
     }
 
     /// 10,000 boards: none fails, every word reads once, no blocked word, the leftover
-    /// letters spell the hidden word. Run with `swift test -c release` (slow in debug).
+    /// letters spell the hidden word. Run with `swift test -c release`. In Debug (the Xcode
+    /// scheme) it checks the first 1,000: all 10,000 took ~10 min there and hung app runs.
     @Test func tenThousandBoards() {
+        #if DEBUG
+        let count = 1_000
+        #else
+        let count = 10_000
+        #endif
         var failures: [String] = []
-        for i in 0..<10_000 {
+        for i in 0..<count {
             let level = Level.allCases[i % 3]
             let language = WordLanguage.allCases[(i / 3) % 2]
             guard let b = board(i, level, language) else { failures.append("\(i) \(level) \(language): no board"); continue }

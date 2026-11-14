@@ -33,6 +33,8 @@ final class AppModel {
     private(set) var unlockedThisGame: [Achievement] = []
     /// 19:00 reminder and 21:00 "streak at risk" (QuietKit), off until allowed.
     let reminders: DailyReminders
+    /// The store-review prompt after the third finished game, and Settings' "Rate" row.
+    let storeReview = StoreReview(appStoreID: "6827562391")
     /// The game on screen completed a daily: on leaving it, offer the reminder (once).
     private var completedDailyThisGame = false
     /// Shows the reminder offer (`dailyReminderOffer`) back on Home.
@@ -200,6 +202,13 @@ final class AppModel {
     // MARK: Daily
 
     var todayKey: String { DailyKey.dayKey(for: AppClock.now) }
+
+    /// Closing the summary of a daily (today's or a past day's) goes back to the Daily
+    /// Challenge, to see the day marked and the streak; a free game goes Home (2026-11-13).
+    var summaryReturnsToDaily: Bool {
+        if case .daily = activeKind { return true }
+        return false
+    }
 
     var currentStreak: Int { Streaks.current(completed: persistence.completedDays, today: todayKey) }
     var longestStreak: Int { Streaks.longest(completed: persistence.completedDays) }

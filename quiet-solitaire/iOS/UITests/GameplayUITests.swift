@@ -215,4 +215,28 @@ final class GameplayUITests: XCTestCase {
         app.buttons["undo"].tap()
         _ = stock
     }
+
+    /// Settings › About: "Rate Quiet Solitaire" (2026-11-13). `TEST_RUNNER_SHOTS_DIR=<dir>` saves a capture.
+    func testRateRowInSettings() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        app.buttons["settings"].tap()
+        let rate = app.buttons["rateApp"]
+        XCTAssertTrue(rate.waitForExistence(timeout: 5))
+        var swipes = 0
+        while !rate.isHittable, swipes < 6 {
+            app.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(rate.isHittable)
+        XCTAssertEqual(rate.label, "Rate Quiet Solitaire")
+        saveShot(app, "settings-solitaire")
+    }
+
+    /// A capture for review, only when `TEST_RUNNER_SHOTS_DIR` is set.
+    private func saveShot(_ app: XCUIApplication, _ name: String) {
+        guard let dir = ProcessInfo.processInfo.environment["SHOTS_DIR"], !dir.isEmpty else { return }
+        try? app.screenshot().pngRepresentation.write(to: URL(fileURLWithPath: dir).appendingPathComponent("\(name).png"))
+    }
 }

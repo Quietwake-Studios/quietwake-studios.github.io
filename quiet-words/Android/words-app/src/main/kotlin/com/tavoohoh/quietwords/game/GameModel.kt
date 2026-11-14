@@ -48,8 +48,8 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
 
     /** Haptics (set by the screen). */
     var onFeedback: (Feedback) -> Unit = {}
-    /** Something that happened (later: achievements, album, saving). */
-    var onEvent: (GameSession.Event) -> Unit = {}
+    /** After every move: the session as it is now and what happened (progress, album, saving). */
+    var onChange: (GameSession, List<GameSession.Event>) -> Unit = { _, _ -> }
     /** Reduce Motion (set by the screen): no letter-by-letter reveal. */
     var reduceMotion = false
 
@@ -153,7 +153,6 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
 
     private fun handle(events: List<GameSession.Event>) {
         for (event in events) {
-            onEvent(event)
             when (event) {
                 is GameSession.Event.Found -> {
                     onFeedback(Feedback.FOUND)
@@ -173,6 +172,7 @@ class GameModel(private val session: GameSession, val isTutorial: Boolean = fals
             }
         }
         state = session.copy()
+        onChange(state, events)
     }
 
     private fun flash(index: Int) {

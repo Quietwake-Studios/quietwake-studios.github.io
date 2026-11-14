@@ -86,7 +86,8 @@ struct SettingsView: View {
                         .padding(.horizontal, 16)
                 }
 
-                GroupSection {
+                GroupSection("About") {
+                    RateAppRow(appName: "Quiet Sudoku", review: app.storeReview)
                     HStack {
                         Text("Version").foregroundStyle(theme.ink)
                         Spacer()
@@ -104,7 +105,7 @@ struct SettingsView: View {
         .confirmationDialog("Reset all progress?", isPresented: $confirmsReset, titleVisibility: .visible) {
             Button("Reset Progress", role: .destructive, action: reset)
         } message: {
-            Text("Your games, daily challenge results, streaks, achievements and unlocked rewards will be deleted on this device and in iCloud. Scores already on Game Center leaderboards stay there. This can't be undone.")
+            Text("All your game progress is erased.")
         }
     }
 

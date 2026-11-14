@@ -177,6 +177,16 @@
         }
       }
     },
+    "About": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acerca de"
+          }
+        }
+      }
+    },
     "Account": {
       "localizations": {
         "es": {
@@ -233,6 +243,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suman 10"
+          }
+        }
+      }
+    },
+    "All your game progress is erased.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se borra todo el progreso de tu partida."
           }
         }
       }
@@ -1605,6 +1625,16 @@
         }
       }
     },
+    "Rate %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Califica %@"
+          }
+        }
+      }
+    },
     "Reach stage 5 in one game.": {
       "localizations": {
         "es": {
@@ -2240,16 +2270,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu pausa de 5 minutos."
-          }
-        }
-      }
-    },
-    "Your games, daily challenge results, streaks, achievements and unlocked rewards will be deleted on this device and in iCloud. Scores already on Game Center leaderboards stay there. This can't be undone.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se borrarán tus partidas, resultados del reto diario, rachas, logros y recompensas desbloqueadas en este dispositivo y en iCloud. Los puntajes que ya están en los leaderboards de Game Center se quedan ahí. No se puede deshacer."
           }
         }
       }

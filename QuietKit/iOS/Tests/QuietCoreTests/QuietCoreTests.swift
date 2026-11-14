@@ -182,3 +182,60 @@ import Testing
         #expect(DailyDuel.result(mine: nil, theirs: (900, 200)) == .notBoth)
     }
 }
+
+@Suite struct ReviewPromptTests {
+    @Test func asksOnTheThirdSummaryOnly() {
+        var prompt = ReviewPrompt()
+        #expect(prompt.summaryClosed() == false)
+        #expect(prompt.summaryClosed() == false)
+        #expect(prompt.summaryClosed() == true)
+        #expect(prompt.asked)
+        for _ in 0..<20 {
+            #expect(prompt.summaryClosed() == false)
+            #expect(prompt.returnedToMenu() == false)
+        }
+    }
+
+    @Test func neverAsksTwice() {
+        var prompt = ReviewPrompt(finishedGames: 2, asked: true)
+        #expect(prompt.summaryClosed() == false)
+        #expect(prompt.returnedToMenu() == false)
+        #expect(prompt == ReviewPrompt(finishedGames: 2, asked: true))
+    }
+
+    /// Third summary closed with "New Game": counted, but nothing over the fresh board; the
+    /// next return to Home or the Daily Challenge asks, once.
+    @Test func newGameWaitsForTheNextReturnToTheMenu() {
+        var prompt = ReviewPrompt(finishedGames: 2)
+        #expect(prompt.summaryClosed(startsNewGame: true) == false)
+        #expect(prompt.finishedGames == 3)
+        #expect(!prompt.asked)
+        #expect(prompt.returnedToMenu() == true)
+        #expect(prompt.returnedToMenu() == false)
+    }
+
+    /// Going to the menu before the third game asks nothing.
+    @Test func theMenuAloneNeverAsksEarly() {
+        var prompt = ReviewPrompt()
+        #expect(prompt.returnedToMenu() == false)
+        #expect(prompt.summaryClosed(startsNewGame: true) == false)
+        #expect(prompt.returnedToMenu() == false)
+        #expect(prompt.summaryClosed() == false)
+        #expect(prompt.returnedToMenu() == false)
+    }
+
+    /// New Game again on the fourth summary: still waiting; closing that one to the menu asks.
+    @Test func aWaitingPromptAsksOnTheNextSummaryClosedToTheMenu() {
+        var prompt = ReviewPrompt(finishedGames: 2)
+        #expect(prompt.summaryClosed(startsNewGame: true) == false)
+        #expect(prompt.summaryClosed(startsNewGame: true) == false)
+        #expect(prompt.summaryClosed() == true)
+    }
+
+    /// A saved count already past the threshold without the flag: the next close asks, once.
+    @Test func asksOnceWhenRestoredPastTheThreshold() {
+        var prompt = ReviewPrompt(finishedGames: 5)
+        #expect(prompt.summaryClosed() == true)
+        #expect(prompt.summaryClosed() == false)
+    }
+}

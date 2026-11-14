@@ -48,6 +48,8 @@ final class AppModel {
     let persistence: PersistenceService
     let gameCenter: GameCenterService
     let reminders: DailyReminders
+    /// The store-review prompt after the third finished game, and Settings' "Rate" row.
+    let storeReview = StoreReview(appStoreID: "6832387795")
     let library = ThemeLibrary.shared
 
     private(set) var activeGame: GameModel?
@@ -288,6 +290,13 @@ final class AppModel {
     // MARK: Daily
 
     var todayKey: String { DailyKey.dayKey(for: AppClock.now) }
+
+    /// Closing the summary of a daily (today's or a past day's) goes back to the Daily
+    /// Challenge, to see the day marked and the streak; a free game goes Home (2026-11-13).
+    var summaryReturnsToDaily: Bool {
+        if case .daily = activeKind { return true }
+        return false
+    }
 
     var currentStreak: Int { Streaks.current(completed: persistence.completedDays, today: todayKey) }
     var longestStreak: Int { Streaks.longest(completed: persistence.completedDays) }

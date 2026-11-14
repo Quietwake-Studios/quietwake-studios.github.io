@@ -28,6 +28,8 @@ Cada app documenta sus comandos exactos en su CLAUDE.md ("Comandos" y "Publicaci
 
 ## Ficha de la App Store
 
+- **ID de la app (Apple ID numérico):** en cuanto exista la app en App Store Connect, va en `StoreReview(appStoreID:)` del `AppModel` (fila "Rate Quiet <App>" de Ajustes y pedido de reseña tras la 3.ª partida; ver "Reseñas en la tienda" en el `CLAUDE.md` de la raíz). Revisar en TestFlight que la fila abre la página de reseña de esa app.
+
 - Textos en `fastlane/metadata/<locale>/` (en-US y es-MX; es-ES si la app lo usa); validar con `scripts/validate-metadata.py` y subir con el script de la app (`upload-metadata.py` en Solitaire) mostrando primero qué cambia y aplicando solo con permiso explícito.
 - Una versión en "Waiting for Review" sí acepta por la API cambios de descripción, palabras clave, links y copyright (verificado el 2026-11-13); una publicada no. Header y búsqueda no se colocan en una versión en revisión.
 - **Palabras clave (2026-11-13, Quiet Words):** máximo 100 bytes por idioma (las tildes cuentan doble), separadas por comas sin espacios. No repetir palabras del nombre ni del subtítulo (Apple ya las combina) ni términos que no describan la app ("crossword" en una sopa de letras). Sí: la palabra pegada que la gente escribe ("wordsearch", "sopadeletras"), sinónimos y lo propio (bilingüe, sin conexión). La posición en búsquedas genéricas depende sobre todo de descargas, conversión y calificaciones: por eso cada app pide reseña (ver "Reseñas en la tienda" en el `CLAUDE.md` de la raíz).

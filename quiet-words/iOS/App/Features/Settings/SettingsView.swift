@@ -18,48 +18,77 @@ struct SettingsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                GroupSection("Game") {
+            VStack(spacing: 18) {
+                GroupSection("Play") {
                     Button { choosesLanguage = true } label: {
-                        row("Word language", value: Text(verbatim: String(localized: app.wordLanguage.name).localizedCapitalized))
+                        SettingsRow(title: Text("Word language"),
+                                    detail: Text(verbatim: String(localized: app.wordLanguage.name).localizedCapitalized))
                     }
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("settingsLanguage")
-                    Toggle("Sound", isOn: $sound).toggleStyle(ThemedToggleStyle())
-                    Toggle("Haptics", isOn: $haptics).toggleStyle(ThemedToggleStyle())
+                    Toggle("Sound", isOn: $sound)
+                    Toggle("Haptics", isOn: $haptics)
                     Toggle(isOn: $largerLetters) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Larger letters")
                             Text("Bigger letters on the board.").font(.footnote).foregroundStyle(theme.muted)
                         }
                     }
-                    .toggleStyle(ThemedToggleStyle())
-                    DailyReminderToggle(reminders: app.reminders)
                 }
+                .toggleStyle(ThemedToggleStyle())
+
                 appearance
+
+                GroupSection("Daily Challenge") {
+                    DailyReminderToggle(reminders: app.reminders)
+                        .padding(.vertical, 8)
+                        .accessibilityIdentifier("dailyReminder")
+                }
+
                 GroupSection("Account") {
                     Button {
-                        app.gameCenter.isAuthenticated ? app.gameCenter.showDashboard() : app.gameCenter.signIn()
+                        if app.gameCenter.isAuthenticated { app.gameCenter.showDashboard() } else { app.gameCenter.signIn() }
                     } label: {
-                        row("Game Center", value: app.gameCenter.isAuthenticated ? Text("Signed in") : Text("Sign in"))
+                        SettingsRow(title: Text("Game Center"), detail: gameCenterStatus)
                     }
-                    .buttonStyle(.plain)
-                    Button(action: onHowToPlay) { row("How to play", value: nil) }
-                        .buttonStyle(.plain)
+                    Button(action: onHowToPlay) { SettingsRow(title: Text("How to play")) }
                         .accessibilityIdentifier("howToPlay")
                 }
+                .buttonStyle(.plain)
+
                 GroupSection("Privacy") {
-                    Text("Quiet Words collects nothing. Your games, album and progress stay on this device; with Game Center they also sync through your Apple account.")
+                    Text("Quiet Words doesn't collect any data. Your games, streaks and achievements stay on this device. If you sign in to Game Center, your scores and achievements are shared with Apple's Game Center and your progress is saved in your iCloud.")
                         .font(.subheadline)
                         .foregroundStyle(theme.muted)
-                        .padding(.vertical, 8)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.vertical, 14)
                 }
-                GroupSection {
-                    Button(role: .destructive) { confirmsReset = true } label: {
-                        Text("Reset progress").foregroundStyle(theme.accent).frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    GroupSection {
+                        Button { confirmsReset = true } label: {
+                            Text("Reset Progress…")
+                                .foregroundStyle(theme.accent)
+                                .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("resetProgress")
                     }
-                    .buttonStyle(.plain)
-                    row("Version", value: Text(verbatim: version))
+                    Text("Deletes games, daily results, streaks, achievements and unlocked rewards, here and in iCloud.")
+                        .font(.footnote)
+                        .foregroundStyle(theme.muted)
+                        .padding(.horizontal, 16)
+                }
+
+                GroupSection("About") {
+                    RateAppRow(appName: "Quiet Words", review: app.storeReview)
+                    HStack {
+                        Text("Version").foregroundStyle(theme.ink)
+                        Spacer()
+                        Text(verbatim: Self.version).foregroundStyle(theme.muted)
+                    }
+                    .accessibilityElement(children: .combine)
                 }
             }
             .padding(.horizontal, 20)
@@ -77,9 +106,9 @@ struct SettingsView: View {
                 .presentationCornerRadius(32)
         }
         .confirmationDialog("Reset all progress?", isPresented: $confirmsReset, titleVisibility: .visible) {
-            Button("Reset progress", role: .destructive) { app.resetProgress() }
+            Button("Reset Progress", role: .destructive) { app.resetProgress() }
         } message: {
-            Text("Games, the album, streaks and rewards are erased here and in iCloud. Sound and settings stay.")
+            Text("All your game progress is erased.")
         }
     }
 
@@ -109,19 +138,40 @@ struct SettingsView: View {
         }
     }
 
-    private func row(_ label: LocalizedStringKey, value: Text?) -> some View {
-        HStack {
-            Text(label).foregroundStyle(theme.ink)
-            Spacer()
-            if let value { value.foregroundStyle(theme.muted) }
-            Image(systemName: "chevron.forward").font(.footnote.weight(.semibold)).foregroundStyle(theme.muted)
-        }
-        .frame(minHeight: 44)
-        .contentShape(Rectangle())
+    private var gameCenterStatus: Text {
+        if let name = app.gameCenter.playerName { return Text("Signed in as \(name)") }
+        return Text("Not signed in")
     }
 
-    private var version: String {
-        let info = Bundle.main.infoDictionary
-        return "\(info?["CFBundleShortVersionString"] as? String ?? "") (\(info?["CFBundleVersion"] as? String ?? ""))"
+    /// Only the version number ("1.0.1"), as in every app of the family.
+    private static var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    }
+}
+
+/// Title, optional detail under it, and a chevron (as in the other apps' Settings).
+private struct SettingsRow: View {
+    let title: Text
+    var detail: Text?
+
+    @Environment(\.quietTheme) private var theme
+
+    var body: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                title.foregroundStyle(theme.ink)
+                if let detail {
+                    detail
+                        .font(.subheadline)
+                        .foregroundStyle(theme.muted)
+                }
+            }
+            Spacer()
+            Image(systemName: "chevron.forward")
+                .font(.footnote.weight(.bold))
+                .foregroundStyle(theme.muted)
+        }
+        .padding(.vertical, 10)
+        .contentShape(Rectangle())
     }
 }

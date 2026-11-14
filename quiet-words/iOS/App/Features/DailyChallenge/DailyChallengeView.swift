@@ -46,7 +46,7 @@ struct DailyChallengeView: View {
                     .disabled(app.isPreparing)
                     .accessibilityIdentifier("playToday")
                     HStack {
-                        Label { Text("\(app.currentStreak) streak") } icon: { Image(systemName: "flame.fill") }
+                        Label { Text("\(app.currentStreak)-day streak") } icon: { Image(systemName: "flame.fill") }
                         Spacer()
                         Text("Best \(app.longestStreak)")
                         Spacer()

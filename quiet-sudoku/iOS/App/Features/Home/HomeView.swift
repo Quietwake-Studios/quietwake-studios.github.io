@@ -97,7 +97,7 @@ struct HomeView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .game:
-                    ActiveGameView(onNewGame: newGame)
+                    ActiveGameView(onNewGame: newGame) { path = app.summaryReturnsToDaily ? [.daily] : [] }
                 case .daily:
                     DailyChallengeView { dayKey in
                         Task {
@@ -126,7 +126,12 @@ struct HomeView: View {
             .onChange(of: app.gameCenter.isAuthenticated, initial: true) { updateAccessPoint() }
             // After a first completed daily, back from the game: "Remind you at 7 PM?"
             .dailyReminderOffer(app.reminders, isPresented: Bindable(app).offersReminders)
-            .onChange(of: path) { updateAccessPoint() }
+            .onChange(of: path) {
+                updateAccessPoint()
+                // Back on Home or the Daily Challenge: a review prompt that waited (the third
+                // summary closed with "New Game") can show now.
+                if path.last == nil || path.last == .daily { app.storeReview.returnedToMenu() }
+            }
         }
         #if DEBUG
         .onAppear(perform: startDebugGameIfRequested)
@@ -200,6 +205,8 @@ struct HomeView: View {
 private struct ActiveGameView: View {
     @Environment(AppModel.self) private var app
     let onNewGame: (Difficulty) -> Void
+    /// Closing the win sheet: the Daily Challenge after a daily, Home after a free game.
+    let onHome: () -> Void
 
     var body: some View {
         if let game = app.activeGame, let kind = app.activeKind {
@@ -209,7 +216,8 @@ private struct ActiveGameView: View {
                 bestScore: kind == .classic ? app.bestAtStart : nil,
                 unlocked: app.unlockedThisGame,
                 onNewGame: onNewGame,
-                onRestart: { app.restart() }
+                onRestart: { app.restart() },
+                onHome: onHome
             )
             .id(ObjectIdentifier(game))
             .onDisappear { app.leftGame() }

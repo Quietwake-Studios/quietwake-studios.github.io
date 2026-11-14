@@ -206,6 +206,16 @@ Decisiones de implementación (fase 5):
 - El ícono dorado funciona en iPhone y iPad (en Mac, la app de iPad no cambia de ícono).
 - Preferencias en `UserDefaults` (`@AppStorage`); progreso y logros en SwiftData (`StoredProgress`). Los retos de días pasados también cuentan para logros de juego.
 
+## Reseñas y vuelta al calendario (2026-11-13)
+
+Regla de la familia ("Reseñas en la tienda" y "Reto diario" en `../CLAUDE.md`):
+- **Pedido de reseña:** `AppModel.storeReview` (`StoreReview` de QuietUI, App Store ID 6827562391) cuenta cada resumen cerrado ("Inicio", "Listo", "Nueva partida") y pide la reseña del sistema una sola vez, al cerrar el de la 3.ª partida terminada; si ese resumen se cierra con "Nueva partida", cuenta pero el diálogo espera a la próxima vuelta a Inicio o al Reto diario (`returnedToMenu()`, desde `HomeView`). Cuenta y marca en `UserDefaults` (`storeReview.*`); "Restablecer progreso" no las borra. Apagado con `-uiTesting`, `-startGame` y `-demo`.
+- **Ajustes iguales en las cuatro apps** (orden Jugar, Apariencia, Reto diario, Cuenta, Privacidad, "Restablecer progreso…" con su nota, Acerca de; texto de Privacidad de la plantilla de `../CLAUDE.md`; Versión solo con el número).
+- **Ajustes › Acerca de:** "Rate Quiet Numbers" / "Califica Quiet Numbers" (`RateAppRow`, abre la página de reseña de la App Store) y Versión.
+- **Restablecer progreso:** la confirmación dice lo mismo en las cuatro apps: "All your game progress is erased." / "Se borra todo el progreso de tu partida." (título y botones, los de siempre).
+- **Al terminar un reto, de hoy o pasado**, el botón del resumen ("Listo") vuelve al Reto diario (`AppModel.summaryReturnsToDaily`); la partida libre vuelve a Inicio.
+- Tests: `DailyRestartUITests.testDoneAfterAPastDayReturnsToTheCalendar` y `testDoneAfterTodayReturnsToTheCalendar` (con `-startGame -summaryScene [-summaryDay <yyyy-MM-dd>]`); `CollectionUITests.testRateRowInSettings`; política en QuietKit (`ReviewPromptTests`).
+
 ## Estética y UX
 
 - Diseño cerrado en el canvas "Quiet Numbers · Diseño" (Claude Design, 2026-10-26); su brief está en `design/backups/pre-plantilla-2026-10-29/canvas/Brief.dc.html`; el canvas vigente es el del link de arriba.

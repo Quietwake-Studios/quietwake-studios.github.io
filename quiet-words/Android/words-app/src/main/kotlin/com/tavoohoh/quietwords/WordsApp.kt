@@ -31,6 +31,10 @@ import com.tavoohoh.quietwords.game.GameScreen
 import com.tavoohoh.quietwords.home.HomeScreen
 import com.tavoohoh.quietwords.newgame.NewGameScreen
 import com.tavoohoh.quietwords.tutorial.TutorialScreen
+import com.tavoohoh.quietwords.daily.DailyScreen
+import com.tavoohoh.quietwords.settings.ReminderOffer
+import com.tavoohoh.quietwords.settings.SettingsScreen
+import com.tavoohoh.quietwords.settings.rememberNotificationRequest
 import kotlinx.coroutines.CancellationException
 
 /** One stack of screens; system back (with its predictive preview) pops it. */
@@ -84,6 +88,19 @@ fun WordsApp(app: AppModel) {
                 Screen(app, screen)
             }
         }
+        val requestNotifications = rememberNotificationRequest(app.reminders)
+        if (app.offersReminders) {
+            ReminderOffer(
+                onRemind = {
+                    app.offersReminders = false
+                    if (app.reminders.needsPermissionRequest) requestNotifications() else app.reminders.onPermissionResult(true)
+                },
+                onNotNow = {
+                    app.offersReminders = false
+                    app.reminders.markOffered()
+                },
+            )
+        }
         AnimatedVisibility(showsSplash, enter = EnterTransition.None, exit = if (reduceMotion) ExitTransition.None else fadeOut(tween(350))) {
             QuietSplash(onFinished = { showsSplash = false })
         }
@@ -92,8 +109,16 @@ fun WordsApp(app: AppModel) {
 
 @Composable
 private fun Screen(app: AppModel, route: Route) {
+    val activity = androidx.activity.compose.LocalActivity.current
+    if (route == Route.HOME || route == Route.DAILY) {
+        androidx.compose.runtime.LaunchedEffect(Unit) {
+            if (app.reviewOnArrival()) activity?.let(app.storeReview::request)
+        }
+    }
     when (route) {
         Route.HOME -> HomeScreen(app)
+        Route.DAILY -> DailyScreen(app, onBack = app::pop)
+        Route.SETTINGS -> SettingsScreen(app, onBack = app::pop, onHowToPlay = { app.push(Route.TUTORIAL) })
         Route.NEW_GAME -> NewGameScreen(app, onBack = app::pop)
         Route.TUTORIAL -> TutorialScreen(app, onFinish = app::tutorialFinished)
         Route.GAME -> {
@@ -105,9 +130,9 @@ private fun Screen(app: AppModel, route: Route) {
                     kind = kind,
                     themeName = app.theme(game.state.themeID)?.localizedName() ?: "",
                     onBack = app::pop,
-                    onNewGame = { app.popToHome(); app.push(Route.NEW_GAME) },
+                    onNewGame = { if (app.leaveGame(toNewGame = true)) activity?.let(app.storeReview::request) },
                     onRestart = app::restart,
-                    onHome = app::popToHome,
+                    onHome = { if (app.leaveGame(toNewGame = false)) activity?.let(app.storeReview::request) },
                 )
             }
         }

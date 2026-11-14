@@ -39,6 +39,35 @@ final class DailyRestartUITests: XCTestCase {
         XCTAssertEqual(cellCount(app), latest)
     }
 
+    /// 2026-11-13: "Done" on a daily's summary goes back to the Daily Challenge (the
+    /// calendar), today's or a past day's.
+    @MainActor
+    func testDoneAfterAPastDayReturnsToTheCalendar() {
+        let app = finishDaily(["-summaryDay", pastDayKey])
+        XCTAssertTrue(app.buttons["Previous month"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
+    func testDoneAfterTodayReturnsToTheCalendar() {
+        let app = finishDaily([])
+        XCTAssertTrue(app.buttons["Previous month"].waitForExistence(timeout: 5))
+    }
+
+    /// The challenge one pair from its goal (`-summaryScene`): the pair, then "Done".
+    @MainActor
+    private func finishDaily(_ arguments: [String]) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-startGame", "-summaryScene", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"] + arguments
+        app.launch()
+        XCTAssertTrue(app.buttons["cell-0"].waitForExistence(timeout: 5))
+        app.buttons["cell-0"].tap()
+        app.buttons["cell-1"].tap()
+        let done = app.buttons["Done"]
+        XCTAssertTrue(done.waitForExistence(timeout: 8))
+        done.tap()
+        return app
+    }
+
     /// The day before today, a month back on the 1st.
     private var pastDayKey: String {
         let formatter = DateFormatter()

@@ -45,6 +45,8 @@ final class AppModel {
     let gameCenter: GameCenterService
     /// 19:00 reminder and 21:00 "streak at risk" (QuietKit), off until allowed.
     let reminders: DailyReminders
+    /// The store-review prompt after the third finished game, and Settings' "Rate" row.
+    let storeReview = StoreReview(appStoreID: "6828993446")
     private(set) var activeGame: GameModel?
     private(set) var activeKind: GameKind?
     /// Classic best when the active game started (for "Best" and "New record!").
@@ -283,6 +285,13 @@ final class AppModel {
     // MARK: Daily
 
     var todayKey: String { DailyKey.dayKey(for: AppClock.now) }
+
+    /// Closing the summary of a daily (today's or a past day's) goes back to the Daily
+    /// Challenge, to see the day marked and the streak; a free game goes Home (2026-11-13).
+    var summaryReturnsToDaily: Bool {
+        if case .daily = activeKind { return true }
+        return false
+    }
 
     var currentStreak: Int { Streaks.current(completed: persistence.completedDays, today: todayKey) }
     var longestStreak: Int { Streaks.longest(completed: persistence.completedDays) }

@@ -84,7 +84,7 @@ struct HomeView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .game:
-                    ActiveGameView()
+                    ActiveGameView { path = app.summaryReturnsToDaily ? [.daily] : [] }
                 case .daily:
                     DailyChallengeView { dayKey in
                         Task {
@@ -111,7 +111,12 @@ struct HomeView: View {
             .onChange(of: app.gameCenter.isAuthenticated, initial: true) { updateAccessPoint() }
             // After a first completed daily, back from the game: "Remind you at 7 PM?"
             .dailyReminderOffer(app.reminders, isPresented: Bindable(app).offersReminders)
-            .onChange(of: path) { updateAccessPoint() }
+            .onChange(of: path) {
+                updateAccessPoint()
+                // Back on Home or the Daily Challenge: a review prompt that waited (the third
+                // summary closed with "New Game") can show now.
+                if path.last == nil || path.last == .daily { app.storeReview.returnedToMenu() }
+            }
         }
         #if DEBUG
         .onAppear(perform: startDebugGameIfRequested)
@@ -131,7 +136,8 @@ struct HomeView: View {
 
     #if DEBUG
     /// UI tests: `-startGame` opens a game right away; `-seedKey <text>` makes its deal
-    /// deterministic; `-nearlyWon` starts one move from auto-complete.
+    /// deterministic; `-nearlyWon` starts one move from auto-complete (`-dailyDay <yyyy-MM-dd>`:
+    /// as that day's challenge, opened from the Daily Challenge).
     private func startDebugGameIfRequested() {
         let arguments = ProcessInfo.processInfo.arguments
         guard arguments.contains("-startGame"), path.isEmpty else { return }
@@ -146,6 +152,11 @@ struct HomeView: View {
         } else {
             GameSession(seed: value(after: "-seedKey").map(FNV1a.hash) ?? .random(in: .min ... .max))
         }
+        if let dayKey = value(after: "-dailyDay") {
+            app.start(GameModel(session: session), as: .daily(dayKey: dayKey, isReplay: false))
+            path = dayKey == app.todayKey ? [.game] : [.daily, .game]
+            return
+        }
         app.start(GameModel(session: session), as: .classic)
         path = [.game]
     }
@@ -155,6 +166,8 @@ struct HomeView: View {
 /// The game `AppModel` has on screen.
 private struct ActiveGameView: View {
     @Environment(AppModel.self) private var app
+    /// Closing the win sheet: the Daily Challenge after a daily, Home after a free game.
+    let onHome: () -> Void
 
     var body: some View {
         if let game = app.activeGame, let kind = app.activeKind {
@@ -164,7 +177,8 @@ private struct ActiveGameView: View {
                 bestScore: kind == .classic ? app.bestAtStart : nil,
                 unlocked: app.unlockedThisGame,
                 onNewGame: { Task { await app.newClassic() } },
-                onRestart: { app.restart() }
+                onRestart: { app.restart() },
+                onHome: onHome
             )
             .id(ObjectIdentifier(game))
             .onDisappear { app.leftGame() }

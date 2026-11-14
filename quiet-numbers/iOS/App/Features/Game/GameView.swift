@@ -16,6 +16,8 @@ struct GameView: View {
     let unlocked: [Achievement]
     /// A daily already played to the end before.
     var isReplay = false
+    /// Closing the summary ("Home", "Done"); nil pops the game.
+    var onHome: (() -> Void)?
 
     /// Best score when this game started, to spot a new record.
     @State private var startingBest: Int?
@@ -26,6 +28,7 @@ struct GameView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppModel.self) private var app
     @Environment(\.appearance) private var appearance
     @Environment(\.quietTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -124,8 +127,8 @@ struct GameView: View {
                     isReplay: isReplay,
                     isNewBest: (startingBest ?? 0) > 0 && model.session.score > (startingBest ?? 0),
                     unlocked: unlocked,
-                    onNewGame: { animate(onNewGame) },
-                    onHome: { dismiss() }
+                    onNewGame: { app.storeReview.summaryClosed(startsNewGame: true); animate(onNewGame) },
+                    onHome: { app.storeReview.summaryClosed(); (onHome ?? { dismiss() })() }
                 )
                 .transition(.move(edge: .bottom))
             }

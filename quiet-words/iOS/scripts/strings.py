@@ -34,6 +34,20 @@ ES = {
     "A Thousand Words": "Mil palabras",
     "A word of the theme made of the letters no word uses. Get it now for +%lld.":
         "Una palabra del tema hecha con las letras que no usa ninguna palabra. Si la adivinas ahora, +%lld.",
+    "About": "Acerca de",
+    "All your game progress is erased.": "Se borra todo el progreso de tu partida.",
+    "Quiet Words doesn't collect any data. Your games, streaks and achievements stay on this device. If you sign in to Game Center, your scores and achievements are shared with Apple's Game Center and your progress is saved in your iCloud.":
+        "Quiet Words no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo. Si inicias sesión en Game Center, tus puntajes y logros se comparten con Game Center de Apple y tu progreso se guarda en tu iCloud.",
+    "Deletes games, daily results, streaks, achievements and unlocked rewards, here and in iCloud.":
+        "Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas, aquí y en iCloud.",
+    "Reset Progress…":
+        "Restablecer progreso…",
+    "Reset Progress":
+        "Restablecer progreso",
+    "Signed in as %@":
+        "Sesión iniciada como %@",
+    "Not signed in":
+        "Sin sesión iniciada",
     "Account": "Cuenta",
     "Achievement": "Logro",
     "Achievement unlocked": "Logro desbloqueado",
@@ -87,8 +101,6 @@ ES = {
     "Friends": "Amigos",
     "Game": "Juego",
     "Game Center": "Game Center",
-    "Games, the album, streaks and rewards are erased here and in iCloud. Sound and settings stay.":
-        "Se borran las partidas, el álbum, las rachas y las recompensas, aquí y en iCloud. El sonido y los ajustes se quedan.",
     "Gentle": "Suave",
     "Global": "Global",
     "Gold": "Dorado",
@@ -182,7 +194,6 @@ ES = {
     "Steady Hand": "Pulso firme",
     "Step %lld of %lld": "Paso %1$lld de %2$lld",
     "Streak": "Racha",
-    "Streak %lld": "Racha %lld",
     "Surprise": "Sorpresa",
     "Teal & coral": "Petróleo y coral",
     "Ten Thousand Words": "Diez mil palabras",
@@ -268,6 +279,7 @@ KIT = {
     "Last %lld challenges": "Últimos %lld retos",
     "You won %lld of %lld": "Ganaste %1$lld de %2$lld",
     "No past challenges yet.": "Todavía no hay retos anteriores.",
+    "Rate %@": "Califica %@",
 }
 
 
@@ -275,7 +287,7 @@ KIT = {
 PLURALS = {
     "%lld friends already played; %@ leads with %@.": ("%lld friend already played; %@ leads with %@.", "%lld friends already played; %@ leads with %@.", "%1$lld amigo ya jugó; %2$@ va primero con %3$@.", "%1$lld amigos ya jugaron; %2$@ va primero con %3$@."),
     "%lld letters · the leftover ones": ("%lld letter · the leftover one", "%lld letters · the leftover ones", "%lld letra · la que sobra", "%lld letras · las que sobran"),
-    "%lld streak": ("%lld-day streak", "%lld-day streak", "Racha de %lld día", "Racha de %lld días"),
+    "%lld-day streak": ("%lld-day streak", "%lld-day streak", "Racha de %lld día", "Racha de %lld días"),
     "%lld tries left · a miss costs nothing": ("%lld try left · a miss costs nothing", "%lld tries left · a miss costs nothing", "Queda %lld intento · fallar no cuesta", "Quedan %lld intentos · fallar no cuesta"),
     "%lld words": ("%lld word", "%lld words", "%lld palabra", "%lld palabras"),
     "%lld words to the badge": ("%lld word to the badge", "%lld words to the badge", "Falta %lld palabra para la insignia", "Faltan %lld palabras para la insignia"),

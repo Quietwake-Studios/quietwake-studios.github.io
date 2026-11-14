@@ -52,7 +52,8 @@ struct GameView: View {
         }
         .sheet(isPresented: Binding(get: { model.showsSummary }, set: { if !$0 { model.dismissSummary() } })) {
             SummarySheet(session: session, kind: kind, bestScore: bestScore, unlocked: unlocked, newAlbumWords: newAlbumWords,
-                         onNewGame: onNewGame, onHome: { model.dismissSummary(); (onHome ?? { dismiss() })() })
+                         onNewGame: { app.storeReview.summaryClosed(startsNewGame: true); onNewGame() },
+                         onHome: { model.dismissSummary(); app.storeReview.summaryClosed(); (onHome ?? { dismiss() })() })
                 .presentationDetents([.large])
                 .presentationCornerRadius(32)
                 .interactiveDismissDisabled()

@@ -80,7 +80,7 @@ struct HomeView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .game:
-                    ActiveGameView()
+                    ActiveGameView { path = app.summaryReturnsToDaily ? [.daily] : [] }
                 case .daily:
                     DailyChallengeView { dayKey in
                         app.playDaily(dayKey)
@@ -103,7 +103,12 @@ struct HomeView: View {
             .onChange(of: app.gameCenter.isAuthenticated, initial: true) { updateAccessPoint() }
             // After a first completed daily, back from the game: "Remind you at 7 PM?"
             .dailyReminderOffer(app.reminders, isPresented: Bindable(app).offersReminders)
-            .onChange(of: path) { updateAccessPoint() }
+            .onChange(of: path) {
+                updateAccessPoint()
+                // Back on Home or the Daily Challenge: a review prompt that waited (the third
+                // summary closed with "New Game") can show now.
+                if path.last == nil || path.last == .daily { app.storeReview.returnedToMenu() }
+            }
         }
         #if DEBUG
         .onAppear(perform: startDebugGameIfRequested)
@@ -120,20 +125,22 @@ struct HomeView: View {
     /// Screenshots and UI tests: `-startGame` opens a game right away;
     /// `-seedKey <text>` makes its board deterministic and
     /// `-boardValues 5,3,7,…` starts from exact numbers.
-    /// `-summaryScene` opens today's challenge one pair (cells 0 and 1) from its goal, for the summary sheet.
+    /// `-summaryScene` opens today's challenge one pair (cells 0 and 1) from its goal, for the summary sheet;
+    /// with `-summaryDay <yyyy-MM-dd>`, that past day's, opened from the Daily Challenge.
     private func startDebugGameIfRequested() {
         let arguments = ProcessInfo.processInfo.arguments
         guard arguments.contains("-startGame"), path.isEmpty else { return }
-        if arguments.contains("-summaryScene") {
-            let board = Board(values: [5, 5, 3, 8, 1, 6, 2, 9, 4, 7, 1, 3, 6, 2, 8, 4, 9, 7])
-            let session = GameSession(board: board, mode: .daily(dayKey: app.todayKey), stage: 3, score: 549, goal: 550)
-            app.start(GameModel(session: session), as: .daily(dayKey: app.todayKey))
-            path = [.game]
-            return
-        }
         func value(after flag: String) -> String? {
             guard let i = arguments.firstIndex(of: flag), i + 1 < arguments.count else { return nil }
             return arguments[i + 1]
+        }
+        if arguments.contains("-summaryScene") {
+            let dayKey = value(after: "-summaryDay") ?? app.todayKey
+            let board = Board(values: [5, 5, 3, 8, 1, 6, 2, 9, 4, 7, 1, 3, 6, 2, 8, 4, 9, 7])
+            let session = GameSession(board: board, mode: .daily(dayKey: dayKey), stage: 3, score: 549, goal: 550)
+            app.start(GameModel(session: session), as: .daily(dayKey: dayKey))
+            path = dayKey == app.todayKey ? [.game] : [.daily, .game]
+            return
         }
         let session = if let values = value(after: "-boardValues") {
             GameSession(values: values.split(separator: ",").compactMap { Int($0) }, seed: 0)
@@ -151,6 +158,8 @@ struct HomeView: View {
 /// The game `AppModel` has on screen.
 private struct ActiveGameView: View {
     @Environment(AppModel.self) private var app
+    /// Closing the summary: the Daily Challenge after a daily, Home after a free game.
+    let onHome: () -> Void
 
     var body: some View {
         if let game = app.activeGame, let kind = app.activeKind {
@@ -161,7 +170,8 @@ private struct ActiveGameView: View {
                 onSessionChange: { app.sessionChanged() },
                 bestScore: kind == .classic ? app.progress.bestScore : nil,
                 unlocked: app.unlockedThisGame,
-                isReplay: app.isReplay
+                isReplay: app.isReplay,
+                onHome: onHome
             )
             .id(ObjectIdentifier(game))
             .onDisappear { app.leftGame() }

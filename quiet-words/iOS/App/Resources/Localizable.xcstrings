@@ -234,46 +234,6 @@
         }
       }
     },
-    "%lld streak": {
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld-day streak"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld-day streak"
-                }
-              }
-            }
-          }
-        },
-        "es": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Racha de %lld día"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Racha de %lld días"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "%lld tries left · a miss costs nothing": {
       "localizations": {
         "en": {
@@ -394,6 +354,46 @@
         }
       }
     },
+    "%lld-day streak": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld-day streak"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld-day streak"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Racha de %lld día"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Racha de %lld días"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld×%lld": {
       "localizations": {
         "es": {
@@ -454,6 +454,16 @@
         }
       }
     },
+    "About": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acerca de"
+          }
+        }
+      }
+    },
     "Account": {
       "localizations": {
         "es": {
@@ -510,6 +520,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Todas"
+          }
+        }
+      }
+    },
+    "All your game progress is erased.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se borra todo el progreso de tu partida."
           }
         }
       }
@@ -894,6 +914,16 @@
         }
       }
     },
+    "Deletes games, daily results, streaks, achievements and unlocked rewards, here and in iCloud.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas, aquí y en iCloud."
+          }
+        }
+      }
+    },
     "Don't lose your %lld-day streak.": {
       "localizations": {
         "en": {
@@ -1124,32 +1154,12 @@
         }
       }
     },
-    "Game": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Juego"
-          }
-        }
-      }
-    },
     "Game Center": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Game Center"
-          }
-        }
-      }
-    },
-    "Games, the album, streaks and rewards are erased here and in iCloud. Sound and settings stay.": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se borran las partidas, el álbum, las rachas y las recompensas, aquí y en iCloud. El sonido y los ajustes se quedan."
           }
         }
       }
@@ -1774,6 +1784,16 @@
         }
       }
     },
+    "Not signed in": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin sesión iniciada"
+          }
+        }
+      }
+    },
     "Notifications are off for this app. Turn them on in Settings.": {
       "localizations": {
         "es": {
@@ -1974,12 +1994,22 @@
         }
       }
     },
-    "Quiet Words collects nothing. Your games, album and progress stay on this device; with Game Center they also sync through your Apple account.": {
+    "Quiet Words doesn't collect any data. Your games, streaks and achievements stay on this device. If you sign in to Game Center, your scores and achievements are shared with Apple's Game Center and your progress is saved in your iCloud.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quiet Words no recolecta nada. Tus partidas, tu álbum y tu progreso se quedan en este dispositivo; con Game Center también se sincronizan con tu cuenta de Apple."
+            "value": "Quiet Words no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo. Si inicias sesión en Game Center, tus puntajes y logros se comparten con Game Center de Apple y tu progreso se guarda en tu iCloud."
+          }
+        }
+      }
+    },
+    "Rate %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Califica %@"
           }
         }
       }
@@ -2010,6 +2040,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repetición · %1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "Reset Progress": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablecer progreso"
+          }
+        }
+      }
+    },
+    "Reset Progress…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablecer progreso…"
           }
         }
       }
@@ -2164,16 +2214,6 @@
         }
       }
     },
-    "Sign in": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Iniciar sesión"
-          }
-        }
-      }
-    },
     "Sign in to Game Center in Settings to see leaderboards. Your progress is saved on this device either way.": {
       "localizations": {
         "es": {
@@ -2184,12 +2224,12 @@
         }
       }
     },
-    "Signed in": {
+    "Signed in as %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Conectado"
+            "value": "Sesión iniciada como %@"
           }
         }
       }
@@ -2290,16 +2330,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Racha"
-          }
-        }
-      }
-    },
-    "Streak %lld": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Racha %lld"
           }
         }
       }

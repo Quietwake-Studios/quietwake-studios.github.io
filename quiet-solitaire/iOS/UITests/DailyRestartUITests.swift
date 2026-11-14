@@ -81,6 +81,41 @@ final class DailyRestartUITests: XCTestCase {
         XCTAssertEqual(moves(app), latest)
     }
 
+    /// 2026-11-13: "Done" on a daily's win sheet goes back to the Daily Challenge (the
+    /// calendar), today's or a past day's.
+    func testDoneAfterAPastDayReturnsToTheCalendar() {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        let app = winDaily(formatter.string(from: Calendar.current.date(byAdding: .day, value: -1, to: .now)!))
+        XCTAssertTrue(app.buttons["Previous month"].waitForExistence(timeout: 5))
+    }
+
+    func testDoneAfterTodayReturnsToTheCalendar() {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        let app = winDaily(formatter.string(from: .now))
+        XCTAssertTrue(app.buttons["Previous month"].waitForExistence(timeout: 5))
+    }
+
+    /// A deal one move from auto-complete played as that day's challenge (`-dailyDay`).
+    private func winDaily(_ dayKey: String) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-resetStore", "-startGame", "-nearlyWon", "-dailyDay", dayKey,
+                               "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        app.buttons["10 of hearts, waste"].firstMatch.tap()
+        let autoComplete = app.buttons["autoComplete"]
+        XCTAssertTrue(autoComplete.waitForExistence(timeout: 3))
+        autoComplete.tap()
+        let done = app.buttons["winHome"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10))
+        XCTAssertEqual(done.label, "Done")
+        done.tap()
+        return app
+    }
+
     func testTodayResumesTheLatestAttempt() {
         check { _ in nil }
     }

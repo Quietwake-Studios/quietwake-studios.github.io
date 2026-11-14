@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.tavoohoh.quiet.ui.CapsuleButton
 import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quiet.ui.QuietType
-import com.tavoohoh.quietwords.GameKind
+import com.tavoohoh.quietwords.core.GameKind
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.GameSession
 import com.tavoohoh.quietwords.design.clock

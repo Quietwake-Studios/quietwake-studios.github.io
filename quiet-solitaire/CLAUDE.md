@@ -207,6 +207,16 @@ Categorías en Colección: mazo, reverso, tablero, efecto de victoria, pack de s
 
 **Colección en dos pestañas (2026-11-13, como Quiet Words):** arriba, `Segments` **Recompensas · Logros** (Words además tiene Álbum). Recompensas: las categorías de siempre y, con Números rojos, la sección Pistas. Logros: "N ganados de M" y una fila por logro con nombre, condición, progreso cuando cuenta algo (racha y victorias), sello si está ganado y la recompensa (`Achievement.reward`, que `AchievementRewardTests` compara con el `unlockedBy` de cada recompensa). Números rojos sin ganar: "Logro oculto · Sigue jugando…", sin condición ni recompensa. UI tests `testAchievementsTab` y `testCollectionTabsDemo` (capturas de las dos pestañas con `-demo`; `TEST_RUNNER_COLLECTION_LANGUAGE=es` para español).
 
+## Reseñas y vuelta al calendario (2026-11-13)
+
+Regla de la familia ("Reseñas en la tienda" y "Reto diario" en `../CLAUDE.md`):
+- **Pedido de reseña:** `AppModel.storeReview` (`StoreReview` de QuietUI, App Store ID 6828074077) cuenta cada resumen cerrado ("Inicio", "Listo", "Nueva partida") y pide la reseña del sistema una sola vez, al cerrar el de la 3.ª partida terminada; si ese resumen se cierra con "Nueva partida", cuenta pero el diálogo espera a la próxima vuelta a Inicio o al Reto diario (`returnedToMenu()`, desde `HomeView`). Cuenta y marca en `UserDefaults` (`storeReview.*`); "Restablecer progreso" no las borra. Apagado con `-uiTesting`, `-startGame` y `-demo`.
+- **Ajustes iguales en las cuatro apps** (orden Jugar, Apariencia, Reto diario, Cuenta, Privacidad, "Restablecer progreso…" con su nota, Acerca de; texto de Privacidad de la plantilla de `../CLAUDE.md`; Versión solo con el número).
+- **Ajustes › Acerca de:** "Rate Quiet Solitaire" / "Califica Quiet Solitaire" (`RateAppRow`, abre la página de reseña de la App Store) y Versión.
+- **Restablecer progreso:** la confirmación dice lo mismo en las cuatro apps: "All your game progress is erased." / "Se borra todo el progreso de tu partida." (título y botones, los de siempre).
+- **Al terminar un reto, de hoy o pasado**, el botón del resumen ("Listo") vuelve al Reto diario (`AppModel.summaryReturnsToDaily`); la partida libre vuelve a Inicio. En un reto el botón de la hoja de victoria dice "Listo" (antes "Inicio").
+- Tests: `DailyRestartUITests.testDoneAfterAPastDayReturnsToTheCalendar` y `testDoneAfterTodayReturnsToTheCalendar` (con `-startGame -nearlyWon -dailyDay <yyyy-MM-dd>`); `GameplayUITests.testRateRowInSettings`; política en QuietKit (`ReviewPromptTests`).
+
 ## Estética y UX
 
 - **Misma UI y colores que Quiet Numbers**, vía QuietKit: temas por rol (`Theme`), SF Pro Rounded con `.monospacedDigit()`, botones redondos arriba, puntaje grande centrado, barra inferior al alcance del pulgar, splash de Quietwake Studios.

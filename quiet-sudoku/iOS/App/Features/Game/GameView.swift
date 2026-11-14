@@ -11,8 +11,11 @@ struct GameView: View {
     let unlocked: [Achievement]
     let onNewGame: (Difficulty) -> Void
     let onRestart: () -> Void
+    /// Closing the win sheet ("Home", "Done"); nil pops the game.
+    var onHome: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppModel.self) private var app
     @Environment(\.quietTheme) private var theme
     @Environment(\.appearance) private var appearance
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -199,8 +202,8 @@ struct GameView: View {
             isRecord: kind == .classic && model.session.score > (bestScore ?? 0),
             unlocked: unlocked,
             showsNewGame: kind == .classic,
-            onNewGame: { onNewGame(model.session.difficulty) },
-            onHome: { dismiss() }
+            onNewGame: { app.storeReview.summaryClosed(startsNewGame: true); onNewGame(model.session.difficulty) },
+            onHome: { app.storeReview.summaryClosed(); (onHome ?? { dismiss() })() }
         )
         .transition(.move(edge: .bottom))
     }
@@ -454,8 +457,10 @@ struct WinSheet: View {
                         .buttonStyle(CapsuleButtonStyle())
                         .accessibilityIdentifier("winNewGame")
                 }
-                Button("Home", action: onHome)
+                // A daily goes back to the Daily Challenge: "Done".
+                Button(showsNewGame ? "Home" : "Done", action: onHome)
                     .buttonStyle(CapsuleButtonStyle(isProminent: !showsNewGame))
+                    .accessibilityIdentifier("winHome")
             }
         }
         .padding(.horizontal, 20)

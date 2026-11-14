@@ -30,6 +30,8 @@ ES = {
     "A hint shows a move that leads to a win when there is one. Each hint costs 10 points.":
         "Una pista muestra una jugada que lleva a ganar, si la hay. Cada pista cuesta 10 puntos.",
     "A tapped card goes to its best place.": "La carta va sola a su mejor sitio.",
+    "About": "Acerca de",
+    "All your game progress is erased.": "Se borra todo el progreso de tu partida.",
     "Account": "Cuenta",
     "Ace": "As",
     "Achievement unlocked": "Logro desbloqueado",
@@ -65,7 +67,7 @@ ES = {
     "Daily challenge": "Reto diario",
     "Deck": "Mazo",
     "Deletes games, daily results, streaks, achievements and unlocked rewards, here and in iCloud.":
-        "Borra partidas, retos, rachas, logros y recompensas, aquí y en iCloud.",
+        "Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas, aquí y en iCloud.",
     "Draw": "Robar",
     "Easy": "Fácil",
     "Economy": "Economía",
@@ -126,7 +128,7 @@ ES = {
     "No scores yet": "Aún no hay puntajes",
     "No way to win from here": "Desde aquí ya no se puede ganar",
     "Not played yet": "Aún no lo juegas",
-    "Not signed in": "Sin sesión",
+    "Not signed in": "Sin sesión iniciada",
     "One Pass": "Una sola vuelta",
     "One deal for everyone each day, always winnable. Easy on Monday, expert on Sunday.":
         "Un reparto para todos cada día, que siempre se puede ganar. Fácil el lunes, experto el domingo.",
@@ -199,8 +201,6 @@ ES = {
     "Won · %@": "Ganado · %@",
     "You won!": "¡Ganaste!",
     "Your 5-minute break.": "Tu pausa de 5 minutos.",
-    "Your games, daily challenge results, streaks, achievements and unlocked rewards will be deleted on this device and in iCloud. Scores already on Game Center leaderboards stay there. This can't be undone.":
-        "Se borrarán tus partidas, retos, rachas, logros y recompensas en este dispositivo y en iCloud. Los puntajes que ya están en las clasificaciones de Game Center se quedan ahí. No se puede deshacer.",
     "Your stats": "Tus estadísticas",
     "Turn a card": "Voltea una carta",
     "Tap the stock to turn its top card over onto the waste.": "Toca el mazo para voltear su primera carta al descarte.",
@@ -299,6 +299,7 @@ KIT = {
     "Last %lld challenges": "Últimos %lld retos",
     "You won %lld of %lld": "Ganaste %1$lld de %2$lld",
     "No past challenges yet.": "Todavía no hay retos anteriores.",
+    "Rate %@": "Califica %@",
 }
 
 # Plurals: key → (en one, en other, es one, es other).

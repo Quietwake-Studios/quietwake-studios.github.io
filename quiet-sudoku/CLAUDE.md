@@ -204,6 +204,16 @@ Para quien nunca jugó. Interactivo, sobre tableros reales del motor, en el que 
 
 Tablero fijo desde 2026-11-13 (`Tutorial.baseGivens`, el Fácil de antes): cambiar el generador ya no cambia el tutorial. Tests: cada paso tiene **una sola** respuesta válida, que se deduce **solo** con lo que enseñan ese paso y los anteriores (lo comprueba el resolvedor lógico limitado a esas técnicas), y el tablero del tutorial es consistente con una solución única. Al terminar: "Ya sabes jugar. Empieza con un Fácil." Ajustes › Reglas resume todo, y Ajustes › Técnicas explica cada técnica que puede mostrar una pista.
 
+## Reseñas y vuelta al calendario (2026-11-13)
+
+Regla de la familia ("Reseñas en la tienda" y "Reto diario" en `../CLAUDE.md`):
+- **Pedido de reseña:** `AppModel.storeReview` (`StoreReview` de QuietUI, App Store ID 6828993446) cuenta cada resumen cerrado ("Inicio", "Listo", "Nueva partida") y pide la reseña del sistema una sola vez, al cerrar el de la 3.ª partida terminada; si ese resumen se cierra con "Nueva partida", cuenta pero el diálogo espera a la próxima vuelta a Inicio o al Reto diario (`returnedToMenu()`, desde `HomeView`). Cuenta y marca en `UserDefaults` (`storeReview.*`); "Restablecer progreso" no las borra. Apagado con `-uiTesting`, `-startGame` y `-demo`.
+- **Ajustes iguales en las cuatro apps** (orden Jugar, Apariencia, Reto diario, Cuenta, Privacidad, "Restablecer progreso…" con su nota, Acerca de; texto de Privacidad de la plantilla de `../CLAUDE.md`; Versión solo con el número).
+- **Ajustes › Acerca de:** "Rate Quiet Sudoku" / "Califica Quiet Sudoku" (`RateAppRow`, abre la página de reseña de la App Store) y Versión.
+- **Restablecer progreso:** la confirmación dice lo mismo en las cuatro apps: "All your game progress is erased." / "Se borra todo el progreso de tu partida." (título y botones, los de siempre).
+- **Al terminar un reto, de hoy o pasado**, el botón del resumen ("Listo") vuelve al Reto diario (`AppModel.summaryReturnsToDaily`); la partida libre vuelve a Inicio. En un reto el botón de la hoja de victoria dice "Listo" (antes "Inicio").
+- Tests: `GameplayUITests.testRateRowInSettings` (sin UI test del día pasado: la app no tenía UI tests del reto); política en QuietKit (`ReviewPromptTests`).
+
 ## Estética y UX
 
 - Misma UI que la familia vía QuietKit: Inicio, Juego, Resumen, Reto diario, Clasificaciones, Colección, Ajustes, Tutorial y Splash; colores solo por rol.

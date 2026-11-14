@@ -62,7 +62,7 @@ import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quiet.ui.RoundIconButton
 import com.tavoohoh.quiet.ui.rememberHaptics
-import com.tavoohoh.quietwords.GameKind
+import com.tavoohoh.quietwords.core.GameKind
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.design.clock
 import com.tavoohoh.quietwords.design.play
@@ -270,11 +270,12 @@ private class GameParts(
         val time = clock(session.elapsedSeconds)
         val text = when (kind) {
             GameKind.Free -> stringResource(R.string.context_free, themeName, session.level.title(), time)
-            is GameKind.Daily -> stringResource(R.string.context_daily, themeName, time)
+            is GameKind.Daily ->
+                stringResource(if (kind.isReplay) R.string.context_replay else R.string.context_daily, themeName, time)
         }
         Text(
             text, style = QuietType.subheadline.copy(fontFeatureSettings = QuietType.TABULAR), color = QuietTheme.colors.muted,
-            maxLines = 1, overflow = TextOverflow.Ellipsis,
+            maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.testTag("context"),
         )
     }
 

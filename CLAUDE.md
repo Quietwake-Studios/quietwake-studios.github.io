@@ -41,7 +41,7 @@ Cada app vive en su propio directorio en la raíz, con su propio `CLAUDE.md` que
 - `quiet-solitaire/` — solitario clásico (Klondike, robar 1). Segunda app, jugable en el simulador.
 - `quiet-sudoku/` — sudoku 9×9 con solución única y dificultad por técnicas lógicas. Tercera app, jugable en el simulador (2026-10-30).
 - `quiet-words/` — sopa de letras con temas para adultos en/es y palabra oculta. Cuarta app, jugable en el simulador (2026-11-08).
-- **Plataformas por carpeta (decisión 2026-11-13):** cada app tiene `iOS/` y `Android/` dentro de su carpeta (`quiet-words/iOS`, `quiet-words/Android`), y el kit igual (`QuietKit/iOS`, `QuietKit/Android`). Android empieza con Quiet Words.
+- **Plataformas por carpeta (decisión 2026-11-13):** cada app tiene `iOS/` y `Android/` dentro de su carpeta (`quiet-words/iOS`, `quiet-words/Android`), y el kit igual (`QuietKit/iOS`, `QuietKit/Android`). Android empieza con Quiet Words; cuando Words Android esté terminado (fases 1–5, código completo), sigue Quiet Numbers (decisión 2026-11-13).
 - `QuietKit/` — paquete compartido: `QuietCore` (PRNG, día del reto, rachas, paleta de temas) y `QuietUI` (tema, componentes, hápticos, tonos, Game Center, splash). Lo usan Quiet Solitaire y Quiet Numbers (migrado el 2026-10-28, para su 1.1; sin cambios visibles ni en los tableros de cada fecha).
 
 ## Reto diario (igual en todos los juegos)
@@ -59,7 +59,7 @@ Todos los juegos tienen modo libre y reto diario, y el reto funciona como el de 
 - **Calendario mensual:** muestra los días reales de cada mes (28 a 31), con flechas para ir al mes anterior, los completados (bandas entre días seguidos), los retos a medias y el día de hoy; racha y mejor racha a la vista. Se pueden jugar los días que caen dentro de los últimos 30; los más viejos se ven pero no se abren.
 
 - **Notificaciones (locales, sin servidor):** recordatorio a las 19:00 si no se ha completado el reto de hoy, con lo que hicieron los amigos si ya se sabe; "racha en riesgo" a las 21:00 si sigue sin hacerse y hay racha de 3 o más. Detalle en el backlog de Quiet Numbers.
-- **Al terminar un día pasado (2026-11-13):** el botón del resumen vuelve a la pantalla del Reto diario (calendario), no a Inicio, porque lo normal es seguir rellenando días. Terminar el reto de hoy o una partida libre sigue volviendo a Inicio.
+- **Al terminar un reto (2026-11-13), de hoy o pasado:** el botón del resumen vuelve a la pantalla del Reto diario (calendario), para ver el día marcado y la racha; una partida libre vuelve a Inicio.
 - **Racha en textos:** "N-day streak" / "Racha de N días" (nunca "N streak").
 - **Restablecer progreso (Ajustes):** pide confirmación con el mismo texto en todos los juegos y plataformas: "Se borra todo el progreso de tu partida." / "All your game progress is erased." Borra partidas, retos, rachas, logros, recompensas y el guardado en la nube; conserva ajustes (idioma, apariencia, sonido, recordatorios) y la marca del pedido de reseña.
 
@@ -67,8 +67,9 @@ Un juego que no cumpla algo de esto lo anota en su `BACKLOG.md` hasta alinearlo.
 
 ## Reseñas en la tienda (igual en todos los juegos, iOS y Android; decisión 2026-11-13)
 
-- **Pedido automático una sola vez:** al cerrar el resumen de la **3.ª partida terminada** (libre o reto, gane o no), se pide la reseña con el diálogo del sistema: `AppStore.requestReview(in:)` de StoreKit en iOS y la In-App Review API de Google Play en Android. Nunca en medio de una partida ni encima del resumen, nunca con un diálogo propio antes ("¿te gusta?") y nunca más de una vez por instalación (el sistema además limita cuántas veces se muestra). La cuenta de partidas y la marca "ya se pidió" viven en las preferencias locales; "Restablecer progreso" no las borra.
+- **Pedido automático una sola vez:** al cerrar el resumen de la **3.ª partida terminada** (libre o reto, gane o no), se pide la reseña con el diálogo del sistema: `AppStore.requestReview(in:)` de StoreKit en iOS y la In-App Review API de Google Play en Android. Nunca en medio de una partida ni encima del resumen, nunca con un diálogo propio antes ("¿te gusta?") y nunca más de una vez por instalación (el sistema además limita cuántas veces se muestra). La cuenta de partidas y la marca "ya se pidió" viven en las preferencias locales; "Restablecer progreso" no las borra. Si el resumen se cierra con "Nueva partida", la partida cuenta pero el diálogo espera a la próxima vuelta a Inicio o al Reto diario (nunca sobre un tablero nuevo).
 - **Botón en Ajustes:** fila "Rate Quiet <App>" / "Califica Quiet <App>" que abre la página de reseña de la tienda: iOS `https://apps.apple.com/app/id<app id>?action=write-review`, Android `market://details?id=<paquete>` (con `https://play.google.com/store/apps/details?id=<paquete>` si no hay Play Store). IDs de la App Store: Numbers 6827562391, Solitaire 6828074077, Sudoku 6828993446, Words 6832387795.
+- **Ajustes iguales en todos los juegos:** mismo orden de secciones, terminando en "Acerca de" (Califica Quiet <App> y Versión, solo el número de versión, p. ej. "1.3"); la fila "Reset Progress…" / "Restablecer progreso…" con la nota "Deletes games, daily results, streaks, achievements and unlocked rewards, here and in iCloud." / su español; y el texto de Privacidad con la misma plantilla: "Quiet <App> doesn't collect any data. Your games, streaks and achievements stay on this device. If you sign in to Game Center, your scores and achievements are shared with Apple's Game Center and your progress is saved in your iCloud." (en Android, Play Games en lugar de Game Center e iCloud).
 - **Android es espejo de iOS:** misma estructura, pantallas, reglas y textos; solo cambia lo que la plataforma obliga (fuente, íconos de Material, Play Games en lugar de Game Center).
 
 ## Diseño

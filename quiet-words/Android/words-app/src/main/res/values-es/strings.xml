@@ -88,4 +88,78 @@
     <string name="tutorial_hidden_title">La palabra oculta</string>
     <string name="tutorial_hidden">Las letras que no usa ninguna palabra forman una palabra del tema. Adivínala antes por +100, o aparece al final.</string>
     <string name="start_playing">Empezar a jugar</string>
+
+    <string name="daily_challenge_title">Reto diario</string>
+    <string name="play_again">Jugar otra vez</string>
+    <string name="continue_pair">Continuar · %1$s · %2$s</string>
+    <string name="context_replay">Repetición · %1$s · %2$s</string>
+    <string name="done_both">Hecho en los dos idiomas</string>
+    <string name="done_one">%1$s hecho · falta %2$s</string>
+    <string name="not_played_yet">%s · sin jugar todavía</string>
+    <string name="best_of_day">%1$s · mejor %2$d</string>
+    <plurals name="streak_label">
+        <item quantity="one">Racha de %d día</item>
+        <item quantity="many">Racha de %d días</item>
+        <item quantity="other">Racha de %d días</item>
+    </plurals>
+    <string name="streak_a11y">Racha %d</string>
+    <string name="best_n">Mejor %d</string>
+    <string name="side_long_hidden">%1$d×%2$d · palabra oculta larga</string>
+    <string name="side">%1$d×%2$d</string>
+    <string name="words_in_done">Palabras en %s, reto de hoy hecho</string>
+    <string name="next_challenge_in">Siguiente reto en %s</string>
+    <string name="daily_explain">Juega el de hoy en los dos idiomas: cada uno tiene su clasificación y la racha cuenta el día una vez. Los días pasados no van a la clasificación, pero terminar uno cuenta para tu racha.</string>
+    <string name="continue_question">¿Seguir con este reto?</string>
+    <string name="left_halfway">Dejaste %s a medias.</string>
+    <string name="previous_month">Mes anterior</string>
+    <string name="next_month">Mes siguiente</string>
+    <string name="in_progress">A medias</string>
+    <string name="completed">Completado</string>
+    <string name="won_later">Ganado después</string>
+    <string name="puzzles">Sopas</string>
+    <string name="album">Álbum</string>
+    <string name="best_streak">Mejor racha</string>
+
+    <string name="settings">Ajustes</string>
+    <string name="game_section">Juego</string>
+    <string name="word_language">Idioma de las palabras</string>
+    <string name="appearance">Apariencia</string>
+    <string name="match_system">Igual que el sistema</string>
+    <string name="light">Claro</string>
+    <string name="dark">Oscuro</string>
+    <string name="account">Cuenta</string>
+    <string name="how_to_play">Cómo jugar</string>
+    <string name="privacy">Privacidad</string>
+    <string name="privacy_text">Quiet Words no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo.</string>
+    <string name="version">Versión</string>
+
+    <string name="reminder_toggle">Recordatorio del reto</string>
+    <string name="reminder_detail">A las %1$s si no has jugado; con una racha de 3 o más, otro a las %2$s.</string>
+    <string name="reminder_denied">Las notificaciones de esta app están desactivadas. Actívalas en Ajustes.</string>
+    <string name="reminder_offer_title">¿Te aviso a las %s?</string>
+    <string name="reminder_offer_text">Solo los días que aún no hayas jugado el reto. Puedes cambiarlo en Ajustes.</string>
+    <string name="remind_me">Avísame</string>
+    <string name="not_now">Ahora no</string>
+    <string name="reminder_channel">Reto diario</string>
+    <string name="your_streak">Tu racha</string>
+    <string name="reminder_waiting">El reto de hoy te espera.</string>
+    <plurals name="reminder_streak">
+        <item quantity="one">No pierdas tu racha de %d día.</item>
+        <item quantity="many">No pierdas tu racha de %d días.</item>
+        <item quantity="other">No pierdas tu racha de %d días.</item>
+    </plurals>
+    <plurals name="reminder_at_risk">
+        <item quantity="one">Tu racha de %d día termina a la medianoche.</item>
+        <item quantity="many">Tu racha de %d días termina a la medianoche.</item>
+        <item quantity="other">Tu racha de %d días termina a la medianoche.</item>
+    </plurals>
+    <string name="reminder_one_friend">%1$s terminó el reto de hoy con %2$s. ¿Te animas?</string>
+    <string name="reminder_friends">%1$d amigos ya jugaron; %2$s va primero con %3$s.</string>
+    <string name="reset_progress">Restablecer progreso…</string>
+    <string name="reset_question">¿Restablecer todo el progreso?</string>
+    <string name="reset_message">Se borra todo el progreso de tu partida.</string>
+    <string name="rate_app">Califica Quiet Words</string>
+    <string name="reset_footnote">Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas en este dispositivo.</string>
+    <string name="about">Acerca de</string>
+    <string name="reset_confirm">Restablecer progreso</string>
 </resources>

@@ -170,6 +170,16 @@ Siempre disponibles: marcador Resaltador, letra Redonda, Petróleo y coral, **Al
 
 **Logros en Colección (2026-11-09, el usuario no tenía forma de saber cómo ganarlos):** Colección tiene tres pestañas, Álbum · Recompensas · Logros. Logros: "N ganados de 11" y una fila por logro con nombre, condición, progreso cuando cuenta algo (palabras 100/1.000/10.000, mejor racha 7/30, % del tema más avanzado para Tema completo, `Album.bestThemeFraction`), sello si está ganado y la recompensa. Los ocultos (Bilingüe y Números rojos) dicen "Logro oculto" sin condición ni recompensa hasta ganarlos. Las otras apps muestran los logros como sección al final de Colección; en Words va como pestaña porque Colección ya está dividida en segmentos. UI tests `testAchievementsTab` y `testCheapHintsToggle`.
 
+## Reseñas y vuelta al calendario (2026-11-13)
+
+Regla de la familia ("Reseñas en la tienda" y "Reto diario" en `../CLAUDE.md`):
+- **Pedido de reseña:** `AppModel.storeReview` (`StoreReview` de QuietUI, App Store ID 6832387795) cuenta cada resumen cerrado ("Inicio", "Listo", "Nueva partida") y pide la reseña del sistema una sola vez, al cerrar el de la 3.ª partida terminada; si ese resumen se cierra con "Nueva partida", cuenta pero el diálogo espera a la próxima vuelta a Inicio o al Reto diario (`returnedToMenu()`, desde `HomeView`). Cuenta y marca en `UserDefaults` (`storeReview.*`); "Restablecer progreso" no las borra. Apagado con `-uiTesting`, `-startGame` y `-demo`.
+- **Ajustes iguales en las cuatro apps** (orden Jugar, Apariencia, Reto diario, Cuenta, Privacidad, "Restablecer progreso…" con su nota, Acerca de; texto de Privacidad de la plantilla de `../CLAUDE.md`; Versión solo con el número).
+- **Ajustes › Acerca de:** "Rate Quiet Words" / "Califica Quiet Words" (`RateAppRow`, abre la página de reseña de la App Store) y Versión.
+- **Restablecer progreso:** la confirmación dice lo mismo en las cuatro apps: "All your game progress is erased." / "Se borra todo el progreso de tu partida." (título y botones, los de siempre).
+- **Al terminar un reto, de hoy o pasado**, el botón del resumen ("Listo") vuelve al Reto diario (`AppModel.summaryReturnsToDaily`); la partida libre vuelve a Inicio. La racha del Reto diario decía "5 streak": ahora "5-day streak" / "Racha de 5 días" (clave `%lld-day streak` con plurales; también la etiqueta de VoiceOver de Inicio, antes "Streak 5").
+- Tests: `GameplayUITests.testDoneAfterADailyReturnsToTheCalendar` (juega el reto de hoy entero) y `testRateRowInSettings`; política en QuietKit (`ReviewPromptTests`).
+
 ## Estética y UX
 
 Sigue el canvas. Lo propio:

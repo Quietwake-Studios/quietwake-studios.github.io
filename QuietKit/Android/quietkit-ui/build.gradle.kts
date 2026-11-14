@@ -26,4 +26,6 @@ dependencies {
     api(libs.compose.ui)
     api(libs.compose.foundation)
     api(libs.compose.material3)
+    implementation(libs.core.ktx)
+    implementation(libs.play.review.ktx)
 }
