@@ -32,9 +32,9 @@ import com.tavoohoh.quietwords.home.HomeScreen
 import com.tavoohoh.quietwords.newgame.NewGameScreen
 import com.tavoohoh.quietwords.tutorial.TutorialScreen
 import com.tavoohoh.quietwords.daily.DailyScreen
-import com.tavoohoh.quietwords.settings.ReminderOffer
+import com.tavoohoh.quiet.ui.ReminderOffer
 import com.tavoohoh.quietwords.settings.SettingsScreen
-import com.tavoohoh.quietwords.settings.rememberNotificationRequest
+import com.tavoohoh.quiet.ui.rememberNotificationRequest
 import kotlinx.coroutines.CancellationException
 
 /** One stack of screens; system back (with its predictive preview) pops it. */

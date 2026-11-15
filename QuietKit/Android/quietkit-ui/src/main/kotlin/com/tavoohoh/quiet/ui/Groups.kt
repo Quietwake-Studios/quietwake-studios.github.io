@@ -1,4 +1,4 @@
-package com.tavoohoh.quietwords.design
+package com.tavoohoh.quiet.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,10 +26,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tavoohoh.quiet.ui.QuietTheme
-import com.tavoohoh.quiet.ui.QuietType
-import com.tavoohoh.quiet.ui.quietClickable
-import com.tavoohoh.quiet.ui.quietSurface
 
 /** A titled group of rows on `surface` (iOS QuietUI `GroupSection`). */
 @Composable

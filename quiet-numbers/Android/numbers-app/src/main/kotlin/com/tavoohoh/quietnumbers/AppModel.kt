@@ -1,100 +1,237 @@
 package com.tavoohoh.quietnumbers
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import com.tavoohoh.quiet.core.DailyKey
+import com.tavoohoh.quiet.core.DailyRecord
+import com.tavoohoh.quiet.ui.DailyReminders
 import com.tavoohoh.quiet.ui.QuietTones
+import com.tavoohoh.quiet.ui.StoreReview
+import com.tavoohoh.quiet.ui.useStandardTexts
+import com.tavoohoh.quietnumbers.core.Achievement
 import com.tavoohoh.quietnumbers.core.Board
 import com.tavoohoh.quietnumbers.core.DailyChallenge
+import com.tavoohoh.quietnumbers.core.GameKind
 import com.tavoohoh.quietnumbers.core.GameMode
 import com.tavoohoh.quietnumbers.core.GameSession
+import com.tavoohoh.quietnumbers.core.MatchRules
+import com.tavoohoh.quietnumbers.core.NumbersPlay
+import com.tavoohoh.quietnumbers.core.NumbersStore
+import com.tavoohoh.quietnumbers.core.PlayerProgress
+import com.tavoohoh.quietnumbers.core.Started
 import com.tavoohoh.quietnumbers.design.FeedbackService
 import com.tavoohoh.quietnumbers.game.GameModel
+import java.io.File
 import java.time.Instant
+import java.time.ZoneId
 import kotlin.random.Random
 
-/** Debug `uiTesting` (no splash). */
+/** Debug `uiTesting` (no splash, its own store, no reminders scheduled). */
 val LocalUiTesting = staticCompositionLocalOf { false }
 
-enum class Route { HOME, GAME }
-
-/** Which game is on screen. */
-sealed interface GameKind {
-    data object Classic : GameKind
-    data class Daily(val dayKey: String) : GameKind
-}
+enum class Route { HOME, GAME, DAILY, SETTINGS }
 
 /** "Now" for anything dated. Debug `--es date <ISO-8601>` fixes it. */
 object AppClock {
     var fixed: Instant? = null
     fun now(): Instant = fixed ?: Instant.now()
     val todayKey: String get() = DailyKey.dayKey(now())
+    val hour: Int get() = now().atZone(ZoneId.systemDefault()).hour
 }
 
 /**
- * The app's state, Phase 2: navigation and the game on screen. Saving, the daily calendar,
- * progress and settings come with Phases 3 and 4 (the same structure as Quiet Words).
+ * The app's state (port of iOS `AppModel`), around `NumbersPlay` (numbers-core), which holds the
+ * rules: the saved classic game, daily attempts, results, streaks and progress. Compose reads
+ * `revision`, bumped on every change.
  */
 class AppModel(application: Application) : AndroidViewModel(application) {
     private var configured = false
+    private var prefs = application.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    lateinit var play: NumbersPlay
+        private set
+    lateinit var reminders: DailyReminders
+        private set
+    /** The store-review prompt after the third finished game, and Settings' "Rate" row. */
+    lateinit var storeReview: StoreReview
+        private set
+    lateinit var feedback: FeedbackService
+        private set
+    var revision by mutableIntStateOf(0)
+        private set
+
     val stack = mutableStateListOf(Route.HOME)
     var activeGame: GameModel? by mutableStateOf(null)
         private set
     var activeKind: GameKind? by mutableStateOf(null)
         private set
+    /** Best classic score when the game on screen started ("New best score!"). */
+    var bestAtStart = 0
+        private set
+    /** "Remind you at 7 PM?" back from a first completed daily, once. */
+    var offersReminders by mutableStateOf(false)
     var uiTesting = false
         private set
-    lateinit var feedback: FeedbackService
+    var demoActive = false
         private set
+    /** No store review in UI tests, the demo or debug games (as iOS). */
+    private var reviewsOff = false
+    /** The finished game's summary was counted for the review prompt. */
+    private var reviewCounted = false
+
     val todayKey: String get() = AppClock.todayKey
 
     fun configure(intent: Intent?) {
         if (configured) return
         configured = true
+        val app = getApplication<Application>()
         val args = if (BuildConfig.DEBUG) LaunchArgs.from(intent) else LaunchArgs()
         uiTesting = args.uiTesting
+        demoActive = args.demo
         AppClock.fixed = args.date
-        feedback = FeedbackService(QuietTones(getApplication()))
+        var directory = storeDirectory(app)
+        if (args.uiTesting) {
+            // Its own store and preferences, empty on every launch (like iOS -uiTesting).
+            directory = File(app.filesDir, "store-uitesting").also { it.deleteRecursively() }
+            prefs = app.getSharedPreferences("$PREFS-uitesting", Context.MODE_PRIVATE)
+            for (name in listOf("$PREFS-uitesting", "dailyReminders-uitesting", "storeReview-uitesting")) {
+                app.getSharedPreferences(name, Context.MODE_PRIVATE).edit(commit = true) { clear() }
+            }
+        }
+        // The demo state never touches the player's store (iOS keeps it in memory).
+        if (args.demo) {
+            if (!args.uiTesting) directory = File(app.filesDir, "store-demo").also { it.deleteRecursively() }
+            DemoData.seed(directory)
+        }
+        reviewsOff = args.uiTesting || args.demo || args.startGame || args.summary != null
+        play = NumbersPlay(NumbersStore(directory), today = { AppClock.todayKey }, hour = { AppClock.hour })
+        play.onChange = { revision++ }
+        feedback = FeedbackService(QuietTones(app))
+        reminders = numbersReminders(app, args.uiTesting) { play.reminderState() }
+        storeReview = StoreReview(app, if (args.uiTesting) "storeReview-uitesting" else "storeReview")
         applyDebug(args)
     }
+
+    // What screens read (through `revision`)
+
+    private inline fun <T> observed(block: () -> T): T {
+        @Suppress("UNUSED_VARIABLE") val r = revision
+        return block()
+    }
+
+    val progress: PlayerProgress get() = observed { play.progress }
+    val currentStreak: Int get() = observed { play.currentStreak }
+    val longestStreak: Int get() = observed { play.longestStreak }
+    val classicStage: Int? get() = observed { play.classicStage }
+    val daysInProgress: Set<String> get() = observed { play.daysInProgress }
+    val dailies: Map<String, DailyRecord> get() = observed { play.store.dailies }
+    val isReplay: Boolean get() = observed { play.isReplay }
+    val unlockedThisGame: List<Achievement> get() = observed { play.unlockedThisGame }
+    fun isDailyInProgress(dayKey: String) = observed { play.isDailyInProgress(dayKey) }
+    fun hasPlayed(dayKey: String) = observed { play.hasPlayed(dayKey) }
+    fun isPlayable(dayKey: String) = play.isPlayable(dayKey)
+
+    // Navigation
 
     fun push(route: Route) {
         stack.add(route)
     }
 
     fun pop() {
-        if (stack.size > 1) stack.removeAt(stack.lastIndex)
+        if (stack.size <= 1) return
+        if (stack.last() == Route.GAME) leftGame()
+        stack.removeAt(stack.lastIndex)
     }
 
-    fun popToHome() {
+    private fun show(vararg routes: Route) {
+        if (stack.last() == Route.GAME && Route.GAME !in routes) leftGame()
         stack.clear()
         stack.add(Route.HOME)
+        stack.addAll(routes)
     }
 
-    /** A new classic game (random seed). */
+    fun popToHome() = show()
+
+    // Classic
+
+    fun continueClassic() {
+        play.continueClassic()?.let(::start) ?: return newClassic()
+        show(Route.GAME)
+    }
+
     fun newClassic() {
-        start(GameModel(GameSession(seed = Random.nextLong().toULong())), GameKind.Classic)
-        popToHome()
+        start(play.newClassic(Random.nextLong().toULong()))
+        show(Route.GAME)
+    }
+
+    // Daily
+
+    /** Continues the attempt left halfway, or deals the day again. The Daily screen asks "Continue / Start over" first. */
+    fun playDaily(dayKey: String) {
+        if (!play.isPlayable(dayKey)) return
+        start(play.playDaily(dayKey))
         push(Route.GAME)
     }
 
-    /** Today's challenge (Phase 2: a fresh attempt, nothing saved). */
-    fun playDaily() {
-        val day = todayKey
-        start(GameModel(DailyChallenge.session(day)), GameKind.Daily(day))
-        push(Route.GAME)
-    }
+    fun startOver(dayKey: String) = play.startOver(dayKey)
 
-    private fun start(model: GameModel, kind: GameKind) {
+    // The active game
+
+    private fun start(started: Started) = attach(GameModel(started.session), started.kind)
+
+    private fun attach(model: GameModel, kind: GameKind) {
         activeGame?.dispose()
+        bestAtStart = play.progress.bestScore
+        model.onEvent = { play.record(it) }
+        model.onChange = { session ->
+            val completedBefore = play.record(todayKey)?.isCompleted == true
+            play.sessionChanged(session)
+            if (session.isOver && kind is GameKind.Daily && !uiTesting) reminders.reschedule()
+            if (completedBefore != (play.record(todayKey)?.isCompleted == true)) revision++
+        }
         activeGame = model
         activeKind = kind
+        reviewCounted = false
+    }
+
+    /**
+     * The summary was closed (or the menu's New Game). Any daily, today's or past, goes back to
+     * the Daily screen; classic games go Home. Returns whether to ask for the store review now.
+     */
+    fun leaveGame(toNewGame: Boolean): Boolean {
+        val game = activeGame
+        val kind = activeKind
+        val finished = game?.session?.isOver == true && !reviewCounted
+        if (finished) reviewCounted = true
+        val ask = finished && storeReview.gameFinished(toNewGame) && !reviewsOff
+        when {
+            toNewGame -> newClassic()
+            kind is GameKind.Daily && game?.session?.isOver == true -> show(Route.DAILY)
+            else -> show()
+        }
+        return ask
+    }
+
+    /** Home or the Daily screen came up: a review request deferred by "New Game" goes now. */
+    fun reviewOnArrival(): Boolean = storeReview.arrived() && !reviewsOff
+
+    /** Back from the game: it's saved with every move; maybe offer the reminders. */
+    private fun leftGame() {
+        activeGame?.commitTime()
+        if (play.leftGame() && reminders.shouldOffer) offersReminders = true
+    }
+
+    /** The app went to the background: the seconds since the last move are saved too. */
+    fun saveActiveGame() {
+        if (stack.last() == Route.GAME) activeGame?.commitTime()
     }
 
     override fun onCleared() {
@@ -104,51 +241,78 @@ class AppModel(application: Application) : AndroidViewModel(application) {
     // Debug
 
     private fun applyDebug(args: LaunchArgs) {
-        if (args.open == "daily") return playDaily()
-        if (args.summary != null) return summaryScene(args.summary)
+        when (args.open) {
+            "daily" -> show(Route.DAILY)
+            "settings" -> show(Route.SETTINGS)
+        }
+        args.playDay?.let { day ->
+            show(Route.DAILY)
+            playDaily(day)
+            return
+        }
+        if (args.summary != null) return summaryScene(args.summary, args.summaryDay)
         if (!args.startGame) return
         val seed = args.seedKey?.let { com.tavoohoh.quiet.core.FNV1a.hash(it) } ?: Random.nextLong().toULong()
         val session = args.boardValues?.let {
             if (args.plusRemaining != null) GameSession.withBoard(Board.of(it), seed = seed, plusRemaining = args.plusRemaining)
             else GameSession.withValues(it, seed = seed)
         } ?: GameSession(seed = seed)
+        // Debug games aren't saved over the player's classic game.
         val model = GameModel(session)
-        start(model, GameKind.Classic)
-        push(Route.GAME)
+        play.begin(session, GameKind.Classic)
+        activeGame?.dispose()
+        activeGame = model
+        activeKind = GameKind.Classic
+        show(Route.GAME)
         // `moves`: plays the first valid pairs (screenshots: ghosts and a score on the board).
         repeat(args.moves) {
-            val pair = com.tavoohoh.quietnumbers.core.MatchRules.validPairs(model.session.board).getOrNull(it % 2) ?: return@repeat
+            val pair = MatchRules.validPairs(model.session.board).getOrNull(it % 2) ?: return@repeat
             model.tap(model.session.board.cells[pair.first])
             model.tap(model.session.board.cells[pair.second])
         }
         if (args.hint) model.showHint()
     }
 
-    /** One move from the end, played: a completed daily (fireworks and "Done") or a classic game with no moves left. */
-    private fun summaryScene(kind: String) {
+    /** One move from the end, played: a completed daily (`summaryDay`, today by default) or a classic game with no moves left. */
+    private fun summaryScene(kind: String, summaryDay: String?) {
         val model: GameModel
         if (kind == "daily") {
-            val day = todayKey
+            val day = summaryDay ?: todayKey
             val goal = DailyChallenge.goal(day)
             val board = Board.of(listOf(4, 4, 1, 2, 1, 2, 1, 2, 3, 7))
             model = GameModel(GameSession.withBoard(board, GameMode.Daily(day), score = goal - 1, goal = goal))
-            start(model, GameKind.Daily(day))
+            play.begin(model.session, GameKind.Daily(day))
+            attach(model, GameKind.Daily(day))
+            show(Route.DAILY, Route.GAME)
         } else {
             val board = Board.of(listOf(1, 2, 1, 2, 1, 1, 3, 4, 3))
             model = GameModel(GameSession.withBoard(board, plusRemaining = 0, score = 1240, stage = 3))
-            start(model, GameKind.Classic)
+            play.begin(model.session, GameKind.Classic)
+            attach(model, GameKind.Classic)
+            show(Route.GAME)
         }
-        push(Route.GAME)
         val cells = model.board.cells
         val (a, b) = if (kind == "daily") 0 to 1 else 4 to 5
         model.tap(cells[a])
         model.tap(cells[b])
     }
 
+    companion object {
+        private const val PREFS = "quietnumbers"
+        fun storeDirectory(context: Context) = File(context.filesDir, "store")
+    }
 }
 
+/** The daily reminders with the family's texts (QuietKit). UI tests get their own preferences. */
+fun numbersReminders(context: Context, uiTesting: Boolean = false, state: () -> Pair<Boolean, Int>): DailyReminders =
+    DailyReminders(context.applicationContext, R.drawable.ic_notification, if (uiTesting) "dailyReminders-uitesting" else "dailyReminders").apply {
+        clock = AppClock::now
+        this.state = state
+        useStandardTexts(context)
+    }
+
 /**
- * Debug launch arguments as intent extras (iOS's `-startGame`, `-seedKey`, `-boardValues`…), e.g.
+ * Debug launch arguments as intent extras (iOS's `-startGame`, `-seedKey`, `-boardValues`, `-demo`…), e.g.
  * `adb shell am start -n com.tavoohoh.quietnumbers/.MainActivity --ez startGame true --es seedKey demo`.
  */
 data class LaunchArgs(
@@ -165,6 +329,12 @@ data class LaunchArgs(
     /** Pairs played right away, and a hint shown after them (screenshots). */
     val moves: Int = 0,
     val hint: Boolean = false,
+    /** Fills the store with a streak, past days, a daily halfway and a classic game (screenshots, iOS `-demo`). */
+    val demo: Boolean = false,
+    /** Opens a day's challenge (`yyyy-MM-dd`) from the Daily screen. */
+    val playDay: String? = null,
+    /** With `summary daily`: that past day's challenge instead of today's (iOS `-summaryDay`). */
+    val summaryDay: String? = null,
 ) {
     companion object {
         fun from(intent: Intent?): LaunchArgs {
@@ -180,6 +350,9 @@ data class LaunchArgs(
                 moves = e.getInt("moves"),
                 hint = e.getBoolean("hint"),
                 plusRemaining = if (e.containsKey("plusRemaining")) e.getInt("plusRemaining") else null,
+                demo = e.getBoolean("demo"),
+                playDay = e.getString("playDay"),
+                summaryDay = e.getString("summaryDay"),
             )
         }
     }

@@ -211,7 +211,7 @@ class StoreTests {
         assertEquals(session, reopened.loadGame(Slot.Daily(id)))
         assertEquals(setOf(id), reopened.dailiesInProgress)
         assertEquals(setOf(today), reopened.daysInProgress)
-        assertEquals(DailyRecord(640, true, 200, 0), reopened.record(DailyID("2026-11-01", WordLanguage.EN)))
+        assertEquals(DailyRecord(640, isFinished = true, isCompleted = true, seconds = 200, attempts = 0), reopened.record(DailyID("2026-11-01", WordLanguage.EN)))
         assertEquals(1, reopened.attempts(id))
         assertEquals(setOf("2026-11-01"), reopened.completedDays)
         assertEquals(12, reopened.loadProfile().progress.wordsFound)
@@ -262,7 +262,7 @@ class StoreTests {
         val store = WordsStore(null)
         val id = DailyID("2026-11-02", WordLanguage.ES)
         store.recordWin(id, 500, 120)
-        store.mergeDailies(mapOf(id.key to DailyRecord(500, true, 100), "2026-11-03#en" to DailyRecord(300, true, 90)))
+        store.mergeDailies(mapOf(id.key to DailyRecord(500, isFinished = true, isCompleted = true, seconds = 100), "2026-11-03#en" to DailyRecord(300, isFinished = true, isCompleted = true, seconds = 90)))
         assertEquals(100, store.record(id)!!.seconds)
         assertEquals(setOf("2026-11-02", "2026-11-03"), store.completedDays)
     }

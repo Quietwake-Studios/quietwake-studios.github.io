@@ -28,6 +28,13 @@ import androidx.compose.ui.unit.dp
 import com.tavoohoh.quiet.ui.QuietSplash
 import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quietnumbers.game.GameScreen
+import com.tavoohoh.quietnumbers.core.GameKind
+import com.tavoohoh.quietnumbers.daily.DailyScreen
+import com.tavoohoh.quietnumbers.settings.SettingsScreen
+import com.tavoohoh.quiet.ui.ReminderOffer
+import com.tavoohoh.quiet.ui.rememberNotificationRequest
+import androidx.activity.compose.LocalActivity
+import androidx.compose.runtime.LaunchedEffect
 import com.tavoohoh.quietnumbers.home.HomeScreen
 import kotlinx.coroutines.CancellationException
 
@@ -76,24 +83,52 @@ fun NumbersApp(app: AppModel) {
                     clip = shrink > 0f
                 },
             ) {
-                when (screen) {
-                    Route.HOME -> HomeScreen(app)
-                    Route.GAME -> {
-                        val game = app.activeGame
-                        val kind = app.activeKind
-                        if (game != null && kind != null) {
-                            GameScreen(
-                                model = game, kind = kind, todayKey = app.todayKey,
-                                bestScore = if (kind == GameKind.Classic) 0 else null,
-                                onBack = app::pop, onNewGame = app::newClassic, onHome = app::popToHome,
-                            )
-                        }
-                    }
-                }
+                Screen(app, screen)
             }
+        }
+        val requestNotifications = rememberNotificationRequest(app.reminders)
+        if (app.offersReminders) {
+            ReminderOffer(
+                onRemind = {
+                    app.offersReminders = false
+                    if (app.reminders.needsPermissionRequest) requestNotifications() else app.reminders.onPermissionResult(true)
+                },
+                onNotNow = {
+                    app.offersReminders = false
+                    app.reminders.markOffered()
+                },
+            )
         }
         AnimatedVisibility(showsSplash, enter = EnterTransition.None, exit = if (reduceMotion) ExitTransition.None else fadeOut(tween(350))) {
             QuietSplash(onFinished = { showsSplash = false })
+        }
+    }
+}
+
+@Composable
+private fun Screen(app: AppModel, route: Route) {
+    val activity = LocalActivity.current
+    if (route == Route.HOME || route == Route.DAILY) {
+        // Back on Home or the Daily screen: a review request that waited ("New Game") can show now.
+        LaunchedEffect(Unit) { if (app.reviewOnArrival()) activity?.let(app.storeReview::request) }
+    }
+    when (route) {
+        Route.HOME -> HomeScreen(app)
+        Route.DAILY -> DailyScreen(app, onBack = app::pop)
+        Route.SETTINGS -> SettingsScreen(app, onBack = app::pop)
+        Route.GAME -> {
+            val game = app.activeGame
+            val kind = app.activeKind
+            if (game != null && kind != null) {
+                GameScreen(
+                    model = game, kind = kind, todayKey = app.todayKey,
+                    bestScore = if (kind == GameKind.Classic) app.bestAtStart else null,
+                    isReplay = app.isReplay,
+                    onBack = app::pop,
+                    onNewGame = { if (app.leaveGame(toNewGame = true)) activity?.let(app.storeReview::request) },
+                    onHome = { if (app.leaveGame(toNewGame = false)) activity?.let(app.storeReview::request) },
+                )
+            }
         }
     }
 }

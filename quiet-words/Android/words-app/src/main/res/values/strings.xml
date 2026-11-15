@@ -117,11 +117,6 @@
     <string name="daily_explain">Play today in both languages: each one has its leaderboard, and the streak counts the day once. Past days don\'t go to the leaderboard, but finishing one counts toward your streak.</string>
     <string name="continue_question">Continue this challenge?</string>
     <string name="left_halfway">You left %s halfway.</string>
-    <string name="previous_month">Previous month</string>
-    <string name="next_month">Next month</string>
-    <string name="in_progress">In progress</string>
-    <string name="completed">Completed</string>
-    <string name="won_later">Won later</string>
     <string name="puzzles">Puzzles</string>
     <string name="album">Album</string>
     <string name="best_streak">Best streak</string>
@@ -138,25 +133,6 @@
     <string name="privacy">Privacy</string>
     <string name="privacy_text">Quiet Words doesn\'t collect any data. Your games, streaks and achievements stay on this device. If you sign in to Play Games, your scores and achievements are shared with Google Play Games and your progress is saved in your Google account.</string>
     <string name="version">Version</string>
-
-    <string name="reminder_toggle">Daily challenge reminder</string>
-    <string name="reminder_detail">At %1$s if you haven\'t played; with a streak of 3 or more, another at %2$s.</string>
-    <string name="reminder_denied">Notifications are off for this app. Turn them on in Settings.</string>
-    <string name="reminder_offer_title">Remind you at %s?</string>
-    <string name="reminder_offer_text">Only on days you haven\'t played the challenge yet. You can change it in Settings.</string>
-    <string name="remind_me">Remind me</string>
-    <string name="not_now">Not now</string>
-    <string name="reminder_channel">Daily challenge</string>
-    <string name="your_streak">Your streak</string>
-    <string name="reminder_waiting">Today\'s challenge is waiting.</string>
-    <plurals name="reminder_streak">
-        <item quantity="one">Don\'t lose your %d-day streak.</item>
-        <item quantity="other">Don\'t lose your %d-day streak.</item>
-    </plurals>
-    <plurals name="reminder_at_risk">
-        <item quantity="one">Your %d-day streak ends at midnight.</item>
-        <item quantity="other">Your %d-day streak ends at midnight.</item>
-    </plurals>
     <string name="reminder_one_friend">%1$s finished today\'s challenge with %2$s. Up for it?</string>
     <string name="reminder_friends">%1$d friends already played; %2$s leads with %3$s.</string>
     <string name="reset_progress">Reset Progress…</string>

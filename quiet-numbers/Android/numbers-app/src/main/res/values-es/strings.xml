@@ -53,4 +53,36 @@
     <string name="hints">Pistas</string>
     <string name="achievement_unlocked">Logro desbloqueado</string>
     <string name="achievements_unlocked">Logros desbloqueados</string>
+
+    <string name="settings">Ajustes</string>
+    <string name="continue_stage">Continuar · Etapa %d</string>
+    <string name="your_stats">Tus estadísticas</string>
+    <string name="best_score">Mejor puntaje</string>
+    <string name="top_streak">Racha récord</string>
+    <string name="games">Partidas</string>
+    <string name="streak">Racha</string>
+    <string name="best_streak">Mejor racha</string>
+    <string name="friends">Amigos</string>
+    <string name="goal_points">Meta: %s puntos</string>
+    <string name="completed_score">Completado · %s</string>
+    <string name="played_score">Jugado · %s</string>
+    <string name="in_progress">En curso</string>
+    <string name="play">Jugar</string>
+    <string name="play_again">Jugar de nuevo</string>
+    <string name="continue_">Continuar</string>
+    <string name="start_over">Empezar de nuevo</string>
+    <string name="cancel">Cancelar</string>
+    <string name="continue_question">¿Seguir con este reto?</string>
+    <string name="left_halfway">Dejaste el %s a medias.</string>
+    <string name="next_challenge_in">Próximo reto en %s</string>
+    <string name="past_days_note">Los días pasados no van a la clasificación, pero completarlos cuenta para tu racha.</string>
+    <string name="replay_note">Juega las veces que quieras: cuenta tu mejor puntaje.</string>
+    <plurals name="day_streak">
+        <item quantity="one">Racha de %d día</item>
+        <item quantity="many">Racha de %d días</item>
+        <item quantity="other">Racha de %d días</item>
+    </plurals>
+    <string name="about">Acerca de</string>
+    <string name="version">Versión</string>
+    <string name="rate_app">Califica Quiet Numbers</string>
 </resources>

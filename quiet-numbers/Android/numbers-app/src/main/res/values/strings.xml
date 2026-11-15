@@ -53,4 +53,36 @@
     <string name="hints">Hints</string>
     <string name="achievement_unlocked">Achievement unlocked</string>
     <string name="achievements_unlocked">Achievements unlocked</string>
+
+    <!-- Phase 3: saving, daily challenge, home, settings -->
+    <string name="settings">Settings</string>
+    <string name="continue_stage">Continue · Stage %d</string>
+    <string name="your_stats">Your stats</string>
+    <string name="best_score">Best score</string>
+    <string name="top_streak">Top streak</string>
+    <string name="games">Games</string>
+    <string name="streak">Streak</string>
+    <string name="best_streak">Best streak</string>
+    <string name="friends">Friends</string>
+    <string name="goal_points">Goal: %s points</string>
+    <string name="completed_score">Completed · %s</string>
+    <string name="played_score">Played · %s</string>
+    <string name="in_progress">In progress</string>
+    <string name="play">Play</string>
+    <string name="play_again">Play again</string>
+    <string name="continue_">Continue</string>
+    <string name="start_over">Start over</string>
+    <string name="cancel">Cancel</string>
+    <string name="continue_question">Continue this challenge?</string>
+    <string name="left_halfway">You left %s halfway.</string>
+    <string name="next_challenge_in">Next challenge in %s</string>
+    <string name="past_days_note">Past days don\'t go to the leaderboard, but completing one counts toward your streak.</string>
+    <string name="replay_note">Play again as often as you like: your best score counts.</string>
+    <plurals name="day_streak">
+        <item quantity="one">%d-day streak</item>
+        <item quantity="other">%d-day streak</item>
+    </plurals>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="rate_app">Rate Quiet Numbers</string>
 </resources>

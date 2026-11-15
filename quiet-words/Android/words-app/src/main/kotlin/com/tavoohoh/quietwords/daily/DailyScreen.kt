@@ -52,6 +52,8 @@ import com.tavoohoh.quietwords.AppModel
 import com.tavoohoh.quietwords.R
 import com.tavoohoh.quietwords.core.DailyChallenge
 import com.tavoohoh.quiet.ui.DayFormat
+import com.tavoohoh.quiet.ui.CalendarDay
+import com.tavoohoh.quiet.ui.CalendarView
 import com.tavoohoh.quietwords.design.LanguagePill
 import com.tavoohoh.quietwords.design.localizedName
 import com.tavoohoh.quietwords.design.title
@@ -223,9 +225,12 @@ private fun CalendarCard(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
+        val completed = app.completedDays
+        val late = app.lateDays
+        val inProgress = app.daysInProgress
         CalendarView(
             month = month, onMonth = onMonth, todayKey = today,
-            completed = app.completedDays, late = app.lateDays, inProgress = app.daysInProgress,
+            day = { k -> CalendarDay(isCompleted = k in completed, isLate = k in late, isInProgress = k in inProgress) },
             isPlayable = app::isPlayable, regular = regular, onSelect = onSelect,
         )
         var now by remember { mutableStateOf(AppClock.now()) }

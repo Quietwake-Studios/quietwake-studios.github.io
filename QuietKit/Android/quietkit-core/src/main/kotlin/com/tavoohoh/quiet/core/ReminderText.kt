@@ -1,7 +1,5 @@
-package com.tavoohoh.quietwords.core
+package com.tavoohoh.quiet.core
 
-import com.tavoohoh.quiet.core.DailyReminderPlan
-import com.tavoohoh.quiet.core.FriendsToday
 
 /**
  * Which text a daily notification gets (port of iOS `DailyReminders.content`); the app turns

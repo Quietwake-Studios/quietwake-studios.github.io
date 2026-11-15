@@ -32,10 +32,10 @@ class PlayGamesTests {
             wordsFound = 412, bestStreak = 3, bestScores = mapOf("hard-es" to 1310),
         )
         val dailies = mapOf(
-            "$today#en" to DailyRecord(742, true, 251, 2),
-            "$today#es" to DailyRecord(0, false, null, 1),
-            "2026-11-13#es" to DailyRecord(600, true, 300, 1),
-            "2026-11-12#en" to DailyRecord(-20, true, 400, 1),
+            "$today#en" to DailyRecord(742, isFinished = true, isCompleted = true, seconds = 251, attempts = 2),
+            "$today#es" to DailyRecord(0, isFinished = false, isCompleted = false, seconds = null, attempts = 1),
+            "2026-11-13#es" to DailyRecord(600, isFinished = true, isCompleted = true, seconds = 300, attempts = 1),
+            "2026-11-12#en" to DailyRecord(-20, isFinished = true, isCompleted = true, seconds = 400, attempts = 1),
         )
         val plan = PlayGamesPlan.of(progress, dailies, today)
         assertEquals(listOf(Achievement.FIRST_PUZZLE, Achievement.BILINGUAL), plan.unlocks)
@@ -56,17 +56,17 @@ class PlayGamesTests {
     @Test fun snapshotMergeNeverLosesProgress() {
         val a = CloudSnapshot(
             Profile(PlayerProgress(unlocked = setOf(Achievement.FIRST_PUZZLE), wordsFound = 50), Album().add(listOf("CORAL"), "ocean", WordLanguage.EN).first),
-            mapOf("$today#en" to DailyRecord(500, true, 200, 1)),
+            mapOf("$today#en" to DailyRecord(500, isFinished = true, isCompleted = true, seconds = 200, attempts = 1)),
         )
         val b = CloudSnapshot(
             Profile(PlayerProgress(unlocked = setOf(Achievement.HABIT), wordsFound = 80), Album().add(listOf("TIDE"), "ocean", WordLanguage.EN).first),
-            mapOf("$today#en" to DailyRecord(500, true, 150, 3), "$today#es" to DailyRecord(300, true, 90, 1)),
+            mapOf("$today#en" to DailyRecord(500, isFinished = true, isCompleted = true, seconds = 150, attempts = 3), "$today#es" to DailyRecord(300, isFinished = true, isCompleted = true, seconds = 90, attempts = 1)),
         )
         val m = CloudSnapshot.decode(a.merged(b).encode())!!
         assertEquals(setOf(Achievement.FIRST_PUZZLE, Achievement.HABIT), m.profile.progress.unlocked)
         assertEquals(80, m.profile.progress.wordsFound)
         assertEquals(setOf("CORAL", "TIDE"), m.profile.album.words["ocean/en"])
-        assertEquals(DailyRecord(500, true, 150, 3), m.dailies["$today#en"])
+        assertEquals(DailyRecord(500, isFinished = true, isCompleted = true, seconds = 150, attempts = 3), m.dailies["$today#en"])
         assertEquals(2, m.dailies.size)
         assertNull(CloudSnapshot.decode("{broken".toByteArray()))
     }
@@ -79,7 +79,7 @@ class PlayGamesTests {
         for (p in s.board.placements) p.cells(s.board.side).let { play.update(s, s.select(it.first(), it.last())!!) }
         val remote = CloudSnapshot(
             Profile(PlayerProgress(unlocked = setOf(Achievement.HABIT), wordsFound = 5000, bestStreak = 7)),
-            mapOf("2026-11-13#es" to DailyRecord(600, true, 300, 1), "$today#en" to DailyRecord(700, true, 250, 1)),
+            mapOf("2026-11-13#es" to DailyRecord(600, isFinished = true, isCompleted = true, seconds = 300, attempts = 1), "$today#en" to DailyRecord(700, isFinished = true, isCompleted = true, seconds = 250, attempts = 1)),
         )
         play.mergeCloud(remote)
         assertEquals(5000, play.progress.wordsFound)

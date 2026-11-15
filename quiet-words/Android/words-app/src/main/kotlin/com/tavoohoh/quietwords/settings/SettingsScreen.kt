@@ -54,6 +54,8 @@ import com.tavoohoh.quiet.ui.QuietScreen
 import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quiet.ui.Segments
+import com.tavoohoh.quiet.ui.ReminderToggle
+import com.tavoohoh.quiet.ui.rememberNotificationRequest
 import com.tavoohoh.quiet.ui.StoreReview
 import com.tavoohoh.quiet.ui.quietClickable
 import com.tavoohoh.quiet.ui.quietSurface
@@ -65,10 +67,10 @@ import com.tavoohoh.quietwords.core.WordLanguage
 import com.tavoohoh.quiet.ui.DayFormat
 import com.tavoohoh.quietwords.design.LanguageChoice
 import com.tavoohoh.quietwords.design.displayName
-import com.tavoohoh.quietwords.design.GroupDivider
-import com.tavoohoh.quietwords.design.GroupRow
-import com.tavoohoh.quietwords.design.GroupSection
-import com.tavoohoh.quietwords.design.GroupToggle
+import com.tavoohoh.quiet.ui.GroupDivider
+import com.tavoohoh.quiet.ui.GroupRow
+import com.tavoohoh.quiet.ui.GroupSection
+import com.tavoohoh.quiet.ui.GroupToggle
 
 /**
  * Settings, in the family's order (iOS `SettingsView`): Play (words language, sound, haptics,
@@ -193,63 +195,3 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
         )
     }
 }
-
-/**
- * Launches the system's notification prompt (Android 13+) and reports the answer to the
- * reminders; on older versions there is no prompt, so it counts as granted.
- */
-@Composable
-fun rememberNotificationRequest(reminders: DailyReminders): () -> Unit {
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        reminders.onPermissionResult(granted)
-    }
-    return remember(reminders) {
-        {
-            if (Build.VERSION.SDK_INT >= 33) launcher.launch(Manifest.permission.POST_NOTIFICATIONS) else reminders.onPermissionResult(true)
-        }
-    }
-}
-
-/** "Remind you at 7 PM?" after a first completed daily. Asked once; Settings keeps the switch. */
-@Composable
-fun ReminderOffer(onRemind: () -> Unit, onNotNow: () -> Unit) {
-    val colors = QuietTheme.colors
-    val locale = LocalConfiguration.current.locales[0]
-    AlertDialog(
-        onDismissRequest = onNotNow,
-        containerColor = colors.surface,
-        title = { Text(stringResource(R.string.reminder_offer_title, DayFormat.hour(DailyReminderPlan.REMINDER_HOUR, locale)), style = QuietType.headline, color = colors.ink) },
-        text = { Text(stringResource(R.string.reminder_offer_text), style = QuietType.body, color = colors.muted) },
-        confirmButton = {
-            TextButton(onClick = onRemind, modifier = Modifier.testTag("remindMe")) {
-                Text(stringResource(R.string.remind_me), color = colors.primary, style = QuietType.headline)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onNotNow, modifier = Modifier.testTag("notNow")) {
-                Text(stringResource(R.string.not_now), color = colors.muted, style = QuietType.headline)
-            }
-        },
-    )
-}
-
-/** "Daily challenge reminder": turning it on asks for permission the first time; if notifications are off for the app, it points to the system settings. */
-@Composable
-private fun ReminderToggle(reminders: DailyReminders, request: () -> Unit) {
-    val colors = QuietTheme.colors
-    val context = LocalContext.current
-    val locale = LocalConfiguration.current.locales[0]
-    val denied = reminders.authorization == DailyReminders.Authorization.DENIED
-    GroupToggle(
-        stringResource(R.string.reminder_toggle),
-        stringResource(R.string.reminder_detail, DayFormat.hour(DailyReminderPlan.REMINDER_HOUR, locale), DayFormat.hour(DailyReminderPlan.STREAK_HOUR, locale)),
-        reminders.isActive, Modifier.testTag("reminderToggle"), enabled = !denied,
-    ) { on -> if (reminders.setEnabled(on)) request() }
-    if (denied) {
-        Text(
-            stringResource(R.string.reminder_denied), style = QuietType.footnote, color = colors.primary,
-            modifier = Modifier.padding(bottom = 10.dp).quietClickable { context.startActivity(reminders.settingsIntent()) },
-        )
-    }
-}
-

@@ -123,6 +123,8 @@ class GameUiTests {
         launch()
         compose.onNodeWithTag("daily").performClick()
         compose.waitForIdle()
+        compose.onNodeWithTag("playToday").performClick()
+        compose.waitForIdle()
         val subtitle = compose.onNodeWithTag("subtitle").fetchSemanticsNode().config.getOrNull(SemanticsProperties.Text)!!.first().text
         assertTrue(subtitle, subtitle.startsWith("Stage 1 · Goal "))
     }

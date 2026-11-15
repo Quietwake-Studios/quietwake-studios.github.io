@@ -201,3 +201,20 @@ fun QuietScreen(
         Box(Modifier.fillMaxWidth().weight(1f)) { content() }
     }
 }
+
+/** A small capsule in `accent` with `onAccent` text (iOS `AccentButtonStyle`): Play on a `primary` card. */
+@Composable
+fun AccentButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
+    val colors = QuietTheme.colors
+    Box(
+        modifier
+            .defaultMinSize(minHeight = 44.dp)
+            .alpha(if (enabled) 1f else 0.4f)
+            .background(colors.accent, CircleShape)
+            .quietClickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 20.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text, style = QuietType.headline, color = colors.onAccent, maxLines = 1)
+    }
+}

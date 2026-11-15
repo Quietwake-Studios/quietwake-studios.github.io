@@ -1,4 +1,4 @@
-package com.tavoohoh.quietwords.daily
+package com.tavoohoh.quiet.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,19 +32,27 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tavoohoh.quiet.ui.QuietTheme
-import com.tavoohoh.quiet.ui.QuietType
-import com.tavoohoh.quiet.ui.quietClickable
-import com.tavoohoh.quietwords.R
-import com.tavoohoh.quiet.ui.DayFormat
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 
+/** How a day looks on the calendar. */
+data class CalendarDay(
+    /** Counts for the streak: filled with `primary`, joined to its completed neighbours. */
+    val isCompleted: Boolean = false,
+    /** Completed after its date (Words) or cleared later (Numbers): softly tinted. */
+    val isLate: Boolean = false,
+    /** Played to the end without completing it (Numbers): outlined. */
+    val isPlayed: Boolean = false,
+    /** An attempt left halfway: a dot. */
+    val isInProgress: Boolean = false,
+)
+
 /**
- * Month grid of daily challenges (iOS `CalendarView`): the month's real days, completed days
- * filled and joined by a band when consecutive (within a week), a dot on a day left halfway,
+ * Month grid of daily challenges, shared by the family (iOS `CalendarView` of each game): the
+ * month's real days, completed days filled and joined by a band when consecutive (within a
+ * week), days completed late softly tinted, played ones outlined, a dot on a day left halfway,
  * today ringed. Days in the replay window (the last 30) can be tapped; older ones only shown.
  */
 @Composable
@@ -52,11 +60,7 @@ fun CalendarView(
     month: YearMonth,
     onMonth: (YearMonth) -> Unit,
     todayKey: String,
-    /** Days completed in either language. */
-    completed: Set<String>,
-    /** Days first won after their date. */
-    late: Set<String>,
-    inProgress: Set<String>,
+    day: (String) -> CalendarDay,
     isPlayable: (String) -> Boolean,
     regular: Boolean,
     onSelect: (String) -> Unit,
@@ -69,18 +73,18 @@ fun CalendarView(
     val leading = Math.floorMod(month.atDay(1).dayOfWeek.value - firstDay.value, 7)
     val days = month.lengthOfMonth()
     fun key(day: Int) = "%04d-%02d-%02d".format(month.year, month.monthValue, day)
-    fun isDone(day: Int) = day in 1..days && key(day) in completed
+    fun isDone(d: Int) = d in 1..days && day(key(d)).isCompleted
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Arrow(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, stringResource(R.string.previous_month), true, Modifier.testTag("previousMonth")) {
+            Arrow(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, stringResource(R.string.quiet_previous_month), true, Modifier.testTag("previousMonth")) {
                 onMonth(month.minusMonths(1))
             }
             Text(
                 DayFormat.month(month, locale), style = QuietType.headline, color = colors.ink,
                 modifier = Modifier.weight(1f).testTag("monthTitle"), textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
-            Arrow(Icons.AutoMirrored.Rounded.KeyboardArrowRight, stringResource(R.string.next_month), !isCurrentMonth, Modifier.testTag("nextMonth")) {
+            Arrow(Icons.AutoMirrored.Rounded.KeyboardArrowRight, stringResource(R.string.quiet_next_month), !isCurrentMonth, Modifier.testTag("nextMonth")) {
                 onMonth(month.plusMonths(1))
             }
         }
@@ -96,15 +100,16 @@ fun CalendarView(
         for (week in 0 until (cells + 6) / 7) {
             Row {
                 for (column in 0 until 7) {
-                    val day = week * 7 + column - leading + 1
+                    val n = week * 7 + column - leading + 1
                     Box(Modifier.weight(1f)) {
-                        if (day in 1..days) {
-                            val k = key(day)
+                        if (n in 1..days) {
+                            val k = key(n)
+                            val mark = day(k)
                             DayCell(
-                                day = day, dayKey = k, isToday = k == todayKey, isCompleted = k in completed, isLate = k in late,
-                                isInProgress = k in inProgress, isPlayable = isPlayable(k),
-                                joinsPrevious = column != 0 && isDone(day) && isDone(day - 1),
-                                joinsNext = column != 6 && isDone(day) && isDone(day + 1),
+                                day = n, dayKey = k, isToday = k == todayKey, isCompleted = mark.isCompleted, isLate = mark.isLate,
+                                isPlayed = mark.isPlayed, isInProgress = mark.isInProgress, isPlayable = isPlayable(k),
+                                joinsPrevious = column != 0 && isDone(n) && isDone(n - 1),
+                                joinsNext = column != 6 && isDone(n) && isDone(n + 1),
                                 regular = regular, onSelect = onSelect,
                             )
                         }
@@ -125,7 +130,7 @@ private fun Arrow(icon: androidx.compose.ui.graphics.vector.ImageVector, label: 
 
 @Composable
 private fun DayCell(
-    day: Int, dayKey: String, isToday: Boolean, isCompleted: Boolean, isLate: Boolean, isInProgress: Boolean,
+    day: Int, dayKey: String, isToday: Boolean, isCompleted: Boolean, isLate: Boolean, isPlayed: Boolean, isInProgress: Boolean,
     isPlayable: Boolean, joinsPrevious: Boolean, joinsNext: Boolean, regular: Boolean, onSelect: (String) -> Unit,
 ) {
     val colors = QuietTheme.colors
@@ -141,9 +146,10 @@ private fun DayCell(
     }
     val label = DayFormat.long(dayKey, locale)
     val status = when {
-        isInProgress -> stringResource(R.string.in_progress)
-        isCompleted -> stringResource(R.string.completed)
-        isLate -> stringResource(R.string.won_later)
+        isInProgress -> stringResource(R.string.quiet_day_in_progress)
+        isCompleted -> stringResource(R.string.quiet_day_completed)
+        isLate -> stringResource(R.string.quiet_day_won_later)
+        isPlayed -> stringResource(R.string.quiet_day_played)
         else -> ""
     }
     val band = colors.primary.copy(alpha = 0.2f)
@@ -177,7 +183,7 @@ private fun DayCell(
                     else -> Color.Transparent
                 },
                 CircleShape,
-            ),
+            ).then(if (isPlayed && !isCompleted && !isLate) Modifier.border(1.5.dp, colors.primary, CircleShape) else Modifier),
             contentAlignment = Alignment.Center,
         ) {
             Text(

@@ -6,28 +6,19 @@ import com.tavoohoh.quiet.core.FriendsToday
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import com.tavoohoh.quiet.core.ReminderText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-/** The daily reminders as this app uses them (port of iOS `AppTests/ReminderTests`; the plan is tested in quietkit-core). */
+/** The daily reminders as this app uses them (port of iOS `AppTests/ReminderTests`; the plan and the texts are tested in quietkit-core). */
 class ReminderTests {
     private val zone = ZoneId.systemDefault()
 
     private fun todaysReminder(streak: Int): DailyReminderPlan.Item {
         val morning = LocalDate.now(zone).atTime(9, 0).atZone(zone).toInstant()
         return DailyReminderPlan.items(morning, todayCompleted = false, streak = streak, zone = zone).first { it.kind == DailyReminderPlan.Kind.REMINDER }
-    }
-
-    @Test fun textsFollowStreakAndFriends() {
-        assertEquals(ReminderText.Waiting, ReminderText.of(todaysReminder(1)))
-        assertEquals(ReminderText.Streak(8), ReminderText.of(todaysReminder(8)))
-        assertEquals(ReminderText.OneFriend("Ana", 560), ReminderText.of(todaysReminder(8), FriendsToday(1, "Ana", 560)))
-        assertEquals(ReminderText.Friends(3, "Ana", 560), ReminderText.of(todaysReminder(8), FriendsToday(3, "Ana", 560)))
-        val morning = LocalDate.now(zone).atTime(9, 0).atZone(zone).toInstant()
-        val risk = DailyReminderPlan.items(morning, false, 5, zone).first { it.kind == DailyReminderPlan.Kind.STREAK_AT_RISK }
-        assertEquals(ReminderText.StreakAtRisk(5), ReminderText.of(risk))
     }
 
     /**

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quiet_previous_month">Mes anterior</string>
+    <string name="quiet_next_month">Mes siguiente</string>
+    <string name="quiet_day_in_progress">En curso</string>
+    <string name="quiet_day_completed">Completado</string>
+    <string name="quiet_day_won_later">Ganado después</string>
+    <string name="quiet_day_played">Jugado</string>
+
+    <string name="quiet_reminder_title">Reto diario</string>
+    <string name="quiet_your_streak">Tu racha</string>
+    <string name="quiet_reminder_waiting">El reto de hoy te espera.</string>
+    <plurals name="quiet_reminder_streak">
+        <item quantity="one">No pierdas tu racha de %d día.</item>
+        <item quantity="many">No pierdas tu racha de %d días.</item>
+        <item quantity="other">No pierdas tu racha de %d días.</item>
+    </plurals>
+    <plurals name="quiet_reminder_at_risk">
+        <item quantity="one">Tu racha de %d día termina a la medianoche.</item>
+        <item quantity="many">Tu racha de %d días termina a la medianoche.</item>
+        <item quantity="other">Tu racha de %d días termina a la medianoche.</item>
+    </plurals>
+    <string name="quiet_reminder_toggle">Recordatorio del reto</string>
+    <string name="quiet_reminder_detail">A las %1$s si no has jugado; con una racha de 3 o más, otro a las %2$s.</string>
+    <string name="quiet_reminder_denied">Las notificaciones de esta app están desactivadas. Actívalas en Ajustes.</string>
+    <string name="quiet_reminder_offer_title">¿Te aviso a las %s?</string>
+    <string name="quiet_reminder_offer_text">Solo los días que aún no hayas jugado el reto. Puedes cambiarlo en Ajustes.</string>
+    <string name="quiet_remind_me">Avísame</string>
+    <string name="quiet_not_now">Ahora no</string>
+</resources>

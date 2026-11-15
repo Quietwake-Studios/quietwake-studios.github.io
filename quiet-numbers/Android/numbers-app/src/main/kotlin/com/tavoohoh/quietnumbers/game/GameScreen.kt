@@ -73,7 +73,7 @@ import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quiet.ui.RoundIconButton
 import com.tavoohoh.quiet.ui.quietClickable
 import com.tavoohoh.quiet.ui.quietSurface
-import com.tavoohoh.quietnumbers.GameKind
+import com.tavoohoh.quietnumbers.core.GameKind
 import com.tavoohoh.quietnumbers.R
 import com.tavoohoh.quiet.ui.DayFormat
 import com.tavoohoh.quietnumbers.design.LocalFeedback
@@ -95,6 +95,8 @@ fun GameScreen(
     todayKey: String,
     /** Best classic score so far; null for daily challenges. */
     bestScore: Int?,
+    /** The day was already played to the end: the summary says "Replay". */
+    isReplay: Boolean = false,
     onBack: () -> Unit,
     onNewGame: () -> Unit,
     onHome: () -> Unit,
@@ -179,6 +181,7 @@ fun GameScreen(
             SummarySheet(
                 session, kind,
                 isNewBest = (startingBest ?: 0) > 0 && session.score > (startingBest ?: 0),
+                isReplay = isReplay,
                 onNewGame = onNewGame, onHome = onHome,
             )
         }

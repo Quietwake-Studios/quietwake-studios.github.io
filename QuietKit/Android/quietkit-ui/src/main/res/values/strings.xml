@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- QuietKit's own texts (calendar, daily reminders), shared by the family. An app overrides one by
+     defining the same name (e.g. Quiet Words' Spanish "A medias"). From the apps' iOS catalogs. -->
+<resources>
+    <string name="quiet_previous_month">Previous month</string>
+    <string name="quiet_next_month">Next month</string>
+    <string name="quiet_day_in_progress">In progress</string>
+    <string name="quiet_day_completed">Completed</string>
+    <string name="quiet_day_won_later">Won later</string>
+    <string name="quiet_day_played">Played</string>
+
+    <string name="quiet_reminder_title">Daily Challenge</string>
+    <string name="quiet_your_streak">Your streak</string>
+    <string name="quiet_reminder_waiting">Today\'s challenge is waiting.</string>
+    <plurals name="quiet_reminder_streak">
+        <item quantity="one">Don\'t lose your %d-day streak.</item>
+        <item quantity="other">Don\'t lose your %d-day streak.</item>
+    </plurals>
+    <plurals name="quiet_reminder_at_risk">
+        <item quantity="one">Your %d-day streak ends at midnight.</item>
+        <item quantity="other">Your %d-day streak ends at midnight.</item>
+    </plurals>
+    <string name="quiet_reminder_toggle">Daily challenge reminder</string>
+    <string name="quiet_reminder_detail">At %1$s if you haven\'t played; with a streak of 3 or more, another at %2$s.</string>
+    <string name="quiet_reminder_denied">Notifications are off for this app. Turn them on in Settings.</string>
+    <string name="quiet_reminder_offer_title">Remind you at %s?</string>
+    <string name="quiet_reminder_offer_text">Only on days you haven\'t played the challenge yet. You can change it in Settings.</string>
+    <string name="quiet_remind_me">Remind me</string>
+    <string name="quiet_not_now">Not now</string>
+</resources>

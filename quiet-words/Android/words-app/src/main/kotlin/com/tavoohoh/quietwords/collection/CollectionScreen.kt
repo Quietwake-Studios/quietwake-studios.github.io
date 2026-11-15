@@ -77,8 +77,8 @@ import com.tavoohoh.quietwords.core.PaletteReward
 import com.tavoohoh.quietwords.core.Reward
 import com.tavoohoh.quietwords.core.WordLanguage
 import com.tavoohoh.quietwords.core.WordTheme
-import com.tavoohoh.quietwords.design.GroupSection
-import com.tavoohoh.quietwords.design.GroupToggle
+import com.tavoohoh.quiet.ui.GroupSection
+import com.tavoohoh.quiet.ui.GroupToggle
 import com.tavoohoh.quietwords.design.condition
 import com.tavoohoh.quietwords.design.family
 import com.tavoohoh.quietwords.design.icon

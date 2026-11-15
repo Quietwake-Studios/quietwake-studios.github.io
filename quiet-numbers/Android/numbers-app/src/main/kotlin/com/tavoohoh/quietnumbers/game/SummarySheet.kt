@@ -30,7 +30,7 @@ import com.tavoohoh.quiet.ui.CapsuleButton
 import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quiet.ui.clock
-import com.tavoohoh.quietnumbers.GameKind
+import com.tavoohoh.quietnumbers.core.GameKind
 import com.tavoohoh.quietnumbers.R
 import com.tavoohoh.quietnumbers.core.GameSession
 import java.text.NumberFormat

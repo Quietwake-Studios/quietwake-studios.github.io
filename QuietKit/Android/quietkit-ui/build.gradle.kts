@@ -27,6 +27,8 @@ dependencies {
     api(libs.compose.foundation)
     api(libs.compose.material3)
     implementation(libs.core.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.compose.material.icons)
     implementation(libs.play.review.ktx)
     implementation(libs.play.games.v2)
 }
