@@ -117,9 +117,25 @@ class GameModel(session: GameSession) {
     private var lastOutcome: MatchOutcome? = null
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    val canAddNumbers: Boolean get() = session.plusRemaining > 0 && !session.isOver
-    val canUseHint: Boolean get() = !session.isOver
-    val canUndo: Boolean get() = session.canUndo
+    /** Tutorial: only these cells can be played (ringed like a hint), and + only when `allowsAdd`. Undo and hints are off. Null is free play. */
+    data class Guide(val cells: Set<Int>, val allowsAdd: Boolean = false)
+
+    var guide: Guide? by mutableStateOf(null)
+        private set
+    /** Bumped when a tap misses the guided pair, so its rings blink again. */
+    var guideNudges by mutableIntStateOf(0)
+        private set
+
+    val canAddNumbers: Boolean get() = session.plusRemaining > 0 && !session.isOver && (guide?.allowsAdd ?: true)
+    val canUseHint: Boolean get() = !session.isOver && guide == null
+    val canUndo: Boolean get() = session.canUndo && guide == null
+
+    /** Tutorial: points at the next move. */
+    fun pointAt(next: Guide?) {
+        guide = next
+        hintIDs = next?.cells ?: emptySet()
+        selectedID = null
+    }
     /** Stuck until the player taps +. */
     val needsNumbers: Boolean get() = !session.isOver && !session.hasValidPair
     val displayedScore: Int get() = session.score - pendingPoints
@@ -130,6 +146,13 @@ class GameModel(session: GameSession) {
         if (live.isOver) return
         val index = live.board.indexOfCell(cell.id) ?: return
         if (live.board.cells[index].isCleared) return
+        guide?.let {
+            if (cell.id !in it.cells) {
+                guideNudges += 1
+                onFeedback(GameFeedback.Select)
+                return
+            }
+        }
         val selected = selectedID
         if (selected == null) return select(cell.id)
         if (selected == cell.id) {
@@ -197,6 +220,7 @@ class GameModel(session: GameSession) {
         if (live.isOver || selectedID == cell.id) return
         val index = live.board.indexOfCell(cell.id) ?: return
         if (live.board.cells[index].isCleared) return
+        if (guide?.cells?.contains(cell.id) == false) return
         select(cell.id)
     }
 
@@ -346,7 +370,7 @@ class GameModel(session: GameSession) {
         }
         if (isLongShot(outcome.pair)) return Praise.Kind.LONG_SHOT to 0
         val digit = outcome.clearedDigits.firstOrNull()
-        if (digit != null && !outcome.boardCleared) return Praise.Kind.NO_MORE to digit
+        if (digit != null && !outcome.boardCleared && guide == null) return Praise.Kind.NO_MORE to digit
         val streak = live.streak
         if (streak > 0 && streak % STREAK_STEP == 0) return Praise.Kind.IN_A_ROW to streak
         return null

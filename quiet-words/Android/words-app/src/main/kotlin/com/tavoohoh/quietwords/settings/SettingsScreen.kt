@@ -71,6 +71,10 @@ import com.tavoohoh.quiet.ui.GroupDivider
 import com.tavoohoh.quiet.ui.GroupRow
 import com.tavoohoh.quiet.ui.GroupSection
 import com.tavoohoh.quiet.ui.GroupToggle
+import com.tavoohoh.quiet.ui.AppearanceSection
+import com.tavoohoh.quiet.ui.PrivacySection
+import com.tavoohoh.quiet.ui.ResetProgressSection
+import com.tavoohoh.quiet.ui.AboutSection
 
 /**
  * Settings, in the family's order (iOS `SettingsView`): Play (words language, sound, haptics,
@@ -81,7 +85,6 @@ import com.tavoohoh.quiet.ui.GroupToggle
 fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
     val colors = QuietTheme.colors
     var choosesLanguage by rememberSaveable { mutableStateOf(false) }
-    var confirmsReset by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val requestNotifications = rememberNotificationRequest(app.reminders)
 
@@ -105,19 +108,7 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
                             Modifier.testTag("largerLetters"), onChange = app::chooseLargerLetters,
                         )
                     }
-                    GroupSection(stringResource(R.string.appearance)) {
-                        val dark = colors.isDark
-                        GroupToggle(stringResource(R.string.match_system), null, app.appearance == AppearanceMode.SYSTEM, Modifier.testTag("matchSystem")) { matches ->
-                            // Off: start on the opposite of what's on screen so the change shows right away.
-                            app.setAppearanceMode(if (matches) AppearanceMode.SYSTEM else if (dark) AppearanceMode.LIGHT else AppearanceMode.DARK)
-                        }
-                        if (app.appearance != AppearanceMode.SYSTEM) {
-                            Segments(
-                                app.appearance, listOf(AppearanceMode.LIGHT to stringResource(R.string.light), AppearanceMode.DARK to stringResource(R.string.dark)),
-                                app::setAppearanceMode, Modifier.padding(vertical = 8.dp).testTag("appearanceMode"),
-                            )
-                        }
-                    }
+                    AppearanceSection(app.appearance, app::setAppearanceMode)
                     GroupSection(stringResource(R.string.daily_challenge_title)) {
                         ReminderToggle(app.reminders, requestNotifications)
                     }
@@ -131,47 +122,12 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
                         GroupDivider()
                         GroupRow(stringResource(R.string.how_to_play), null, Modifier.testTag("howToPlay"), onClick = onHowToPlay)
                     }
-                    GroupSection(stringResource(R.string.privacy)) {
-                        Text(stringResource(R.string.privacy_text), style = QuietType.subheadline, color = colors.muted, modifier = Modifier.padding(vertical = 10.dp))
-                    }
-                    GroupSection(null) {
-                        Text(
-                            stringResource(R.string.reset_progress), style = QuietType.body, color = colors.accent,
-                            modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 48.dp).quietClickable { confirmsReset = true }
-                                .padding(vertical = 13.dp).testTag("resetProgress"),
-                        )
-                    }
-                    Text(
-                        stringResource(R.string.reset_footnote), style = QuietType.footnote, color = colors.muted,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 0.dp).offset(y = (-10).dp),
-                    )
-                    GroupSection(stringResource(R.string.about)) {
-                        GroupRow(stringResource(R.string.rate_app), null, Modifier.testTag("rateApp")) { StoreReview.openRatePage(context) }
-                        GroupDivider()
-                        GroupRow(stringResource(R.string.version), BuildConfig.VERSION_NAME, chevron = false)
-                    }
+                    PrivacySection(stringResource(R.string.app_name))
+                    ResetProgressSection(app::resetProgress)
+                    AboutSection(stringResource(R.string.app_name), BuildConfig.VERSION_NAME)
                 }
             }
         }
-    }
-
-    if (confirmsReset) {
-        AlertDialog(
-            onDismissRequest = { confirmsReset = false },
-            containerColor = colors.surface,
-            title = { Text(stringResource(R.string.reset_question), style = QuietType.headline, color = colors.ink) },
-            text = { Text(stringResource(R.string.reset_message), style = QuietType.body, color = colors.muted) },
-            confirmButton = {
-                TextButton(onClick = { confirmsReset = false; app.resetProgress() }, modifier = Modifier.testTag("confirmReset")) {
-                    Text(stringResource(R.string.reset_confirm), color = colors.accent, style = QuietType.headline)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { confirmsReset = false }) {
-                    Text(stringResource(R.string.cancel), color = colors.primary, style = QuietType.headline)
-                }
-            },
-        )
     }
 
     if (choosesLanguage) {

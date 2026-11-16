@@ -74,6 +74,11 @@ import com.tavoohoh.quiet.ui.RoundIconButton
 import com.tavoohoh.quiet.ui.quietClickable
 import com.tavoohoh.quiet.ui.quietSurface
 import com.tavoohoh.quietnumbers.core.GameKind
+import com.tavoohoh.quietnumbers.core.Achievement
+import com.tavoohoh.quietnumbers.design.LocalBoardLooks
+import com.tavoohoh.quietnumbers.design.Badge
+import com.tavoohoh.quietnumbers.design.title
+import com.tavoohoh.quiet.ui.UnlockBanner
 import com.tavoohoh.quietnumbers.R
 import com.tavoohoh.quiet.ui.DayFormat
 import com.tavoohoh.quietnumbers.design.LocalFeedback
@@ -97,6 +102,11 @@ fun GameScreen(
     bestScore: Int?,
     /** The day was already played to the end: the summary says "Replay". */
     isReplay: Boolean = false,
+    /** Achievements this game unlocked, for the summary. */
+    unlocked: List<Achievement> = emptyList(),
+    /** An achievement unlocked during play, shown in a banner for a moment (never over the summary). */
+    pendingUnlock: Achievement? = null,
+    onUnlockShown: (Achievement) -> Unit = {},
     onBack: () -> Unit,
     onNewGame: () -> Unit,
     onHome: () -> Unit,
@@ -144,7 +154,7 @@ fun GameScreen(
             val regular = maxWidth >= 600.dp
             val boardWidth = minOf(maxWidth - 48.dp, if (regular) 760.dp else 540.dp)
             val cellWidth = floor(boardWidth.value / 9).dp
-            val cellHeight = maxOf(46.dp, cellWidth)
+            val cellHeight = maxOf(if (LocalBoardLooks.current.largerNumbers) 52.dp else 46.dp, cellWidth)
             Column(Modifier.widthIn(max = boardWidth + 48.dp).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                     RoundIconButton(QuietIcons.Back, stringResource(R.string.back), onBack, Modifier.testTag("back"))
@@ -182,8 +192,23 @@ fun GameScreen(
                 session, kind,
                 isNewBest = (startingBest ?: 0) > 0 && session.score > (startingBest ?: 0),
                 isReplay = isReplay,
+                unlocked = unlocked,
                 onNewGame = onNewGame, onHome = onHome,
             )
+        }
+        // "Achievement unlocked" during play, at the bottom (iOS `UnlockBanner`); none over the summary.
+        val unlock = pendingUnlock?.takeUnless { session.isOver }
+        AnimatedVisibility(
+            unlock != null, Modifier.align(Alignment.BottomCenter).safeDrawingPadding().padding(bottom = 96.dp),
+            enter = if (reduceMotion) fadeIn() else slideInVertically { it } + fadeIn(), exit = fadeOut(),
+        ) {
+            var shown by remember { mutableStateOf(unlock) }
+            if (unlock != null) shown = unlock
+            shown?.let { UnlockBanner(it.title()) { Badge(it, 36.dp) } }
+        }
+        if (unlock != null) LaunchedEffect(unlock) {
+            delay(2500)
+            onUnlockShown(unlock)
         }
         if (celebrates) {
             val seed = when (kind) {
@@ -232,7 +257,7 @@ private fun GameMenu(onNewGame: () -> Unit) {
 
 /** Score and stage, with praise as a toast on the right. */
 @Composable
-private fun TopBar(model: GameModel, subtitle: String) {
+internal fun TopBar(model: GameModel, subtitle: String) {
     val colors = QuietTheme.colors
     val scoreLabel = stringResource(R.string.score)
     val score = model.session.score
@@ -240,7 +265,7 @@ private fun TopBar(model: GameModel, subtitle: String) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    NumberFormat.getIntegerInstance().format(model.displayedScore), style = QuietType.score(44.sp), color = colors.ink,
+                    NumberFormat.getIntegerInstance().format(model.displayedScore), style = QuietType.score(44.sp).copy(fontFamily = LocalBoardLooks.current.family), color = colors.ink,
                     modifier = Modifier.clearAndSetSemantics { contentDescription = scoreLabel; stateDescription = "$score"; testTag = "score" },
                 )
                 ScoreChangeLabel(model, Modifier.padding(bottom = 6.dp))
@@ -329,7 +354,7 @@ private fun DigitStrip(board: Board, modifier: Modifier) {
 
 /** Undo, + and hint, at the bottom within thumb reach. */
 @Composable
-private fun ActionBar(model: GameModel) {
+internal fun ActionBar(model: GameModel) {
     val session = model.session
     Row(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp)) {
         CounterButton(Icons.AutoMirrored.Rounded.Undo, stringResource(R.string.undo), stringResource(R.string.undo), null, model.canUndo, false, 0, Modifier.weight(1f).testTag("undo")) { model.undo() }

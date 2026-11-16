@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -56,7 +57,7 @@ import java.text.NumberFormat
 /**
  * Home (iOS `HomeView`): the menu at the top right, the icon and name, the daily card with the
  * streak, "Continue · Stage N" when a classic game is saved, New Game and "Your stats".
- * Leaderboards and Collection join the menu in Phases 4–5.
+ * Leaderboards joins the menu in Phase 5.
  */
 @Composable
 fun HomeScreen(app: AppModel) {
@@ -70,7 +71,10 @@ fun HomeScreen(app: AppModel) {
             ) {
                 Column(Modifier.widthIn(max = if (regular) 440.dp else 360.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Menu(
-                        listOf(MenuItem(Icons.Outlined.Settings, stringResource(R.string.settings), "settings") { app.push(Route.SETTINGS) }),
+                        listOf(
+                            MenuItem(Icons.Outlined.GridView, stringResource(R.string.collection), "collection") { app.openCollection() },
+                            MenuItem(Icons.Outlined.Settings, stringResource(R.string.settings), "settings") { app.push(Route.SETTINGS) },
+                        ),
                     )
                     Spacer(Modifier.height(if (regular) 64.dp else 40.dp))
                     Image(painterResource(R.drawable.home_icon), null, Modifier.size(84.dp).clip(RoundedCornerShape(84.dp * 0.225f)))
@@ -85,7 +89,7 @@ fun HomeScreen(app: AppModel) {
                         CapsuleButton(stringResource(R.string.continue_stage, stage), app::continueClassic, Modifier.testTag("continue"))
                         Spacer(Modifier.height(12.dp))
                     }
-                    CapsuleButton(stringResource(R.string.new_game), app::newClassic, Modifier.testTag("newGame"), prominent = app.classicStage == null)
+                    CapsuleButton(stringResource(R.string.new_game), app::newGameFromHome, Modifier.testTag("newGame"), prominent = app.classicStage == null)
                     Spacer(Modifier.height(30.dp))
                     Stats(app)
                 }

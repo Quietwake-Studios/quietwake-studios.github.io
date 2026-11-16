@@ -6,7 +6,13 @@ import com.tavoohoh.quiet.ui.QuietTones
 import com.tavoohoh.quietnumbers.game.GameFeedback
 
 /** The game's haptics and tones on the kit's `QuietHaptics` and `QuietTones` (port of iOS `FeedbackService`). */
-class FeedbackService(private val tones: QuietTones?, private val sound: () -> Boolean = { true }, private val haptics: () -> Boolean = { true }) {
+class FeedbackService(
+    private val tones: QuietTones?,
+    private val sound: () -> Boolean = { true },
+    private val haptics: () -> Boolean = { true },
+    /** The sound pack from Collection (Marimba is the "Monotone" reward). */
+    private val voice: () -> QuietTones.Voice = { QuietTones.Voice.SOFT },
+) {
     fun play(event: GameFeedback, view: QuietHaptics) {
         if (haptics()) {
             view.play(
@@ -18,7 +24,7 @@ class FeedbackService(private val tones: QuietTones?, private val sound: () -> B
                 },
             )
         }
-        if (sound()) tones?.play(notes(event))
+        if (sound()) tones?.play(notes(event), voice())
     }
 
     companion object {

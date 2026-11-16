@@ -116,6 +116,8 @@ private fun Screen(app: AppModel, route: Route) {
         Route.HOME -> HomeScreen(app)
         Route.DAILY -> DailyScreen(app, onBack = app::pop)
         Route.SETTINGS -> SettingsScreen(app, onBack = app::pop)
+        Route.COLLECTION -> com.tavoohoh.quietnumbers.collection.CollectionScreen(app, onBack = app::pop)
+        Route.TUTORIAL -> com.tavoohoh.quietnumbers.tutorial.TutorialScreen(app.tutorialIsFirstRun, onBack = app::pop, onFinish = app::tutorialFinished)
         Route.GAME -> {
             val game = app.activeGame
             val kind = app.activeKind
@@ -124,6 +126,9 @@ private fun Screen(app: AppModel, route: Route) {
                     model = game, kind = kind, todayKey = app.todayKey,
                     bestScore = if (kind == GameKind.Classic) app.bestAtStart else null,
                     isReplay = app.isReplay,
+                    unlocked = app.unlockedThisGame,
+                    pendingUnlock = app.pendingUnlocks.firstOrNull(),
+                    onUnlockShown = app::dismissUnlock,
                     onBack = app::pop,
                     onNewGame = { if (app.leaveGame(toNewGame = true)) activity?.let(app.storeReview::request) },
                     onHome = { if (app.leaveGame(toNewGame = false)) activity?.let(app.storeReview::request) },

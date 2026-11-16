@@ -124,24 +124,10 @@
     <string name="settings">Settings</string>
     <string name="game_section">Game</string>
     <string name="word_language">Word language</string>
-    <string name="appearance">Appearance</string>
-    <string name="match_system">Match system</string>
-    <string name="light">Light</string>
-    <string name="dark">Dark</string>
     <string name="account">Account</string>
     <string name="how_to_play">How to play</string>
-    <string name="privacy">Privacy</string>
-    <string name="privacy_text">Quiet Words doesn\'t collect any data. Your games, streaks and achievements stay on this device. If you sign in to Play Games, your scores and achievements are shared with Google Play Games and your progress is saved in your Google account.</string>
-    <string name="version">Version</string>
     <string name="reminder_one_friend">%1$s finished today\'s challenge with %2$s. Up for it?</string>
     <string name="reminder_friends">%1$d friends already played; %2$s leads with %3$s.</string>
-    <string name="reset_progress">Reset Progress…</string>
-    <string name="reset_question">Reset all progress?</string>
-    <string name="reset_message">All your game progress is erased.</string>
-    <string name="rate_app">Rate Quiet Words</string>
-    <string name="reset_footnote">Deletes games, daily results, streaks, achievements and unlocked rewards, here and in the cloud.</string>
-    <string name="about">About</string>
-    <string name="reset_confirm">Reset progress</string>
 
     <!-- Phase 4: collection, rewards, achievements, settings -->
     <string name="collection">Collection</string>
@@ -168,17 +154,12 @@
         <item quantity="other">Missing word, %d letters</item>
     </plurals>
     <string name="missing_note">Missing words show only their length.</string>
-    <string name="cheaper_hints">Cheaper hints</string>
     <string name="cheaper_hints_detail">Free play: a hint costs 10 points instead of 30. Daily challenges always cost 30. From your next game.</string>
     <string name="marker">Marker</string>
     <string name="board_letters">Board letters</string>
     <string name="theme">Theme</string>
     <string name="app_icon">App icon</string>
     <string name="earned">Earned</string>
-    <string name="n_earned">%d earned</string>
-    <string name="of_n">of %d</string>
-    <string name="hidden_achievement">Hidden achievement</string>
-    <string name="keep_playing">Keep playing: it shows here once earned.</string>
     <string name="n_of_words">%1$d of %2$d words</string>
     <string name="best_streak_of">Best streak: %1$d of %2$d days</string>
     <string name="most_advanced">Most advanced theme: %s</string>
@@ -199,7 +180,6 @@
     <string name="new_best">New best</string>
     <string name="new_in_album">New in the album</string>
     <string name="achievement">Achievement</string>
-    <string name="achievement_unlocked">Achievement unlocked</string>
     <string name="sound">Sound</string>
     <string name="haptics">Haptics</string>
     <string name="larger_letters">Larger letters</string>

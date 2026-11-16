@@ -27,4 +27,28 @@
     <string name="quiet_reminder_offer_text">Only on days you haven\'t played the challenge yet. You can change it in Settings.</string>
     <string name="quiet_remind_me">Remind me</string>
     <string name="quiet_not_now">Not now</string>
+    <!-- Collection and Settings, the same in every game (root CLAUDE.md). -->
+    <string name="quiet_earned">Earned</string>
+    <string name="quiet_n_earned">%d earned</string>
+    <string name="quiet_of_n">of %d</string>
+    <string name="quiet_hidden_achievement">Hidden achievement</string>
+    <string name="quiet_keep_playing">Keep playing: it shows here once earned.</string>
+    <string name="quiet_achievement_unlocked">Achievement unlocked</string>
+    <string name="quiet_hints">Hints</string>
+    <string name="quiet_cheaper_hints">Cheaper hints</string>
+    <string name="quiet_appearance">Appearance</string>
+    <string name="quiet_match_system">Match system</string>
+    <string name="quiet_light">Light</string>
+    <string name="quiet_dark">Dark</string>
+    <string name="quiet_privacy">Privacy</string>
+    <string name="quiet_privacy_text">%1$s doesn\'t collect any data. Your games, streaks and achievements stay on this device. If you sign in to Play Games, your scores and achievements are shared with Google Play Games and your progress is saved in your Google account.</string>
+    <string name="quiet_reset_progress">Reset Progress…</string>
+    <string name="quiet_reset_footnote">Deletes games, daily results, streaks, achievements and unlocked rewards, here and in the cloud.</string>
+    <string name="quiet_reset_question">Reset all progress?</string>
+    <string name="quiet_reset_message">All your game progress is erased.</string>
+    <string name="quiet_reset_confirm">Reset progress</string>
+    <string name="quiet_cancel">Cancel</string>
+    <string name="quiet_about">About</string>
+    <string name="quiet_rate_app">Rate %s</string>
+    <string name="quiet_version">Version</string>
 </resources>

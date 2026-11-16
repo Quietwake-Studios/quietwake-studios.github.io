@@ -27,4 +27,27 @@
     <string name="quiet_reminder_offer_text">Solo los días que aún no hayas jugado el reto. Puedes cambiarlo en Ajustes.</string>
     <string name="quiet_remind_me">Avísame</string>
     <string name="quiet_not_now">Ahora no</string>
+    <string name="quiet_earned">Ganado</string>
+    <string name="quiet_n_earned">%d ganados</string>
+    <string name="quiet_of_n">de %d</string>
+    <string name="quiet_hidden_achievement">Logro oculto</string>
+    <string name="quiet_keep_playing">Sigue jugando: aparece aquí cuando lo ganes.</string>
+    <string name="quiet_achievement_unlocked">Logro desbloqueado</string>
+    <string name="quiet_hints">Pistas</string>
+    <string name="quiet_cheaper_hints">Pistas más baratas</string>
+    <string name="quiet_appearance">Apariencia</string>
+    <string name="quiet_match_system">Igual que el sistema</string>
+    <string name="quiet_light">Claro</string>
+    <string name="quiet_dark">Oscuro</string>
+    <string name="quiet_privacy">Privacidad</string>
+    <string name="quiet_privacy_text">%1$s no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo. Si inicias sesión en Play Juegos, tus puntajes y logros se comparten con Google Play Juegos y tu progreso se guarda en tu cuenta de Google.</string>
+    <string name="quiet_reset_progress">Restablecer progreso…</string>
+    <string name="quiet_reset_footnote">Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas, aquí y en la nube.</string>
+    <string name="quiet_reset_question">¿Restablecer todo el progreso?</string>
+    <string name="quiet_reset_message">Se borra todo el progreso de tu partida.</string>
+    <string name="quiet_reset_confirm">Restablecer progreso</string>
+    <string name="quiet_cancel">Cancelar</string>
+    <string name="quiet_about">Acerca de</string>
+    <string name="quiet_rate_app">Califica %s</string>
+    <string name="quiet_version">Versión</string>
 </resources>

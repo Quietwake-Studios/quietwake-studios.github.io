@@ -209,6 +209,13 @@ class NumbersPlay(
     /** Whether today is completed and the current streak, for the reminders. */
     fun reminderState(): Pair<Boolean, Int> = (store.dailies[todayKey]?.isCompleted == true) to currentStreak
 
+    /** Debug `unlockAll` (QA and screenshots, iOS `-unlockAll`): every achievement, nothing announced. */
+    fun unlockAll() {
+        progress = progress.copy(unlocked = Achievement.entries.toSet())
+        store.store.saveProfile(progress)
+        onChange()
+    }
+
     /** Erases games, dailies and progress (settings and the review count stay). */
     fun reset() {
         store.store.deleteEverything()

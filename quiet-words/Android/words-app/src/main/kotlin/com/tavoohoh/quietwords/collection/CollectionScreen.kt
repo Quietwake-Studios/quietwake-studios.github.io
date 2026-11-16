@@ -60,6 +60,10 @@ import androidx.compose.ui.unit.sp
 import com.tavoohoh.quiet.core.Palette
 import com.tavoohoh.quiet.ui.QuietColors
 import com.tavoohoh.quiet.ui.QuietScreen
+import com.tavoohoh.quiet.ui.ProgressBar
+import com.tavoohoh.quiet.ui.ThemePreview
+import com.tavoohoh.quiet.ui.AchievementsHeader
+import com.tavoohoh.quiet.ui.CheaperHintsSection
 import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quiet.ui.QuietType
 import com.tavoohoh.quiet.ui.Segments
@@ -194,12 +198,6 @@ private fun BadgeIcon(complete: Boolean, modifier: Modifier) {
     }
 }
 
-@Composable
-fun ProgressBar(fraction: Float, color: Color, modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxWidth().height(4.dp).background(QuietTheme.colors.surface2, CircleShape)) {
-        Box(Modifier.fillMaxHeight().fillMaxWidth(fraction.coerceIn(0f, 1f)).background(color, CircleShape))
-    }
-}
 
 /** One theme's album: found words as written; missing ones only show their length. */
 @Composable
@@ -302,12 +300,7 @@ private fun RewardsList(app: AppModel) {
         // "In the Red" (hidden): the only reward that touches play, so it can be turned off.
         // It doesn't show until earned.
         if (Achievement.IN_THE_RED in progress.unlocked) {
-            GroupSection(stringResource(R.string.hints)) {
-                GroupToggle(
-                    stringResource(R.string.cheaper_hints), stringResource(R.string.cheaper_hints_detail), app.cheapHints,
-                    Modifier.testTag("cheapHints"), onChange = app::chooseCheapHints,
-                )
-            }
+            CheaperHintsSection(stringResource(R.string.cheaper_hints_detail), app.cheapHints, app::chooseCheapHints)
         }
         RewardSection(stringResource(R.string.marker), Marker.entries, looks.marker, app, { app.choose(looks.copy(marker = it)) }) { m, _ ->
             MarkerPreview(m)
@@ -317,7 +310,7 @@ private fun RewardsList(app: AppModel) {
         }
         RewardSection(
             stringResource(R.string.theme), PaletteReward.all, PaletteReward(looks.palette), app, { app.choose(looks.copy(palette = it.palette)) },
-        ) { p, _ -> ThemePreview(p.palette) }
+        ) { p, _ -> ThemePreview(p.palette, Modifier.padding(6.dp).fillMaxWidth().height(34.dp)) }
         RewardSection(stringResource(R.string.app_icon), AppIconChoice.entries, looks.icon, app, { app.choose(looks.copy(icon = it)) }) { c, _ ->
             Icon(
                 if (c == AppIconChoice.GOLD) Icons.Rounded.Verified else Icons.Outlined.WorkspacePremium, null,
@@ -406,24 +399,6 @@ private fun MarkerPreview(marker: Marker) {
     }
 }
 
-/** A theme in both modes, side by side: background with its primary and accent. */
-@Composable
-private fun ThemePreview(palette: Palette) {
-    val light = QuietColors.of(palette, dark = false)
-    val dark = QuietColors.of(palette, dark = true)
-    Row(Modifier.padding(6.dp).fillMaxWidth().height(34.dp).background(Color.Transparent, RoundedCornerShape(10.dp))) {
-        for (c in listOf(light, dark)) {
-            Row(
-                Modifier.weight(1f).fillMaxHeight().background(c.background, if (c === light) RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp) else RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)),
-                horizontalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(Modifier.size(14.dp).background(c.primary, CircleShape))
-                Box(Modifier.size(14.dp).background(c.accent, CircleShape))
-            }
-        }
-    }
-}
-
 // Achievements
 
 /**
@@ -436,11 +411,7 @@ private fun AchievementsList(app: AppModel) {
     val progress = app.progress
     val earned = Achievement.entries.count { it in progress.unlocked }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(Modifier.padding(horizontal = 4.dp).semantics(mergeDescendants = true) {}, verticalAlignment = Alignment.Bottom) {
-            Text(stringResource(R.string.n_earned, earned), style = QuietType.title2.copy(fontWeight = FontWeight.Black), color = colors.ink)
-            Spacer(Modifier.weight(1f))
-            Text(stringResource(R.string.of_n, Achievement.entries.size), style = QuietType.subheadline, color = colors.muted)
-        }
+        AchievementsHeader(earned, Achievement.entries.size)
         GroupSection(null) {
             for (achievement in Achievement.entries) {
                 AchievementRow(achievement, achievement in progress.unlocked, AchievementStep.of(achievement, progress, app.album, app.library))
@@ -460,31 +431,12 @@ private fun AchievementRow(achievement: Achievement, isEarned: Boolean, step: Ac
         is AchievementStep.Percent -> stringResource(R.string.most_advanced, NumberFormat.getPercentInstance(locale).format(step.value))
         null -> null
     }
-    val earnedLabel = stringResource(R.string.earned)
-    Row(
-        Modifier.fillMaxWidth().semantics(mergeDescendants = true) { testTag = "achievement-${achievement.rawValue}" }.padding(vertical = 12.dp),
-        verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp),
+    com.tavoohoh.quiet.ui.AchievementRow(
+        id = achievement.rawValue, title = achievement.title(), condition = achievement.condition(), isEarned = isEarned,
+        isSecret = secret, reward = achievement.reward(), stepFraction = step?.fraction?.toFloat(), stepText = stepText,
     ) {
         Box(Modifier.size(42.dp).background(if (isEarned) colors.primary else colors.surface2, CircleShape), contentAlignment = Alignment.Center) {
             Icon(if (secret) Icons.Outlined.QuestionMark else achievement.icon, null, tint = if (isEarned) colors.onPrimary else colors.muted, modifier = Modifier.size(20.dp))
-        }
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(if (secret) stringResource(R.string.hidden_achievement) else achievement.title(), style = QuietType.headline, color = colors.ink)
-            Text(if (secret) stringResource(R.string.keep_playing) else achievement.condition(), style = QuietType.subheadline, color = colors.muted)
-            if (step != null && stepText != null && !isEarned) {
-                ProgressBar(step.fraction.toFloat(), colors.primary, Modifier.padding(vertical = 2.dp))
-                Text(stepText, style = QuietType.caption.copy(fontFeatureSettings = QuietType.TABULAR), color = colors.muted)
-            }
-            val reward = achievement.reward()
-            if (!secret && reward != null) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(Icons.Outlined.CardGiftcard, null, tint = if (isEarned) colors.primary else colors.muted, modifier = Modifier.size(14.dp))
-                    Text(reward, style = QuietType.caption, color = if (isEarned) colors.primary else colors.muted)
-                }
-            }
-        }
-        if (isEarned) {
-            Icon(Icons.Rounded.Verified, earnedLabel, tint = colors.primary, modifier = Modifier.size(24.dp))
         }
     }
 }

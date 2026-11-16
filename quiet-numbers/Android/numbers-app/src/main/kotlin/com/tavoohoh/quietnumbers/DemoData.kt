@@ -1,6 +1,7 @@
 package com.tavoohoh.quietnumbers
 
 import com.tavoohoh.quiet.core.DailyKey
+import com.tavoohoh.quietnumbers.core.Achievement
 import com.tavoohoh.quietnumbers.core.DailyChallenge
 import com.tavoohoh.quietnumbers.core.GameSession
 import com.tavoohoh.quietnumbers.core.MatchRules
@@ -34,6 +35,11 @@ object DemoData {
         }
         store.store.saveProfile(
             PlayerProgress(
+                // Some rewards unlocked, as iOS's demo.
+                unlocked = setOf(
+                    Achievement.FIRST_STEP, Achievement.CLEAN_SLATE, Achievement.NO_HELP, Achievement.CONSISTENCY,
+                    Achievement.STAGE_FIVE, Achievement.NIGHT_OWL, Achievement.IN_THE_RED,
+                ),
                 gamesFinished = 31, gamesPlayed = 34, boardsCleared = 9, rowsCleared = 64, highestStage = 4,
                 dailiesCompleted = 14, bestStreak = 8, bestScore = 2480, practicedDays = setOf(day(-12)),
             ),

@@ -141,6 +141,6 @@ class DailyUiTests {
         launch()
         click("settings")
         tag("reminderToggle").assertIsDisplayed()
-        tag("rateApp").assertIsDisplayed()
+        tag("rateApp").performScrollTo().assertIsDisplayed()
     }
 }

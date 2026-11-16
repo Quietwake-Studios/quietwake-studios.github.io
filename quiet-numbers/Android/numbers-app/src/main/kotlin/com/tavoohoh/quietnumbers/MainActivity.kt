@@ -9,6 +9,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.tavoohoh.quiet.ui.QuietTheme
 import com.tavoohoh.quietnumbers.design.LocalFeedback
+import com.tavoohoh.quietnumbers.design.BoardLooks
+import com.tavoohoh.quietnumbers.design.LocalBoardLooks
+import androidx.compose.foundation.isSystemInDarkTheme
 
 class MainActivity : ComponentActivity() {
     private val app: AppModel by viewModels()
@@ -19,9 +22,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         app.configure(intent)
         setContent {
-            // Teal & coral, light or dark following the system (themes and the appearance setting: Phase 4).
-            QuietTheme {
-                CompositionLocalProvider(LocalUiTesting provides app.uiTesting, LocalFeedback provides app.feedback) {
+            // The theme picked in Collection › Rewards (if unlocked); light or dark following the
+            // system unless Settings › Appearance fixes one.
+            val looks = app.looks
+            QuietTheme(palette = looks.theme.palette, dark = app.appearance.isDark(isSystemInDarkTheme())) {
+                CompositionLocalProvider(
+                    LocalUiTesting provides app.uiTesting,
+                    LocalFeedback provides app.feedback,
+                    LocalBoardLooks provides BoardLooks(looks.tileStyle, looks.numberFont, looks.clearEffect, app.largerNumbers),
+                ) {
                     NumbersApp(app)
                 }
             }

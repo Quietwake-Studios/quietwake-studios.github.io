@@ -13,7 +13,16 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import com.tavoohoh.quiet.core.DailyKey
 import com.tavoohoh.quiet.core.DailyRecord
+import com.tavoohoh.quiet.core.AppearanceMode
 import com.tavoohoh.quiet.ui.DailyReminders
+import com.tavoohoh.quiet.ui.LauncherIcon
+import com.tavoohoh.quietnumbers.core.AppIconChoice
+import com.tavoohoh.quietnumbers.core.ClearEffect
+import com.tavoohoh.quietnumbers.core.Looks
+import com.tavoohoh.quietnumbers.core.NumberFont
+import com.tavoohoh.quietnumbers.core.SoundPack
+import com.tavoohoh.quietnumbers.core.ThemeChoice
+import com.tavoohoh.quietnumbers.core.TileStyle
 import com.tavoohoh.quiet.ui.QuietTones
 import com.tavoohoh.quiet.ui.StoreReview
 import com.tavoohoh.quiet.ui.useStandardTexts
@@ -38,7 +47,10 @@ import kotlin.random.Random
 /** Debug `uiTesting` (no splash, its own store, no reminders scheduled). */
 val LocalUiTesting = staticCompositionLocalOf { false }
 
-enum class Route { HOME, GAME, DAILY, SETTINGS }
+enum class Route { HOME, GAME, DAILY, SETTINGS, COLLECTION, TUTORIAL }
+
+/** Collection's tabs (iOS `CollectionTab`). */
+enum class CollectionTab { REWARDS, ACHIEVEMENTS }
 
 /** "Now" for anything dated. Debug `--es date <ISO-8601>` fixes it. */
 object AppClock {
@@ -82,6 +94,30 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         private set
     var demoActive = false
         private set
+    // Preferences (iOS `PreferenceKey`): settings stay after a reset; reward choices and the tutorial don't.
+    var appearance by mutableStateOf(AppearanceMode.SYSTEM)
+        private set
+    var soundEnabled by mutableStateOf(true)
+        private set
+    var hapticsEnabled by mutableStateOf(true)
+        private set
+    /** "Larger numbers": cells 52 dp tall and numbers of 32. */
+    var largerNumbers by mutableStateOf(false)
+        private set
+    /** "Cheaper hints" (the "In the Red" reward, classic only): on when earned, the player can turn it off. */
+    var cheapHints by mutableStateOf(true)
+        private set
+    /** What the player picked in Rewards (`looks` is what applies: only unlocked choices). */
+    var chosenLooks by mutableStateOf(Looks())
+        private set
+    private var tutorialSeen = false
+    /** The tutorial on screen came from New Game (it starts a game) rather than Settings › How to play. */
+    var tutorialIsFirstRun = false
+        private set
+    var collectionTab by mutableStateOf(CollectionTab.REWARDS)
+    /** Debug `tutorial`: UI tests skip the tutorial unless they ask for it (iOS `-tutorial`). */
+    private var tutorialInTests = false
+
     /** No store review in UI tests, the demo or debug games (as iOS). */
     private var reviewsOff = false
     /** The finished game's summary was counted for the review prompt. */
@@ -112,13 +148,110 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             DemoData.seed(directory)
         }
         reviewsOff = args.uiTesting || args.demo || args.startGame || args.summary != null
-        play = NumbersPlay(NumbersStore(directory), today = { AppClock.todayKey }, hour = { AppClock.hour })
+        loadPreferences()
+        tutorialInTests = args.tutorial
+        play = NumbersPlay(NumbersStore(directory), today = { AppClock.todayKey }, hour = { AppClock.hour }, cheapHintsEnabled = { cheapHints })
         play.onChange = { revision++ }
-        feedback = FeedbackService(QuietTones(app))
+        if (args.unlockAll) play.unlockAll()
+        feedback = FeedbackService(
+            QuietTones(app), sound = { soundEnabled }, haptics = { hapticsEnabled },
+            voice = { if (looks.soundPack == SoundPack.MARIMBA) QuietTones.Voice.MARIMBA else QuietTones.Voice.SOFT },
+        )
         reminders = numbersReminders(app, args.uiTesting) { play.reminderState() }
         storeReview = StoreReview(app, if (args.uiTesting) "storeReview-uitesting" else "storeReview")
         applyDebug(args)
     }
+
+    private fun loadPreferences() {
+        appearance = AppearanceMode.fromRaw(prefs.getString(KEY_APPEARANCE, null))
+        soundEnabled = prefs.getBoolean(KEY_SOUND, true)
+        hapticsEnabled = prefs.getBoolean(KEY_HAPTICS, true)
+        largerNumbers = prefs.getBoolean(KEY_LARGER, false)
+        cheapHints = prefs.getBoolean(KEY_CHEAP_HINTS, true)
+        tutorialSeen = prefs.getBoolean(KEY_TUTORIAL, false)
+        chosenLooks = Looks(
+            theme = ThemeChoice.fromRaw(prefs.getString(KEY_THEME, null)) ?: ThemeChoice.TEAL_CORAL,
+            tileStyle = TileStyle.fromRaw(prefs.getString(KEY_TILES, null)) ?: TileStyle.PLAIN,
+            numberFont = NumberFont.fromRaw(prefs.getString(KEY_FONT, null)) ?: NumberFont.ROUNDED,
+            clearEffect = ClearEffect.fromRaw(prefs.getString(KEY_CLEAR, null)) ?: ClearEffect.OUTLINE,
+            soundPack = SoundPack.fromRaw(prefs.getString(KEY_SOUND_PACK, null)) ?: SoundPack.SOFT,
+            icon = AppIconChoice.fromRaw(prefs.getString(KEY_ICON, null)) ?: AppIconChoice.STANDARD,
+        )
+    }
+
+    // Settings and rewards
+
+    fun setAppearanceMode(mode: AppearanceMode) { appearance = mode; prefs.edit { putString(KEY_APPEARANCE, mode.rawValue) } }
+    fun setSound(on: Boolean) { soundEnabled = on; prefs.edit { putBoolean(KEY_SOUND, on) } }
+    fun setHaptics(on: Boolean) { hapticsEnabled = on; prefs.edit { putBoolean(KEY_HAPTICS, on) } }
+    fun chooseLargerNumbers(on: Boolean) { largerNumbers = on; prefs.edit { putBoolean(KEY_LARGER, on) } }
+    fun chooseCheapHints(on: Boolean) { cheapHints = on; prefs.edit { putBoolean(KEY_CHEAP_HINTS, on) } }
+
+    /** What applies: the chosen cosmetics that are unlocked. */
+    val looks: Looks get() = chosenLooks.effective(progress)
+
+    /** A reward picked in Collection (only unlocked ones can be picked). */
+    fun choose(looks: Looks) {
+        val iconChanged = looks.icon != chosenLooks.icon
+        chosenLooks = looks
+        prefs.edit {
+            putString(KEY_THEME, looks.theme.rawValue)
+            putString(KEY_TILES, looks.tileStyle.rawValue)
+            putString(KEY_FONT, looks.numberFont.rawValue)
+            putString(KEY_CLEAR, looks.clearEffect.rawValue)
+            putString(KEY_SOUND_PACK, looks.soundPack.rawValue)
+            putString(KEY_ICON, looks.icon.rawValue)
+        }
+        if (iconChanged && !uiTesting) LauncherIcon.set(getApplication(), gold = looks.icon == AppIconChoice.GOLD)
+    }
+
+    fun openCollection(tab: CollectionTab = CollectionTab.REWARDS) {
+        collectionTab = tab
+        push(Route.COLLECTION)
+    }
+
+    /**
+     * Settings › Reset Progress… (iOS `resetProgress`): games, dailies, streaks, achievements and
+     * the reward choices (and the Gold icon) go, with the tutorial; settings and the review count stay.
+     */
+    fun resetProgress() {
+        activeGame?.dispose()
+        activeGame = null
+        activeKind = null
+        play.reset()
+        prefs.edit { for (key in REWARD_KEYS + KEY_TUTORIAL) remove(key) }
+        tutorialSeen = false
+        cheapHints = true
+        if (chosenLooks.icon != AppIconChoice.STANDARD && !uiTesting) LauncherIcon.set(getApplication(), gold = false)
+        chosenLooks = Looks()
+        if (!uiTesting) reminders.reschedule()
+    }
+
+    // Tutorial
+
+    /** Before the first game: never played one, none saved, the tutorial not seen (UI tests skip it unless asked). */
+    val needsTutorial: Boolean
+        get() = observed { (!uiTesting || tutorialInTests) && !tutorialSeen && play.progress.gamesFinished == 0 && !play.hasClassicInProgress }
+
+    /** Home's New Game: the tutorial first, the first time. */
+    fun newGameFromHome() {
+        if (needsTutorial) openTutorial(firstRun = true) else newClassic()
+    }
+
+    fun openTutorial(firstRun: Boolean) {
+        tutorialIsFirstRun = firstRun
+        push(Route.TUTORIAL)
+    }
+
+    /** Played or skipped: from New Game a game starts; from Settings it goes back. */
+    fun tutorialFinished() {
+        tutorialSeen = true
+        prefs.edit { putBoolean(KEY_TUTORIAL, true) }
+        if (tutorialIsFirstRun) newClassic() else pop()
+    }
+
+    val pendingUnlocks: List<Achievement> get() = observed { play.pendingUnlocks }
+    fun dismissUnlock(achievement: Achievement) = play.dismissUnlock(achievement)
 
     // What screens read (through `revision`)
 
@@ -244,6 +377,9 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         when (args.open) {
             "daily" -> show(Route.DAILY)
             "settings" -> show(Route.SETTINGS)
+            "collection" -> { collectionTab = CollectionTab.REWARDS; show(Route.COLLECTION) }
+            "achievements" -> { collectionTab = CollectionTab.ACHIEVEMENTS; show(Route.COLLECTION) }
+            "tutorial" -> { tutorialIsFirstRun = true; show(Route.TUTORIAL) }
         }
         args.playDay?.let { day ->
             show(Route.DAILY)
@@ -299,6 +435,21 @@ class AppModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
         private const val PREFS = "quietnumbers"
+        // The same keys as iOS's `PreferenceKey`.
+        private const val KEY_APPEARANCE = "appearanceMode"
+        private const val KEY_SOUND = "soundEnabled"
+        private const val KEY_HAPTICS = "hapticsEnabled"
+        private const val KEY_LARGER = "largerNumbers"
+        private const val KEY_TUTORIAL = "tutorialSeen"
+        private const val KEY_CHEAP_HINTS = "cheapHints"
+        private const val KEY_THEME = "theme"
+        private const val KEY_TILES = "tileStyle"
+        private const val KEY_FONT = "numberFont"
+        private const val KEY_CLEAR = "clearEffect"
+        private const val KEY_SOUND_PACK = "soundPack"
+        private const val KEY_ICON = "appIcon"
+        /** Cosmetic choices, cleared by a reset (iOS `PreferenceKey.rewards`). */
+        private val REWARD_KEYS = listOf(KEY_THEME, KEY_TILES, KEY_FONT, KEY_CLEAR, KEY_SOUND_PACK, KEY_ICON, KEY_CHEAP_HINTS)
         fun storeDirectory(context: Context) = File(context.filesDir, "store")
     }
 }
@@ -335,6 +486,10 @@ data class LaunchArgs(
     val playDay: String? = null,
     /** With `summary daily`: that past day's challenge instead of today's (iOS `-summaryDay`). */
     val summaryDay: String? = null,
+    /** Every achievement unlocked (QA and screenshots, iOS `-unlockAll`). */
+    val unlockAll: Boolean = false,
+    /** UI tests: show the tutorial before the first game (iOS `-tutorial`). */
+    val tutorial: Boolean = false,
 ) {
     companion object {
         fun from(intent: Intent?): LaunchArgs {
@@ -353,6 +508,8 @@ data class LaunchArgs(
                 demo = e.getBoolean("demo"),
                 playDay = e.getString("playDay"),
                 summaryDay = e.getString("summaryDay"),
+                unlockAll = e.getBoolean("unlockAll"),
+                tutorial = e.getBoolean("tutorial"),
             )
         }
     }

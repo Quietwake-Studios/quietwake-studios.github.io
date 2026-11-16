@@ -62,6 +62,12 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
+import com.tavoohoh.quietnumbers.core.TileStyle
+import com.tavoohoh.quietnumbers.core.ClearEffect
+import com.tavoohoh.quietnumbers.design.LocalBoardLooks
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -204,7 +210,9 @@ private fun BoardRow(model: GameModel, start: Int, end: Int, cellWidth: Dp, cell
     val colors = QuietTheme.colors
     val cells = model.board.cells
     Box(modifier.width(cellWidth * Board.COLUMNS).height(cellHeight)) {
-        if (flashing) RowClearEffect(cellHeight)
+        if (flashing) {
+            if (LocalBoardLooks.current.clearEffect == ClearEffect.WAVE) RowWaveEffect(cellHeight) else RowClearEffect(cellHeight)
+        }
         Row {
             for (index in start until end) {
                 val cell = cells[index]
@@ -230,6 +238,7 @@ private fun CellView(
 ) {
     val colors = QuietTheme.colors
     val reduceMotion = QuietTheme.reduceMotion
+    val looks = LocalBoardLooks.current
     val ring = height * 40f / 46f
     val label = stringResource(R.string.cell, cell.value, index / Board.COLUMNS + 1, index % Board.COLUMNS + 1)
     val cleared = stringResource(R.string.cleared)
@@ -288,25 +297,31 @@ private fun CellView(
             val c = if (isMissed) colors.accent else colors.primary
             Box(Modifier.size(ring).background(c.copy(alpha = 0.14f), CircleShape).border(2.dp, c, CircleShape))
         }
-        if (isHinted) HintRing(ring)
+        // Tile style from Collection. Ghosts never get a tile.
+        if (!cell.isCleared) when (looks.tileStyle) {
+            TileStyle.PLAIN -> Unit
+            TileStyle.CIRCLE -> Box(Modifier.size(ring).background(colors.ink.copy(alpha = 0.07f), CircleShape))
+            TileStyle.OUTLINE -> Box(Modifier.size(ring - 4.dp).border(1.dp, colors.ink.copy(alpha = 0.25f), CircleShape))
+        }
+        if (isHinted) HintRing(ring, model.guideNudges)
         Text(
             "${cell.value}",
             style = TextStyle(
-                fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal, fontFeatureSettings = QuietType.TABULAR,
-                fontSize = with(LocalDensity.current) { (height * 27f / 46f).toSp() }, textAlign = TextAlign.Center,
+                fontFamily = looks.family, fontWeight = FontWeight.Normal, fontFeatureSettings = QuietType.TABULAR,
+                fontSize = with(LocalDensity.current) { (height * (if (looks.largerNumbers) 32f / 52f else 27f / 46f)).toSp() }, textAlign = TextAlign.Center,
             ),
             color = color,
         )
     }
 }
 
-/** Dashed ring on a hinted pair; blinks twice, then stays. */
+/** Dashed ring on a hinted pair; blinks twice, then stays. In the tutorial a tap off the pair blinks it again (`nudges`). */
 @Composable
-private fun HintRing(diameter: Dp) {
+private fun HintRing(diameter: Dp, nudges: Int = 0) {
     val colors = QuietTheme.colors
     val reduceMotion = QuietTheme.reduceMotion
     val blink = remember { Animatable(1f) }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(nudges) {
         if (reduceMotion) return@LaunchedEffect
         repeat(2) {
             blink.animateTo(0.2f, tween(250))
@@ -332,6 +347,27 @@ private fun RowClearEffect(height: Dp) {
             .background(colors.primary.copy(alpha = 0.14f * progress.value), shape)
             .border(2.dp, colors.primary.copy(alpha = progress.value), shape),
     )
+}
+
+/** "Wave" (the Sweeper reward): a soft band of the primary sweeps across the row (iOS `RowWaveEffect`). */
+@Composable
+private fun RowWaveEffect(height: Dp) {
+    val colors = QuietTheme.colors
+    val reduceMotion = QuietTheme.reduceMotion
+    val offset = remember { Animatable(if (reduceMotion) 0.5f else 0f) }
+    LaunchedEffect(Unit) { if (!reduceMotion) offset.animateTo(1f, tween(150, easing = FastOutSlowInEasing)) }
+    Canvas(Modifier.fillMaxSize().clip(RoundedCornerShape(height / 2))) {
+        val band = size.width * 0.45f
+        val x = offset.value * (size.width + band) - band
+        val p = colors.primary
+        drawRect(
+            Brush.horizontalGradient(
+                listOf(Color.Transparent, p.copy(alpha = 0.25f), p.copy(alpha = 0.45f), p.copy(alpha = 0.25f), Color.Transparent),
+                startX = x, endX = x + band,
+            ),
+            topLeft = Offset(x, 0f), size = androidx.compose.ui.geometry.Size(band, size.height),
+        )
+    }
 }
 
 /** A matched number bursting: 8 rays move out from 15 to 25 (at 54 across) and fade. */

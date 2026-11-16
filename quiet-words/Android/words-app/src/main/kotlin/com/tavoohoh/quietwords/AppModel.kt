@@ -24,7 +24,7 @@ import com.tavoohoh.quietwords.core.BoardFont
 import com.tavoohoh.quietwords.core.Looks
 import com.tavoohoh.quietwords.core.Marker
 import com.tavoohoh.quietwords.design.FeedbackService
-import com.tavoohoh.quietwords.design.LauncherIcon
+import com.tavoohoh.quiet.ui.LauncherIcon
 import com.tavoohoh.quiet.ui.StoreReview
 import com.tavoohoh.quietwords.core.Achievement
 import com.tavoohoh.quietwords.core.Album
@@ -59,14 +59,8 @@ enum class Route { HOME, NEW_GAME, GAME, TUTORIAL, DAILY, SETTINGS, COLLECTION, 
 /** Collection's tabs. */
 enum class CollectionTab { ALBUM, REWARDS, ACHIEVEMENTS }
 
-/** "Match system", or a fixed light or dark look. */
-enum class AppearanceMode(val rawValue: String) {
-    SYSTEM("system"), LIGHT("light"), DARK("dark");
-
-    companion object {
-        fun fromRaw(raw: String?) = entries.firstOrNull { it.rawValue == raw } ?: SYSTEM
-    }
-}
+/** "Match system", or a fixed light or dark look (QuietKit, shared by the family). */
+typealias AppearanceMode = com.tavoohoh.quiet.core.AppearanceMode
 
 /** "Now" for anything dated: today's challenge, the calendar. Debug `--es date <ISO-8601>` fixes it. */
 object AppClock {
@@ -303,7 +297,7 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             putString(KEY_BOARD_FONT, looks.boardFont.rawValue)
             putString(KEY_ICON, looks.icon.rawValue)
         }
-        if (iconChanged && !uiTesting) LauncherIcon.set(getApplication(), looks.icon)
+        if (iconChanged && !uiTesting) LauncherIcon.set(getApplication(), gold = looks.icon == AppIconChoice.GOLD)
     }
 
     // Collection
@@ -452,7 +446,7 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         // Like iOS: the cosmetic choices and the tutorial go; settings stay.
         prefs.edit { for (key in REWARD_KEYS + KEY_TUTORIAL) remove(key) }
         cheapHints = true
-        if (chosenLooks.icon != AppIconChoice.STANDARD && !uiTesting) LauncherIcon.set(getApplication(), AppIconChoice.STANDARD)
+        if (chosenLooks.icon != AppIconChoice.STANDARD && !uiTesting) LauncherIcon.set(getApplication(), gold = false)
         chosenLooks = Looks()
         if (!uiTesting) reminders.reschedule()
         // The saved game too (iOS: iCloud); if signed out, on the next sign-in.

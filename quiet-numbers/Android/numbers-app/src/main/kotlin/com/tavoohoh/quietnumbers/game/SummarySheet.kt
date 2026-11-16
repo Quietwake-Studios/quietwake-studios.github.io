@@ -1,5 +1,11 @@
 package com.tavoohoh.quietnumbers.game
 
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.border
+import com.tavoohoh.quietnumbers.design.title
+import com.tavoohoh.quietnumbers.design.Badge
+import com.tavoohoh.quietnumbers.core.Achievement
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,7 +46,10 @@ import java.text.NumberFormat
  * A sheet from the bottom, 520 dp at most (also on tablets, as on iPad).
  */
 @Composable
-fun SummarySheet(session: GameSession, kind: GameKind, isNewBest: Boolean, isReplay: Boolean = false, onNewGame: () -> Unit, onHome: () -> Unit) {
+fun SummarySheet(
+    session: GameSession, kind: GameKind, isNewBest: Boolean, isReplay: Boolean = false, unlocked: List<Achievement> = emptyList(),
+    onNewGame: () -> Unit, onHome: () -> Unit,
+) {
     val colors = QuietTheme.colors
     val n = NumberFormat.getIntegerInstance()
     Column(
@@ -91,6 +100,24 @@ fun SummarySheet(session: GameSession, kind: GameKind, isNewBest: Boolean, isRep
                 if (i != rows.lastIndex) HorizontalDivider(thickness = 1.dp, color = colors.separator)
             }
         }
+        if (unlocked.isNotEmpty()) {
+            // One card however many: badges in a row, names below (iOS).
+            val names = unlocked.map { it.title() }
+            Column(
+                Modifier.fillMaxWidth().border(1.5.dp, colors.surface2, RoundedCornerShape(20.dp)).padding(12.dp)
+                    .semantics(mergeDescendants = true) {}.testTag("summaryUnlocked"),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    stringResource(if (unlocked.size == 1) R.string.achievement_unlocked else R.string.achievements_unlocked),
+                    style = QuietType.caption.copy(fontWeight = FontWeight.Bold), color = colors.muted,
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy((-6).dp)) {
+                    for (a in unlocked) Box(Modifier.size(36.dp).border(2.dp, colors.surface, CircleShape)) { Badge(a, 36.dp) }
+                }
+                Text(listFormat(names), style = QuietType.headline, color = colors.ink)
+            }
+        }
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             if (kind == GameKind.Classic) {
                 CapsuleButton(stringResource(R.string.new_game), onNewGame, Modifier.testTag("summaryNewGame"))
@@ -100,4 +127,12 @@ fun SummarySheet(session: GameSession, kind: GameKind, isNewBest: Boolean, isRep
             }
         }
     }
+}
+
+/** "A, B and C" in the app's language. */
+@Composable
+private fun listFormat(items: List<String>): String {
+    if (items.size <= 1) return items.firstOrNull().orEmpty()
+    val and = stringResource(R.string.and)
+    return items.dropLast(1).joinToString(", ") + " $and " + items.last()
 }

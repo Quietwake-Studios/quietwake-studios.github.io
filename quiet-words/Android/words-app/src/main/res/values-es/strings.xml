@@ -118,24 +118,10 @@
     <string name="settings">Ajustes</string>
     <string name="game_section">Juego</string>
     <string name="word_language">Idioma de las palabras</string>
-    <string name="appearance">Apariencia</string>
-    <string name="match_system">Igual que el sistema</string>
-    <string name="light">Claro</string>
-    <string name="dark">Oscuro</string>
     <string name="account">Cuenta</string>
     <string name="how_to_play">Cómo jugar</string>
-    <string name="privacy">Privacidad</string>
-    <string name="privacy_text">Quiet Words no recolecta ningún dato. Tus partidas, rachas y logros se quedan en este dispositivo. Si inicias sesión en Play Juegos, tus puntajes y logros se comparten con Google Play Juegos y tu progreso se guarda en tu cuenta de Google.</string>
-    <string name="version">Versión</string>
     <string name="reminder_one_friend">%1$s terminó el reto de hoy con %2$s. ¿Te animas?</string>
     <string name="reminder_friends">%1$d amigos ya jugaron; %2$s va primero con %3$s.</string>
-    <string name="reset_progress">Restablecer progreso…</string>
-    <string name="reset_question">¿Restablecer todo el progreso?</string>
-    <string name="reset_message">Se borra todo el progreso de tu partida.</string>
-    <string name="rate_app">Califica Quiet Words</string>
-    <string name="reset_footnote">Borra partidas, resultados diarios, rachas, logros y recompensas desbloqueadas, aquí y en la nube.</string>
-    <string name="about">Acerca de</string>
-    <string name="reset_confirm">Restablecer progreso</string>
 
     <string name="collection">Colección</string>
     <string name="rewards">Recompensas</string>
@@ -163,17 +149,12 @@
         <item quantity="other">Palabra que falta, %d letras</item>
     </plurals>
     <string name="missing_note">Las que faltan solo muestran su largo.</string>
-    <string name="cheaper_hints">Pistas más baratas</string>
     <string name="cheaper_hints_detail">Juego libre: una pista cuesta 10 puntos en vez de 30. En los retos diarios siempre cuesta 30. Desde tu próxima partida.</string>
     <string name="marker">Marcador</string>
     <string name="board_letters">Letra del tablero</string>
     <string name="theme">Tema</string>
     <string name="app_icon">Ícono de la app</string>
     <string name="earned">Ganado</string>
-    <string name="n_earned">%d ganados</string>
-    <string name="of_n">de %d</string>
-    <string name="hidden_achievement">Logro oculto</string>
-    <string name="keep_playing">Sigue jugando: aparece aquí cuando lo ganes.</string>
     <string name="n_of_words">%1$d de %2$d palabras</string>
     <string name="best_streak_of">Mejor racha: %1$d de %2$d días</string>
     <string name="most_advanced">Tema más avanzado: %s</string>
@@ -194,7 +175,6 @@
     <string name="new_best">Nuevo récord</string>
     <string name="new_in_album">Nuevas en el álbum</string>
     <string name="achievement">Logro</string>
-    <string name="achievement_unlocked">Logro desbloqueado</string>
     <string name="sound">Sonido</string>
     <string name="haptics">Hápticos</string>
     <string name="larger_letters">Letras más grandes</string>

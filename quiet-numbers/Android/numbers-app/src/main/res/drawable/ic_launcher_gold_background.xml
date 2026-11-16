@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Gold icon's gradient (#E3B043 → #B27A17), as on iOS. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:angle="270" android:startColor="#E3B043" android:endColor="#B27A17" />
+</shape>

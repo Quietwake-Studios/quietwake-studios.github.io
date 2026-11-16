@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -189,7 +190,7 @@ fun QuietScreen(
     val colors = QuietTheme.colors
     Column(modifier.fillMaxSize().background(colors.background)) {
         Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(top = 4.dp)) {
-            RoundIconButton(QuietIcons.Back, backDescription, onBack, Modifier.align(Alignment.CenterStart))
+            RoundIconButton(QuietIcons.Back, backDescription, onBack, Modifier.align(Alignment.CenterStart).testTag("back"))
             if (title != null) {
                 Text(
                     title, style = QuietType.headline, color = colors.ink, maxLines = 1,

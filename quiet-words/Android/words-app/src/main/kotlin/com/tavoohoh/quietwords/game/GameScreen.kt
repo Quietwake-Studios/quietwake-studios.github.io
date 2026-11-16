@@ -189,17 +189,9 @@ fun GameScreen(
 @Composable
 private fun UnlockBanner(achievement: Achievement) {
     val colors = QuietTheme.colors
-    Row(
-        Modifier.padding(top = 8.dp).shadow(12.dp, CircleShape).background(colors.surface, CircleShape)
-            .semantics(mergeDescendants = true) {}.testTag("unlockBanner").padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
+    com.tavoohoh.quiet.ui.UnlockBanner(achievement.title(), Modifier.padding(top = 8.dp)) {
         Box(Modifier.size(36.dp).background(colors.primary, CircleShape), contentAlignment = Alignment.Center) {
             Icon(achievement.icon, null, tint = colors.onPrimary, modifier = Modifier.size(18.dp))
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(stringResource(R.string.achievement_unlocked), style = QuietType.caption, color = colors.muted)
-            Text(achievement.title(), style = QuietType.headline, color = colors.ink)
         }
     }
 }
