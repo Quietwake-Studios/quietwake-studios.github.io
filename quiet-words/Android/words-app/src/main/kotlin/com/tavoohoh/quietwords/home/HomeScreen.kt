@@ -123,7 +123,7 @@ private fun Menu(app: AppModel) {
         Spacer(Modifier.weight(1f))
         Row(Modifier.quietSurface(CircleShape).padding(horizontal = 6.dp)) {
             for ((icon, label, tag, action) in listOf(
-                MenuItem(Icons.Outlined.EmojiEvents, stringResource(R.string.leaderboards), "leaderboards") { app.push(Route.LEADERBOARDS) },
+                MenuItem(Icons.Outlined.EmojiEvents, com.tavoohoh.quiet.ui.leaderboardsTitle(), "leaderboards") { app.push(Route.LEADERBOARDS) },
                 MenuItem(Icons.Outlined.GridView, stringResource(R.string.collection), "collection") { app.openCollection(CollectionTab.REWARDS) },
                 MenuItem(Icons.Outlined.Settings, stringResource(R.string.settings), "settings") { app.push(Route.SETTINGS) },
             )) {

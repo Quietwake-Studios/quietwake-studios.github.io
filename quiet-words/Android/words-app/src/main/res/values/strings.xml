@@ -220,21 +220,7 @@
     <string name="rew_in_the_red">Cheaper hints in free play</string>
 
     <!-- Phase 5: Play Games -->
-    <string name="play_games" translatable="false">Play Games</string>
-    <string name="signed_in_as">Signed in as %s</string>
-    <string name="not_signed_in">Not signed in</string>
-    <string name="leaderboards">Leaderboards</string>
     <string name="lb_today">Today</string>
     <string name="lb_best_hard">Best · Hard</string>
     <string name="lb_streak">Streak</string>
-    <string name="lb_global">Global</string>
-    <string name="lb_friends">Friends</string>
-    <string name="couldnt_load">Couldn\'t load</string>
-    <string name="check_connection">Check your connection and try again.</string>
-    <string name="no_scores">No scores yet</string>
-    <string name="scores_from">Scores from Play Games · updated just now</string>
-    <string name="play_with_friends">Play with friends</string>
-    <string name="sign_in_to_see">Sign in to Play Games in Settings to see leaderboards. Your progress is saved on this device either way.</string>
-    <string name="open_settings">Open Settings</string>
-    <string name="among_friends">#%d among friends</string>
 </resources>

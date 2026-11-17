@@ -173,4 +173,5 @@
     <string name="tutorial_done_text">Tap to match, or drag from one number to the other. Hints show a pair, for a few points.</string>
     <string name="start_playing">Start playing</string>
     <string name="and">and</string>
+    <string name="lb_today">Today</string>
 </resources>

@@ -116,6 +116,7 @@ private fun Screen(app: AppModel, route: Route) {
         Route.HOME -> HomeScreen(app)
         Route.DAILY -> DailyScreen(app, onBack = app::pop)
         Route.SETTINGS -> SettingsScreen(app, onBack = app::pop)
+        Route.LEADERBOARDS -> com.tavoohoh.quietnumbers.leaderboards.LeaderboardsScreen(app, onBack = app::pop, onOpenSettings = { app.push(Route.SETTINGS) })
         Route.COLLECTION -> com.tavoohoh.quietnumbers.collection.CollectionScreen(app, onBack = app::pop)
         Route.TUTORIAL -> com.tavoohoh.quietnumbers.tutorial.TutorialScreen(app.tutorialIsFirstRun, onBack = app::pop, onFinish = app::tutorialFinished)
         Route.GAME -> {

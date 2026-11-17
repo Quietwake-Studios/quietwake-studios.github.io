@@ -209,6 +209,22 @@ class NumbersPlay(
     /** Whether today is completed and the current streak, for the reminders. */
     fun reminderState(): Pair<Boolean, Int> = (store.dailies[todayKey]?.isCompleted == true) to currentStreak
 
+    // Play Games
+
+    /** Progress and daily results for the saved game (iOS `Snapshot`). */
+    fun cloudSnapshot(): CloudSnapshot = CloudSnapshot(progress, store.dailies)
+
+    /** What another device saved, merged in: nothing local is lost. */
+    fun mergeCloud(remote: CloudSnapshot) {
+        progress = progress.merged(remote.progress)
+        store.store.saveProfile(progress)
+        store.mergeDailies(remote.dailies)
+        onChange()
+    }
+
+    /** Achievements and scores to mirror on Play Games. */
+    fun playGamesPush(): com.tavoohoh.quiet.core.PlayGamesPush = PlayGamesPlan.of(progress, store.dailies, todayKey)
+
     /** Debug `unlockAll` (QA and screenshots, iOS `-unlockAll`): every achievement, nothing announced. */
     fun unlockAll() {
         progress = progress.copy(unlocked = Achievement.entries.toSet())

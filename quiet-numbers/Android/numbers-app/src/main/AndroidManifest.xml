@@ -52,7 +52,9 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-        <!-- Play Games comes in Phase 5: its automatic init provider (from QuietKit) stays off until then. -->
+        <!-- Google Play Games (Phase 5): the project ID from games-ids.xml. Play's automatic init
+             provider is removed: PlayGamesService starts the SDK only once a real ID is set. -->
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/play_games_app_id" />
         <provider
             android:name="com.google.android.gms.games.provider.PlayGamesInitProvider"
             android:authorities="${applicationId}.playgamesinitprovider"

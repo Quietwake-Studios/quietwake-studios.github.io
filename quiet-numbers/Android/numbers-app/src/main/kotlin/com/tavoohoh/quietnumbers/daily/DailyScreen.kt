@@ -151,7 +151,12 @@ private fun TodayCard(app: AppModel, today: String, onPlay: () -> Unit) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             StatTile(n.format(app.currentStreak), stringResource(R.string.streak), true, Modifier.weight(1f).testTag("dailyStreak"))
             StatTile(n.format(app.longestStreak), stringResource(R.string.best_streak), false, Modifier.weight(1f))
-            StatTile("–", stringResource(R.string.friends), false, Modifier.weight(1f))
+            // Today's place among Play Games friends (time breaks ties, like iOS); "–" signed out or not on the board.
+            val friendsRank = com.tavoohoh.quiet.ui.rememberFriendsRank(
+                app.games, app.leaderboardID(com.tavoohoh.quietnumbers.core.Leaderboard.DAILY), today,
+                demoRank = if (app.demoActive) com.tavoohoh.quiet.core.LeaderboardDemo.FRIENDS_RANK else null,
+            )
+            StatTile(friendsRank?.let { "#${n.format(it)}" } ?: "–", stringResource(R.string.friends), false, Modifier.weight(1f).testTag("friendsRank"))
         }
         if (app.hasPlayed(today)) {
             Text(stringResource(R.string.replay_note), style = QuietType.footnote, color = colors.onPrimary, modifier = Modifier.alpha(0.85f))

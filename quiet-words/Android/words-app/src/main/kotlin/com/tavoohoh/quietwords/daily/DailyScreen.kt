@@ -185,22 +185,13 @@ private fun TodayCard(app: AppModel, today: String, onPlay: () -> Unit) {
             Spacer(Modifier.weight(1f))
             Text(stringResource(R.string.best_n, app.longestStreak), style = QuietType.subheadline, color = colors.onPrimary, modifier = Modifier.testTag("dailyBest"))
             // Signed in to Play Games: today's place among friends (time breaks ties, like iOS).
-            var friendsRank by androidx.compose.runtime.remember { mutableStateOf<Int?>(null) }
-            val signedIn = app.games.isAuthenticated
-            LaunchedEffect(signedIn, language, app.demoActive) {
-                friendsRank = when {
-                    app.demoActive -> com.tavoohoh.quietwords.leaderboards.LeaderboardDemo.FRIENDS_RANK
-                    !signedIn -> null
-                    else -> runCatching {
-                        val board = com.tavoohoh.quietwords.core.Leaderboard.daily(language)
-                        val (_, top) = app.games.entries(app.leaderboardID(board), friendsOnly = true, daily = true)
-                        com.tavoohoh.quiet.core.Leaderboards.today(top, today).firstOrNull { it.isLocalPlayer }?.rank
-                    }.getOrNull()
-                }
-            }
+            val friendsRank = com.tavoohoh.quiet.ui.rememberFriendsRank(
+                app.games, app.leaderboardID(com.tavoohoh.quietwords.core.Leaderboard.daily(language)), today,
+                demoRank = if (app.demoActive) com.tavoohoh.quiet.core.LeaderboardDemo.FRIENDS_RANK else null,
+            )
             friendsRank?.let {
                 Spacer(Modifier.weight(1f))
-                Text(stringResource(R.string.among_friends, it), style = QuietType.subheadline, color = colors.onPrimary, modifier = Modifier.testTag("friendsRank"))
+                Text(com.tavoohoh.quiet.ui.amongFriends(it), style = QuietType.subheadline, color = colors.onPrimary, modifier = Modifier.testTag("friendsRank"))
             }
         }
         val record = app.bestOfDay(today, language)

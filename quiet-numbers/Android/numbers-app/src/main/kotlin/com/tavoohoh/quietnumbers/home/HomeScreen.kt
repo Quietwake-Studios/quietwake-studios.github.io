@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -57,7 +58,7 @@ import java.text.NumberFormat
 /**
  * Home (iOS `HomeView`): the menu at the top right, the icon and name, the daily card with the
  * streak, "Continue · Stage N" when a classic game is saved, New Game and "Your stats".
- * Leaderboards joins the menu in Phase 5.
+ * The menu: Leaderboards, Collection and Settings.
  */
 @Composable
 fun HomeScreen(app: AppModel) {
@@ -72,6 +73,7 @@ fun HomeScreen(app: AppModel) {
                 Column(Modifier.widthIn(max = if (regular) 440.dp else 360.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Menu(
                         listOf(
+                            MenuItem(Icons.Outlined.EmojiEvents, com.tavoohoh.quiet.ui.leaderboardsTitle(), "leaderboards") { app.push(Route.LEADERBOARDS) },
                             MenuItem(Icons.Outlined.GridView, stringResource(R.string.collection), "collection") { app.openCollection() },
                             MenuItem(Icons.Outlined.Settings, stringResource(R.string.settings), "settings") { app.push(Route.SETTINGS) },
                         ),

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Google Play Games IDs (Phase 5). TODO: every value below is a placeholder until the game
+    exists in Play Console (the account is pending verification; nothing is created there
+    without the user). Replace each TODO with the ID Play Console gives (Play Games Services ›
+    Configuration). While `play_games_app_id` isn't a number, the app never starts Play Games
+    and everything works signed out. Same concepts as iOS's Game Center; see CLAUDE.md.
+-->
+<resources>
+    <!-- Play Games Services › Configuration › Project ID (digits only). -->
+    <string name="play_games_app_id" translatable="false">TODO_PLAY_GAMES_APP_ID</string>
+
+    <string name="achievement_first_step" translatable="false">TODO_first_step</string>
+    <string name="achievement_clean_slate" translatable="false">TODO_clean_slate</string>
+    <string name="achievement_no_help" translatable="false">TODO_no_help</string>
+    <string name="achievement_consistency" translatable="false">TODO_consistency</string>
+    <string name="achievement_habit" translatable="false">TODO_habit</string>
+    <string name="achievement_sweeper" translatable="false">TODO_sweeper</string>
+    <string name="achievement_stage_five" translatable="false">TODO_stage_five</string>
+    <string name="achievement_centennial" translatable="false">TODO_centennial</string>
+    <string name="achievement_night_owl" translatable="false">TODO_night_owl</string>
+    <string name="achievement_monotone" translatable="false">TODO_monotone</string>
+    <string name="achievement_in_the_red" translatable="false">TODO_in_the_red</string>
+
+    <string name="leaderboard_daily_challenge" translatable="false">TODO_daily_challenge</string>
+    <string name="leaderboard_best_score" translatable="false">TODO_best_score</string>
+    <string name="leaderboard_longest_streak" translatable="false">TODO_longest_streak</string>
+</resources>

@@ -51,4 +51,20 @@
     <string name="quiet_about">About</string>
     <string name="quiet_rate_app">Rate %s</string>
     <string name="quiet_version">Version</string>
+    <!-- Play Games (leaderboards, the Account row, friends). -->
+    <string name="quiet_play_games" translatable="false">Play Games</string>
+    <string name="quiet_signed_in_as">Signed in as %s</string>
+    <string name="quiet_not_signed_in">Not signed in</string>
+    <string name="quiet_leaderboards">Leaderboards</string>
+    <string name="quiet_lb_global">Global</string>
+    <string name="quiet_lb_friends">Friends</string>
+    <string name="quiet_couldnt_load">Couldn\'t load</string>
+    <string name="quiet_check_connection">Check your connection and try again.</string>
+    <string name="quiet_no_scores">No scores yet</string>
+    <string name="quiet_scores_from">Scores from Play Games · updated just now</string>
+    <string name="quiet_same_score_faster">Same score: the faster time ranks higher.</string>
+    <string name="quiet_play_with_friends">Play with friends</string>
+    <string name="quiet_sign_in_to_see">Sign in to Play Games in Settings to see leaderboards. Your progress is saved on this device either way.</string>
+    <string name="quiet_open_settings">Open Settings</string>
+    <string name="quiet_among_friends">#%d among friends</string>
 </resources>

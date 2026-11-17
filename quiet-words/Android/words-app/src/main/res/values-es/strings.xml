@@ -213,23 +213,9 @@
     <string name="rew_consistency">Tema Salvia y coral</string>
     <string name="rew_steady_hand">Marcador Subrayado</string>
     <string name="rew_in_the_red">Pistas más baratas en juego libre</string>
-
-    <string name="signed_in_as">Sesión iniciada como %s</string>
-    <string name="not_signed_in">Sin sesión iniciada</string>
-    <string name="leaderboards">Clasificaciones</string>
     <string name="lb_today">Hoy</string>
     <string name="lb_best_hard">Mejor · Difícil</string>
     <string name="lb_streak">Racha</string>
-    <string name="lb_global">Global</string>
-    <string name="lb_friends">Amigos</string>
-    <string name="couldnt_load">No se pudo cargar</string>
-    <string name="check_connection">Revisa tu conexión e inténtalo de nuevo.</string>
-    <string name="no_scores">Todavía no hay puntajes</string>
-    <string name="scores_from">Puntajes de Play Juegos · recién actualizados</string>
-    <string name="play_with_friends">Juega con tus amigos</string>
-    <string name="sign_in_to_see">Inicia sesión en Play Juegos en Ajustes para ver las clasificaciones. Tu progreso se guarda en este dispositivo de todas formas.</string>
-    <string name="open_settings">Abrir Ajustes</string>
-    <string name="among_friends">#%d entre amigos</string>
     <!-- QuietKit text, Words' own Spanish (iOS Words: "A medias"). -->
     <string name="quiet_day_in_progress">A medias</string>
 </resources>

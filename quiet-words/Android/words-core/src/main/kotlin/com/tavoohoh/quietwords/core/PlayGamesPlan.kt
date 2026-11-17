@@ -58,6 +58,13 @@ data class PlayGamesPlan(
 ) {
     data class Score(val leaderboard: Leaderboard, val value: Long, val tag: String? = null)
 
+    /** By concept ID, for QuietKit's `PlayGamesSync`. */
+    fun push() = com.tavoohoh.quiet.core.PlayGamesPush(
+        unlocks.map { it.conceptID },
+        steps.mapKeys { it.key.conceptID },
+        scores.map { com.tavoohoh.quiet.core.PlayGamesPush.Score(it.leaderboard.conceptID, it.value, it.tag) },
+    )
+
     companion object {
         fun of(progress: PlayerProgress, dailies: Map<String, DailyRecord>, todayKey: String): PlayGamesPlan {
             val unlocks = Achievement.entries.filter { !it.isIncremental && it in progress.unlocked }

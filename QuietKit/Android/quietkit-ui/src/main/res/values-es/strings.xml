@@ -50,4 +50,18 @@
     <string name="quiet_about">Acerca de</string>
     <string name="quiet_rate_app">Califica %s</string>
     <string name="quiet_version">Versión</string>
+    <string name="quiet_signed_in_as">Sesión iniciada como %s</string>
+    <string name="quiet_not_signed_in">Sin sesión iniciada</string>
+    <string name="quiet_leaderboards">Clasificaciones</string>
+    <string name="quiet_lb_global">Global</string>
+    <string name="quiet_lb_friends">Amigos</string>
+    <string name="quiet_couldnt_load">No se pudo cargar</string>
+    <string name="quiet_check_connection">Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="quiet_no_scores">Todavía no hay puntajes</string>
+    <string name="quiet_scores_from">Puntajes de Play Juegos · recién actualizados</string>
+    <string name="quiet_same_score_faster">Con el mismo puntaje, gana el menor tiempo.</string>
+    <string name="quiet_play_with_friends">Juega con tus amigos</string>
+    <string name="quiet_sign_in_to_see">Inicia sesión en Play Juegos en Ajustes para ver las clasificaciones. Tu progreso se guarda en este dispositivo de todas formas.</string>
+    <string name="quiet_open_settings">Abrir Ajustes</string>
+    <string name="quiet_among_friends">#%d entre amigos</string>
 </resources>

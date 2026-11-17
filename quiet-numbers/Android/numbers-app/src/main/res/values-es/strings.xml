@@ -173,4 +173,5 @@
     <string name="tutorial_done_text">Toca para juntar, o arrastra de un número al otro. Las pistas te muestran una pareja, a cambio de unos puntos.</string>
     <string name="start_playing">Empezar a jugar</string>
     <string name="and">y</string>
+    <string name="lb_today">Hoy</string>
 </resources>

@@ -16,6 +16,11 @@ import com.tavoohoh.quiet.core.DailyRecord
 import com.tavoohoh.quiet.core.AppearanceMode
 import com.tavoohoh.quiet.ui.DailyReminders
 import com.tavoohoh.quiet.ui.LauncherIcon
+import com.tavoohoh.quiet.ui.PlayGamesService
+import com.tavoohoh.quiet.ui.PlayGamesSync
+import com.tavoohoh.quietnumbers.core.CloudSnapshot
+import com.tavoohoh.quietnumbers.core.Leaderboard
+import androidx.lifecycle.viewModelScope
 import com.tavoohoh.quietnumbers.core.AppIconChoice
 import com.tavoohoh.quietnumbers.core.ClearEffect
 import com.tavoohoh.quietnumbers.core.Looks
@@ -47,7 +52,7 @@ import kotlin.random.Random
 /** Debug `uiTesting` (no splash, its own store, no reminders scheduled). */
 val LocalUiTesting = staticCompositionLocalOf { false }
 
-enum class Route { HOME, GAME, DAILY, SETTINGS, COLLECTION, TUTORIAL }
+enum class Route { HOME, GAME, DAILY, SETTINGS, COLLECTION, TUTORIAL, LEADERBOARDS }
 
 /** Collection's tabs (iOS `CollectionTab`). */
 enum class CollectionTab { REWARDS, ACHIEVEMENTS }
@@ -77,6 +82,11 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         private set
     lateinit var feedback: FeedbackService
         private set
+    /** Google Play Games (optional; IDs in games-ids.xml, placeholders until Play Console exists). */
+    lateinit var games: PlayGamesService
+        private set
+    /** IDs, the saved game and the push to Play Games (QuietKit). */
+    private lateinit var sync: PlayGamesSync
     var revision by mutableIntStateOf(0)
         private set
 
@@ -158,6 +168,18 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             voice = { if (looks.soundPack == SoundPack.MARIMBA) QuietTones.Voice.MARIMBA else QuietTones.Voice.SOFT },
         )
         reminders = numbersReminders(app, args.uiTesting) { play.reminderState() }
+        // UI tests never touch Play Games (iOS: -uiTesting is offline too).
+        games = PlayGamesService(if (args.uiTesting) "" else app.getString(R.string.play_games_app_id))
+        sync = PlayGamesSync(
+            app, games, prefs, viewModelScope,
+            plan = { play.playGamesPush() },
+            local = { play.cloudSnapshot().encode() },
+            merge = CloudSnapshot::mergeBytes,
+            apply = { bytes -> CloudSnapshot.decode(bytes)?.let(play::mergeCloud) },
+            snapshotName = CloudSnapshot.NAME,
+        )
+        games.onAuthenticated = { sync.sync() }
+        games.initialize(app)
         storeReview = StoreReview(app, if (args.uiTesting) "storeReview-uitesting" else "storeReview")
         applyDebug(args)
     }
@@ -225,7 +247,13 @@ class AppModel(application: Application) : AndroidViewModel(application) {
         if (chosenLooks.icon != AppIconChoice.STANDARD && !uiTesting) LauncherIcon.set(getApplication(), gold = false)
         chosenLooks = Looks()
         if (!uiTesting) reminders.reschedule()
+        // The saved game too (iOS: iCloud); if signed out, on the next sign-in.
+        sync.resetCloud()
     }
+
+    // Play Games
+
+    fun leaderboardID(board: Leaderboard) = sync.leaderboardID(board.conceptID)
 
     // Tutorial
 
@@ -328,6 +356,8 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             val completedBefore = play.record(todayKey)?.isCompleted == true
             play.sessionChanged(session)
             if (session.isOver && kind is GameKind.Daily && !uiTesting) reminders.reschedule()
+            // Every finished game: achievements, today's best with its time and the saved game.
+            if (session.isOver) sync.push()
             if (completedBefore != (play.record(todayKey)?.isCompleted == true)) revision++
         }
         activeGame = model
@@ -360,6 +390,8 @@ class AppModel(application: Application) : AndroidViewModel(application) {
     private fun leftGame() {
         activeGame?.commitTime()
         if (play.leftGame() && reminders.shouldOffer) offersReminders = true
+        // The classic best and anything unlocked mid-game (iOS sends them on leaving the game).
+        sync.push()
     }
 
     /** The app went to the background: the seconds since the last move are saved too. */
@@ -380,6 +412,7 @@ class AppModel(application: Application) : AndroidViewModel(application) {
             "collection" -> { collectionTab = CollectionTab.REWARDS; show(Route.COLLECTION) }
             "achievements" -> { collectionTab = CollectionTab.ACHIEVEMENTS; show(Route.COLLECTION) }
             "tutorial" -> { tutorialIsFirstRun = true; show(Route.TUTORIAL) }
+            "leaderboards" -> show(Route.LEADERBOARDS)
         }
         args.playDay?.let { day ->
             show(Route.DAILY)

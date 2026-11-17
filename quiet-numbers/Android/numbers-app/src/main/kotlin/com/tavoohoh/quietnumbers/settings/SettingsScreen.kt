@@ -35,7 +35,7 @@ import com.tavoohoh.quietnumbers.R
 
 /**
  * Settings in the family's order (iOS `SettingsView`): Play (sound, haptics, larger numbers),
- * Appearance, Daily Challenge (reminder), Account (How to play; Play Games comes with Phase 5),
+ * Appearance, Daily Challenge (reminder), Account (Play Games, How to play),
  * Privacy, Reset Progress… with its footnote, and About.
  */
 @Composable
@@ -62,6 +62,8 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit) {
                         ReminderToggle(app.reminders, requestNotifications)
                     }
                     GroupSection(stringResource(R.string.account)) {
+                        com.tavoohoh.quiet.ui.PlayGamesRow(app.games)
+                        GroupDivider()
                         GroupRow(stringResource(R.string.how_to_play), null, Modifier.testTag("howToPlay")) { app.openTutorial(firstRun = false) }
                     }
                     PrivacySection(stringResource(R.string.app_name))

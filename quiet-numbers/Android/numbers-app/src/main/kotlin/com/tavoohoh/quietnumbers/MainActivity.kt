@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        app.games.attach(this)
         // The day may have changed, or notifications been turned on or off in the system.
         if (!app.uiTesting) app.reminders.reschedule() else app.reminders.refreshAuthorization()
     }

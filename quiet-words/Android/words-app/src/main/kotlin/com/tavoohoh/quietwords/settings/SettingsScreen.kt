@@ -113,12 +113,7 @@ fun SettingsScreen(app: AppModel, onBack: () -> Unit, onHowToPlay: () -> Unit) {
                         ReminderToggle(app.reminders, requestNotifications)
                     }
                     GroupSection(stringResource(R.string.account)) {
-                        val name = app.games.playerName
-                        GroupRow(
-                            stringResource(R.string.play_games),
-                            if (name != null) stringResource(R.string.signed_in_as, name) else stringResource(R.string.not_signed_in),
-                            Modifier.testTag("playGames"),
-                        ) { if (app.games.isAuthenticated) app.games.showAchievements() else app.games.signIn() }
+                        com.tavoohoh.quiet.ui.PlayGamesRow(app.games)
                         GroupDivider()
                         GroupRow(stringResource(R.string.how_to_play), null, Modifier.testTag("howToPlay"), onClick = onHowToPlay)
                     }
