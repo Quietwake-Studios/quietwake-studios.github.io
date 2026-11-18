@@ -7,6 +7,13 @@
 
 ## Siguiente
 
+### Ficha y tienda: lo aprendido el 2026-11-18
+- **Cuándo:** en la próxima versión que se envíe.
+- **Qué:**
+  - Cambiar en el header y la imagen de búsqueda (en/es) las frases "Nothing to sell. Just play." / "Calm, no catch." por algo sobre el juego: la guía 2.3.14 no acepta precios ni frases que no se puedan comprobar.
+  - Capturas de iPhone Duo (opcionales hoy, dan la insignia; obligatorias desde abril de 2027 con el SDK de iOS 27.1).
+- **Por qué:** checklist de `quiet-release` (revisión de app-store-compliance).
+
 ### Imágenes de la tienda (fase 6)
 - **Cuándo:** antes de mandar la 1.0 a revisión.
 - **Qué:** `iOS/scripts/screenshots.sh` y `store-images.py` (como Quiet Solitaire): 5 imágenes por iPhone 6.9" e iPad 13" en en/es, header 21:9 y búsqueda 3:2 (iOS 27+). Subirlas a la página App Store del canvas y correr el QA.

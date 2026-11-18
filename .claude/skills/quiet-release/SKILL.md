@@ -59,6 +59,18 @@ Toda versión que se envía a revisión lleva en App Review Information › Note
 - **Notas** en `AppStore/app-review-notes.md` de la app, en inglés y numeradas como las pide Apple: 1) video (y que no hay cuentas, contenido de usuarios ni compras); 2) propósito y público; 3) cómo entrar a lo principal (sin login ni cuenta de prueba; dónde están el tutorial y el reto diario); 4) servicios externos (solo Game Center e iCloud del usuario); 5) sin diferencias por región; 6) sin industria regulada ni material de terceros. Plantilla: `quiet-numbers/iOS/AppStore/app-review-notes.md`.
 - **Video** grabado por el usuario en su iPhone, con el iOS más reciente y el build que se envía (instalación limpia desde TestFlight para que salga el tutorial; No molestar activado; Game Center con sesión). Empieza abriendo la app desde la pantalla de inicio y muestra en 2–3 min: tutorial, partida libre (jugadas, pista, deshacer), reto diario (salir y "Continuar / Empezar de nuevo", calendario), clasificaciones, Colección y Ajustes. Sin audio ni edición.
 - Revisar las notas cuando cambie algo que mencionan (servicios, notificaciones, funciones nuevas).
+- **Párrafo "Part of a family"** (antes de "Services", desde 2026-11-18): dice que es uno de los juegos de Quietwake Studios ("a small family of calm games", sin lista), cada uno con sus reglas, generador, puntaje, tutorial, logros y recompensas, que solo comparten el sistema de diseño y el reto diario. Se adelanta a la guía 4.3 (apps repetidas o de plantilla; Apple la endureció en junio de 2026), porque llegan varias apps nuevas de la misma cuenta, con el mismo estilo y en categorías llenas. No nombra los juegos, así sirve aunque la familia crezca. Las notas se pueden cambiar por la API con la versión en espera (`PATCH /v1/appStoreReviewDetails/{id}`).
+
+### Checklist antes de enviar (además de lo anterior)
+
+Revisado contra https://github.com/mjmirza/app-store-compliance el 2026-11-18; volver a mirarlo de vez en cuando por cambios de reglas.
+
+- **Imágenes de la ficha (guía 2.3.14):** headers e imágenes de búsqueda hablan del juego o de la marca; nada de precios, "gratis", "nada que vender", "sin trampa", rankings ni frases que no se puedan comprobar.
+- **Cuestionario de edad:** respondido con la pregunta de redes sociales ("no"; solo "competencia" en sí, por Game Center). Sin eso, la versión nueva se traba.
+- **Estado de comerciante de la UE (DSA):** declarado en App Store Connect › Business (hecho: no comerciante). Igual en Google Play.
+- **iPhone Duo:** sus capturas son opcionales hoy (dan la insignia "optimizado"); obligatorias desde abril de 2027 para apps con el SDK de iOS 27.1 o posterior. La interfaz sale de size classes, nunca de tamaños fijos.
+- **Accesibilidad en la UE (EAA):** la web del estudio publica la declaración de accesibilidad de cada juego.
+- **Google Play (fase 6 de cada app Android):** paquete registrado en la verificación de desarrollador; cuestionario IARC; Data Safety "no se recopilan datos" (Play Games incluido); `targetSdk` al mínimo vigente (36); prueba cerrada de 12 testers × 14 días con cuenta personal.
 
 ## Game Center
 

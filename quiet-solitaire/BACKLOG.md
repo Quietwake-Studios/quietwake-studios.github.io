@@ -10,6 +10,13 @@
 
 ## Siguiente
 
+### Ficha y tienda: lo aprendido el 2026-11-18
+- **Cuándo:** en la próxima versión que se envíe.
+- **Qué:**
+  - Cambiar en el header y la imagen de búsqueda (en/es) las frases "Nothing to sell. Just play." / "Calm, no catch." por algo sobre el juego: la guía 2.3.14 no acepta precios ni frases que no se puedan comprobar.
+  - Capturas de iPhone Duo (opcionales hoy, dan la insignia; obligatorias desde abril de 2027 con el SDK de iOS 27.1).
+- **Por qué:** checklist de `quiet-release` (revisión de app-store-compliance).
+
 ### Challenges y activities de Game Center (iOS 26+)
 - **Cuándo:** cuando Quiet Numbers los tenga (se construyen en QuietKit y se adoptan aquí).
 - **Qué:** ver `quiet-numbers/BACKLOG.md` (mismo diseño; en Solitaire la clasificación de tiempo sería `qs_daily_time`). El botón "Retar" del perfil de amigo llega con esto.

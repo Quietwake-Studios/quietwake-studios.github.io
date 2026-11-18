@@ -30,6 +30,13 @@
 
 ## Siguiente
 
+### Ficha y tienda: lo aprendido el 2026-11-18
+- **Cuándo:** en la próxima versión que se envíe.
+- **Qué:**
+  - Cambiar en el header y la imagen de búsqueda (en/es) las frases "Nothing to sell. Just play." / "Calm, no catch." por algo sobre el juego: la guía 2.3.14 no acepta precios ni frases que no se puedan comprobar.
+  - Capturas de iPhone Duo (opcionales hoy, dan la insignia; obligatorias desde abril de 2027 con el SDK de iOS 27.1).
+- **Por qué:** checklist de `quiet-release` (revisión de app-store-compliance).
+
 ### Challenges y activities de Game Center (iOS 26+)
 - **Cuándo:** después de que la 1.1 esté publicada en la App Store.
 - **Por qué:** los challenges convierten el reto diario en una competencia con amigos y contactos (hasta 16) que el sistema promociona en el Games app y con notificaciones; las activities llevan directo del Games app o de una notificación a la parte del juego que corresponde.

@@ -10,6 +10,12 @@
 
 ## Siguiente
 
+### Ficha y tienda: lo aprendido el 2026-11-18
+- **Cuándo:** en la próxima versión que se envíe.
+- **Qué:**
+  - Capturas de iPhone Duo (opcionales hoy, dan la insignia; obligatorias desde abril de 2027 con el SDK de iOS 27.1).
+- **Por qué:** checklist de `quiet-release` (revisión de app-store-compliance).
+
 ### Más temas después del lanzamiento
 - **Qué:** la lista de la propuesta (Bosque, Aves, Clima y cielo, Minerales y gemas, Arquitectura, Pintura, Escritura y libros, Mitología griega, Navegación…), ~200 palabras por idioma y hasta 20 regionales, con la misma revisión.
 

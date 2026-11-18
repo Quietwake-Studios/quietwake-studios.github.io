@@ -18,6 +18,9 @@ After you win a first daily challenge, the app asks if you'd like a reminder at 
 The recording
 Attached, recorded on an iPhone with the latest iOS and the submitted build. It starts at launch and goes through the tutorial, a classic game, the daily challenge and its calendar, the leaderboards, the Collection and Settings. There are no accounts, user content or purchases in the app, so there are no flows for those.
 
+Part of a family
+Quiet Solitaire is one of the games we make as Quietwake Studios, a small family of calm games. Each is a different game with its own rules, generator, scoring, tutorial, achievements and rewards. They share only our design system and the idea of a daily challenge; none is a variation or reskin of another.
+
 Services
 Just Apple's: Game Center (optional) and the player's own iCloud to sync progress between their devices. No servers of our own, no third-party SDKs, analytics, ads, payments or AI.
 

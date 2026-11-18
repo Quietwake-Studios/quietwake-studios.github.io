@@ -20,6 +20,19 @@ Misma estructura en todos: **modo libre** (partidas sin fin, mejor puntaje) y **
 | Idea | Bloques | Armar figuras con bloques encastrables | Por definir la mecánica. **Nunca** usar "LEGO" ni formas de su marca: decir "bloques". |
 | Idea | Números (otro) | Por definir | Distinto de Quiet Numbers y Sudoku. |
 | Idea | Snake | La serpiente clásica que crece al comer | "Snake" es genérico; no usar "Nokia". Reto diario: mismo mapa y misma secuencia de comida para todos. |
+| **Idea elegida para el juego de pago (2026-11-17)** | Robot que limpia el mundo (nombre por definir) | Exploración, recolección y fabricación en 2D con supervivencia | iOS y Android desde una sola base. Detalle abajo. |
+
+## Juego de pago: robot que limpia el mundo (idea del 2026-11-17, en construcción)
+
+Notas del usuario para no olvidarlas; sigue pensando en más detalles.
+
+- **Historia:** mundo postapocalíptico. El personaje es un robot que despierta una mañana y recibe la tarea de limpiar el mundo para prepararlo para el regreso de los humanos.
+- **Progresión:** empieza con herramientas muy básicas (las manos) y recoge las cosas una por una; lo recogido da material para fabricar herramientas cada vez más complejas.
+- **Peligros:** no está solo: robots corruptos, robots zombis, animales salvajes, mutaciones.
+- **Mundo:** procedural; mapas grandes pero no infinitos, que se puedan generar sobre lugares reales a partir de OpenStreetMap.
+- **Estilo:** 2D con gráficos modernos, vista tipo los RPG de mundo abierto en 2D (referencias de sensación: Stardew Valley, los Pokémon clásicos, Astro Boy, Medabots; ambiente de supervivencia tipo Project Zomboid; tono de "reconstruir un mundo vacío" tipo Pokémon Pokopia). Como siempre, solo la sensación y las mecánicas genéricas: nada de nombres, personajes, arte ni textos de esos juegos.
+- **Plataformas:** iOS y Android con una sola base de código; logros nativos de cada plataforma (Game Center y Play Games).
+- **Por decidir:** motor (Unity, Godot, Unreal u otro multiplataforma); nombre; modelo de pago (ver prerrequisitos abajo); si el reto diario de la familia aplica y cómo; cómo encaja OpenStreetMap con "offline primero" y sin servidor (descargar la zona una vez y generar en el dispositivo; la licencia ODbL pide atribución en la app).
 
 ## Prerrequisitos antes de lanzar un juego de pago
 
