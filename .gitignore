@@ -44,3 +44,9 @@ __pycache__/
 
 # Claude Code: local settings stay on this machine
 .claude/settings.local.json
+
+# Android release signing and Play Console credentials: never commit (they live in ~/.config/quietwake)
+*.jks
+*.keystore
+keystore.properties
+play-service-account*.json

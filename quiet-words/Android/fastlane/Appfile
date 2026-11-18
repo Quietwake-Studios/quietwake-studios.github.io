@@ -1,0 +1,3 @@
+# Quiet Words for Android. The service account key lives outside the repo.
+json_key_file(ENV["PLAY_JSON_KEY"] || File.expand_path("~/.config/quietwake/play-service-account.json"))
+package_name("com.tavoohoh.quietwords")

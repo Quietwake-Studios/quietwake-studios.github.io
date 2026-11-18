@@ -50,7 +50,7 @@ QuietKit/Android/
 
 `quietkit-core` y `quietkit-ui` se incluyen desde `settings.gradle.kts` (`projectDir = ../../QuietKit/Android/…`) y usan el catálogo de versiones del proyecto que los incluye. Paquetes: `com.tavoohoh.quiet.core`, `com.tavoohoh.quiet.ui`, `com.tavoohoh.quietwords.core` y `com.tavoohoh.quietwords` (app). La app no repite reglas: todo pasa por `words-core` (`FreeGame` arma la partida libre, agregado en la Fase 2).
 
-**Versiones (2026-11-13):** AGP 8.13.0, compileSdk/targetSdk 36, Compose BOM 2026.06.01 (Compose 1.11), activity-compose 1.13.0, lifecycle 2.10.0, material-icons-extended 1.7.8. Compose 1.12 (BOM 2026.08+) ya pide compileSdk 37 y AGP 9.1: no subir sin cambiar los dos. Firma: solo la de debug; no hay keystore de release.
+**Versiones (2026-11-13):** AGP 8.13.0, compileSdk/targetSdk 36, Compose BOM 2026.06.01 (Compose 1.11), activity-compose 1.13.0, lifecycle 2.10.0, material-icons-extended 1.7.8. Compose 1.12 (BOM 2026.08+) ya pide compileSdk 37 y AGP 9.1: no subir sin cambiar los dos. Firma de release: ver "Publicación en Google Play".
 
 ## Comandos
 
@@ -81,6 +81,8 @@ Espejo de Game Center en iOS (`../iOS/AppStore/game-center.json`). Todo funciona
 
 ### Qué crear en Play Console (con el usuario)
 
+**Hecho el 2026-11-18:** proyecto de juegos 718493126144 (mismo número que el proyecto de Cloud de fastlane), con es-419 agregado como idioma. Los 11 logros y las 5 clasificaciones se crearon por la API con `python3 scripts/setup-play-games.py 718493126144 [--apply]` (necesita la "Google Play Games Services Publishing API" activada y la cuenta de servicio con **Admin** en la app; reutiliza lo que existe y escribe `games-ids.xml`). El endpoint de imágenes respondió 503 siempre: los íconos de los logros se suben a mano desde `PlayConsole/achievements/`. Build 2 (1.0) con los IDs reales en Prueba interna.
+
 1. Play Games Services › Configuración: crear el proyecto de juegos para `com.tavoohoh.quietwords`, credencial Android (SHA-1 de la firma de subida y de la de Play), activar **Saved Games**. Copiar el **ID del proyecto** a `play_games_app_id`.
 2. **Logros** (11; ícono: `PlayConsole/achievements/<id>.png`, 512 px; nombres y descripciones en inglés y español):
 
@@ -109,6 +111,14 @@ Espejo de Game Center en iOS (`../iOS/AppStore/game-center.json`). Todo funciona
 | `qw_longest_streak` | Longest Streak / Racha más larga | days / días |
 
 4. Copiar el ID de cada logro y clasificación a su `achievement_<id>` / `leaderboard_<id>` en `games-ids.xml`, publicar los cambios de Play Games (o agregar testers) y probar en un dispositivo con Play Games: sin conexión y al reconectar (criterio de la Fase 5).
+
+## Publicación en Google Play (Fase 6, 2026-11-18)
+
+- **Firma de subida** fuera del repo: `~/.config/quietwake/android/upload-keystore.jks` y `keystore.properties` (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`); otra ruta con `QUIETWAKE_KEYSTORE_PROPERTIES`. La misma clave de subida sirve para todas las apps de Quietwake. Play App Signing guarda la clave de la app. Sin ese archivo solo hay builds de debug (`bundleRelease` sale sin firmar y Play lo rechaza). `.gitignore` bloquea `*.jks`, `*.keystore`, `keystore.properties` y `play-service-account*.json`.
+- **Versión:** `versionName` 1.0, `versionCode` 1; subir `versionCode` en cada build que se suba.
+- **fastlane** (`brew install fastlane`), desde esta carpeta: `fastlane android build` (bundle firmado), `internal`, `closed` (pista "alpha"), `metadata` (solo textos) y `validate` (revisa sin cambiar nada). Las versiones se crean como borrador y se publican a mano en Play Console. Credencial: cuenta de servicio de Google Cloud con acceso a la app en Play Console, JSON en `~/.config/quietwake/play-service-account.json` (o `PLAY_JSON_KEY`). Permisos de la cuenta de servicio `fastlane@quietwake-play…` en la app (2026-11-18): View app information, Edit and delete draft apps (sin este, editar la ficha de una app sin producción da "The caller does not have permission"), Release apps to testing tracks, Manage testing tracks and edit tester lists, Manage store presence; producción todavía no. El lane `metadata` usa la pista internal porque supply la necesita. **El primer AAB se sube a mano en Play Console** (hecho: 1.0 (1) en Prueba interna, 2026-11-18) (la API no acepta subidas a una app que nunca tuvo uno). Nada se sube sin permiso explícito del usuario.
+- **Textos de la ficha:** `fastlane/metadata/android/{en-US,es-419}/` (título 30, descripción corta 80, completa 4000), adaptados de iOS: Play Juegos en lugar de Game Center e iCloud, TalkBack en lugar de VoiceOver, sin diccionario ni "SDKs de terceros" (Play Games es de Google), teléfonos y tablets.
+- **Imágenes de la ficha (2026-11-18):** `scripts/screenshots.sh <serial> phone|tablet` (QW_Phone y luego QW_Tablet, uno a la vez; instala el debug, barra de estado en modo demo 09:41 y abre cada escena con `--ez demo true`, fecha 2026-11-11, las mismas de iOS: 01 tablero Océano, 02 reto diario, 03 clasificaciones en oscuro, 04 álbum de Océano en oscuro, 05 palabra oculta) → `PlayConsole/screenshots/<phone|tablet>/<en|es>/`; después `python3 scripts/store-images.py` → `PlayConsole/store/`: `icon-512.png` (512×512 con alfa, el ícono estándar sin recortar; Play pone su máscara), `feature-graphic.<en|es>.png` (1024×500 sin alfa, el header de iOS rearmado a esa proporción, todo al centro), `phone/<en|es>/01-board … 05-hidden.png` (1080×1920, 9:16, los títulos de las capturas de iOS sobre el degradado de `store-style.json` y la captura en un marco que sale por abajo) y `tablet/<en|es>/` (2560×1600, historias 1, 2, 4 y 5). Chrome headless como en iOS; letra Nunito (la alternativa del header de iOS) en lugar de SF Pro Rounded, cuya licencia es solo para plataformas de Apple. Nada se sube sin el usuario.
 
 ## Fases (no avanzar sin cumplir el criterio)
 

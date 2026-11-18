@@ -1,0 +1,84 @@
+# Quiet Words for Android. Run from quiet-words/Android:
+#   fastlane android build        signed release bundle (.aab), no upload
+#   fastlane android internal     build + upload to Internal testing
+#   fastlane android closed       build + upload to Closed testing (track "alpha")
+#   fastlane android metadata     upload only the store texts (fastlane/metadata/android)
+#   fastlane android images       upload only the store images (PlayConsole/store)
+#   fastlane android validate     check texts and bundle against Play without changing anything
+# Nothing is uploaded without the user's explicit OK. While the app is still a draft in
+# Play Console, releases are created as drafts and rolled out by hand in the console.
+
+default_platform(:android)
+
+JAVA_HOME = File.expand_path("~/Library/Java/JavaVirtualMachines/jbr-17.0.12/Contents/Home")
+AAB = "words-app/build/outputs/bundle/release/words-app-release.aab"
+
+platform :android do
+  desc "Signed release bundle"
+  lane :build do
+    ENV["JAVA_HOME"] ||= JAVA_HOME
+    gradle(project_dir: ".", task: "clean :words-app:bundleRelease")
+    UI.user_error!("No signed bundle: check ~/.config/quietwake/android/keystore.properties") unless File.exist?(File.join("..", AAB))
+  end
+
+  desc "Upload to a track as a draft (internal by default)"
+  lane :upload do |options|
+    build
+    upload_to_play_store(
+      track: options[:track] || "internal",
+      aab: AAB,
+      release_status: options[:status] || "draft",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  lane(:internal) { upload(track: "internal") }
+  lane(:closed) { upload(track: "alpha") }
+
+  desc "Store texts only"
+  lane :metadata do
+    # supply needs a track with a release to attach to; the texts are app-wide anyway.
+    upload_to_play_store(
+      track: "internal",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Store images only (from PlayConsole/store, made by scripts/store-images.py)"
+  lane :images do
+    require "tmpdir"
+    require "fileutils"
+    store = File.expand_path("../PlayConsole/store", __dir__)
+    Dir.mktmpdir("play-images") do |dir|
+      { "en-US" => "en", "es-419" => "es" }.each do |locale, lang|
+        images = File.join(dir, locale, "images")
+        FileUtils.mkdir_p([File.join(images, "phoneScreenshots"), File.join(images, "tenInchScreenshots")])
+        FileUtils.cp(File.join(store, "icon-512.png"), File.join(images, "icon.png"))
+        FileUtils.cp(File.join(store, "feature-graphic.#{lang}.png"), File.join(images, "featureGraphic.png"))
+        Dir[File.join(store, "phone", lang, "*.png")].sort.each { |f| FileUtils.cp(f, File.join(images, "phoneScreenshots")) }
+        Dir[File.join(store, "tablet", lang, "*.png")].sort.each { |f| FileUtils.cp(f, File.join(images, "tenInchScreenshots")) }
+      end
+      upload_to_play_store(
+        track: "internal",
+        metadata_path: dir,
+        skip_upload_aab: true,
+        skip_upload_apk: true,
+        skip_upload_metadata: true,
+        skip_upload_changelogs: true,
+        sync_image_upload: true
+      )
+    end
+  end
+
+  desc "Validate without changing anything"
+  lane :validate do
+    build
+    upload_to_play_store(track: "internal", aab: AAB, release_status: "draft", validate_only: true)
+  end
+end

@@ -1,9 +1,20 @@
-// Quiet Words for Android (Jetpack Compose). Debug signing only: no release keystore yet.
+// Quiet Words for Android (Jetpack Compose).
+// Release signing reads the upload key from outside the repo:
+// ~/.config/quietwake/android/keystore.properties (storeFile, storePassword, keyAlias, keyPassword),
+// or the path in QUIETWAKE_KEYSTORE_PROPERTIES. Without it, only debug builds work.
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+
+val uploadKey: Properties? = (System.getenv("QUIETWAKE_KEYSTORE_PROPERTIES")
+    ?: "${System.getProperty("user.home")}/.config/quietwake/android/keystore.properties")
+    .let { file(it) }
+    .takeIf { it.exists() }
+    ?.let { f -> Properties().apply { f.inputStream().use(::load) } }
 
 android {
     namespace = "com.tavoohoh.quietwords"
@@ -13,9 +24,25 @@ android {
         applicationId = "com.tavoohoh.quietwords"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.3"
+        versionCode = 2
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        if (uploadKey != null) {
+            create("upload") {
+                storeFile = file(uploadKey.getProperty("storeFile"))
+                storePassword = uploadKey.getProperty("storePassword")
+                keyAlias = uploadKey.getProperty("keyAlias")
+                keyPassword = uploadKey.getProperty("keyPassword")
+            }
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.findByName("upload")
+        }
     }
 
     buildFeatures {

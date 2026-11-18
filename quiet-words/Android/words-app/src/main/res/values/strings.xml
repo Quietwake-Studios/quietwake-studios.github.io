@@ -223,4 +223,6 @@
     <string name="lb_today">Today</string>
     <string name="lb_best_hard">Best · Hard</string>
     <string name="lb_streak">Streak</string>
+    <!-- Same as the kit; overridden here only so Spanish can say "A medias". -->
+    <string name="quiet_day_in_progress">In progress</string>
 </resources>
